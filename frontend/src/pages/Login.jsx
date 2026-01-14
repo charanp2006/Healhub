@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUp, signIn } from "../services/authService";
+import { userAPI } from "../services/apiService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,12 +25,28 @@ const Login = () => {
           setLoading(false);
           return;
         }
-        await signUp(email, password, name);
+        const userCredential = await signUp(email, password, name);
         toast.success("Account created successfully!");
+        
+        // Sync user with backend API (optional, will fail gracefully if backend is not available)
+        try {
+          await userAPI.syncUser({ name });
+        } catch (syncError) {
+          console.log('Backend sync not available, using direct Firestore');
+        }
+        
         navigate("/");
       } else {
         await signIn(email, password);
         toast.success("Logged in successfully!");
+        
+        // Sync user with backend API (optional)
+        try {
+          await userAPI.syncUser();
+        } catch (syncError) {
+          console.log('Backend sync not available');
+        }
+        
         navigate("/");
       }
     } catch (error) {
@@ -64,20 +81,20 @@ const Login = () => {
 
   return (
     <form className="min-h-[80vh] flex items-center ">
-      <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border border-gray-300 dark:border-gray-700 rounded-xl text-[#5E5E5E] dark:text-gray-300 text-sm shadow-lg bg-white dark:bg-background-cardDark transition-colors duration-300">
-        <p className="text-2xl font-semibold text-gray-800 dark:text-white transition-colors">
+      <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border border-gray-300 rounded-xl text-[#5E5E5E] text-sm shadow-lg bg-white">
+        <p className="text-2xl font-semibold text-gray-800">
           {state === "Sign up" ? "Create Account" : "Login"}
         </p>
-        <p className="text-gray-600 dark:text-gray-400 transition-colors">
+        <p className="text-gray-600">
           Please {state === "Sign up" ? "sign-up" : "log-in"} to book your
           appointment
         </p>
         {
           state === "Sign up" && (
             <div className="w-full">
-              <p className="text-gray-700 dark:text-gray-300">Full Name</p>
+              <p className="text-gray-700">Full Name</p>
               <input
-                className="border border-[#DADADA] dark:border-gray-600 rounded w-full p-2 mt-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors"
+                className="border border-[#DADADA] rounded w-full p-2 mt-1 bg-white text-gray-900"
                 type="text"
                 onChange={(e) => setName(e.target.value)}
                 value={name}
@@ -86,9 +103,9 @@ const Login = () => {
             </div>)
           }
         <div className="w-full">
-          <p className="text-gray-700 dark:text-gray-300">Email</p>
+          <p className="text-gray-700">Email</p>
           <input
-            className="border border-[#DADADA] dark:border-gray-600 rounded w-full p-2 mt-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors"
+            className="border border-[#DADADA] rounded w-full p-2 mt-1 bg-white text-gray-900"
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
@@ -96,9 +113,9 @@ const Login = () => {
           />
         </div>
         <div className="w-full">
-          <p className="text-gray-700 dark:text-gray-300">Password</p>
+          <p className="text-gray-700">Password</p>
           <input
-            className="border border-[#DADADA] dark:border-gray-600 rounded w-full p-2 mt-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors"
+            className="border border-[#DADADA] rounded w-full p-2 mt-1 bg-white text-gray-900"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
@@ -114,12 +131,12 @@ const Login = () => {
         </button>
 
         {state === "Sign up" ? (
-          <p className="text-gray-600 dark:text-gray-400">
-            Already have an account? <span onClick={()=>setState("Login")} className="text-primary underline cursor-pointer hover:text-primary-hover transition-colors">login here</span>
+          <p className="text-gray-600">
+            Already have an account? <span onClick={()=>setState("Login")} className="text-primary underline cursor-pointer hover:text-primary-hover">login here</span>
           </p>
         ) : (
-          <p className="text-gray-600 dark:text-gray-400">
-            Don't have an account? <span onClick={()=>setState("Sign up")} className="text-primary underline cursor-pointer hover:text-primary-hover transition-colors">create account here</span>
+          <p className="text-gray-600">
+            Don't have an account? <span onClick={()=>setState("Sign up")} className="text-primary underline cursor-pointer hover:text-primary-hover">create account here</span>
           </p>
         )}
       </div>

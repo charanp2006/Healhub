@@ -16,7 +16,7 @@ import Footer from './components/Footer'
 
 const App = () => {
   return (
-    <div className='mx-4 sm:mx-[10%] min-h-screen bg-white dark:bg-background-dark transition-colors duration-300'>
+    <div className='mx-4 sm:mx-[10%] min-h-screen bg-white'>
       <Navbar />
       <Routes>
         <Route path='/' element={<Home />} />
