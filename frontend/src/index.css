@@ -10,6 +10,14 @@
   --color-primary-dark: #1aa896;
   --color-primary-light: #2dd4c0;
   --grid-template-columns-auto: repeat(auto-fill, minmax(200px, 1fr));
+  
+  /* Dark mode colors */
+  --color-background-dark: #0F172A;
+  --color-background-light: #F3F4F6;
+  --color-text-primary-dark: #FFFFFF;
+  --color-text-primary-light: #1F2933;
+  --color-text-secondary-dark: #9CA3AF;
+  --color-text-secondary-light: #6B7280;
 }
 
 .active hr{
@@ -18,6 +26,11 @@
 
 ::-webkit-scrollbar{
     @apply hidden
+}
+
+/* Dark mode transitions */
+html {
+  @apply transition-colors duration-300;
 }
 
 @media (max-width: 740px) {
