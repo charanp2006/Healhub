@@ -1,0 +1,21 @@
+{
+  "name": "@healhub/config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "typescript/*.json",
+    "eslint/*.mjs",
+    "tailwind/*.js"
+  ],
+  "exports": {
+    "./typescript/*": "./typescript/*",
+    "./eslint/*": "./eslint/*",
+    "./tailwind/*": "./tailwind/*"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0",
+    "eslint": "^9.0.0",
+    "tailwindcss": "^4.0.0"
+  }
+}
