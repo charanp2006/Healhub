@@ -1,0 +1,6 @@
+{
+  "name": "typescript-eslint",
+  "version": "0.1.0",
+  "main": "index.mjs",
+  "files": ["index.mjs", "base.mjs", "next.mjs"]
+}
