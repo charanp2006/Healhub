@@ -377,7 +377,7 @@ const Appointment = () => {
 
           <button
             onClick={bookAppointment}
-            className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6 cursor-pointer"
+            className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6 w-full sm:w-auto cursor-pointer touch-none-outline"
           >
             Book an appointment
           </button>

@@ -165,7 +165,7 @@ const HospitalProfile = () => {
           <button
             onClick={handleBooking}
             disabled={!hospital.isRegistered}
-            className={`text-sm font-light px-14 py-3 rounded-full my-6 cursor-pointer ${hospital.isRegistered ? "bg-primary text-white" : "bg-primary-soft text-text-secondaryLight cursor-not-allowed"}`}
+            className={`text-sm font-light px-14 py-3 rounded-full my-6 w-full sm:w-auto cursor-pointer touch-none-outline ${hospital.isRegistered ? "bg-primary text-white" : "bg-primary-soft text-text-secondaryLight cursor-not-allowed"}`}
           >
             Book an appointment
           </button>
@@ -181,27 +181,27 @@ const HospitalProfile = () => {
             No doctors are listed for this hospital yet.
           </p>
         ) : (
-          <div className="w-full grid grid-cols-auto gap-4 gap-y-6 mt-5">
+          <div className="w-full grid grid-cols-2 md:grid-cols-auto gap-3 md:gap-4 gap-y-5 md:gap-y-6 mt-5">
             {doctors.map((item) => (
               <div
                 onClick={() => router.push(`/appointment/${item._id}`)}
                 key={item._id}
-                className="border border-primary-soft rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"
+                className="border border-primary-soft bg-white rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"
               >
-                <img className="bg-primary-soft" src={item.image} alt="" />
-                <div className="p-4">
+                <img className="bg-primary-soft w-full" src={item.image} alt="" />
+                <div className="p-3 md:p-4">
                   <div
-                    className={`flex items-center gap-2 text-sm text-center ${item.available ? "text-green-600" : "text-gray-500"}`}
+                    className={`flex items-center gap-2 text-xs md:text-sm text-center ${item.available ? "text-green-600" : "text-gray-500"}`}
                   >
                     <span
                       className={`w-2 h-2 ${item.available ? "bg-green-500" : "bg-gray-400"} rounded-full`}
                     ></span>
                     <p>{item.available ? "Available" : "Not Available"}</p>
                   </div>
-                  <p className="text-text-primaryLight text-lg font-medium">
+                  <p className="text-text-primaryLight text-sm md:text-lg font-medium">
                     {item.name}
                   </p>
-                  <p className="text-text-secondaryLight text-sm">
+                  <p className="text-text-secondaryLight text-xs md:text-sm truncate">
                     {item.speciality}
                   </p>
                 </div>

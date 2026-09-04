@@ -12,7 +12,7 @@ const FloatingDemoButton = () => {
       {/* Floating Button */}
       <button
         onClick={() => setShowDemo(!showDemo)}
-        className="fixed bottom-6 right-6 bg-primary hover:bg-primary-dark text-white rounded-full p-4 shadow-lg transition-all duration-300 z-40 flex items-center justify-center hover:scale-110 motion-safe:animate-bounce"
+        className="fixed bottom-24 right-4 md:bottom-6 md:right-6 bg-primary hover:bg-primary-dark text-white rounded-full p-4 shadow-lg transition-all duration-300 z-40 flex items-center justify-center hover:scale-110 motion-safe:animate-bounce"
         title="View Platform Demo"
       >
         <HelpCircle size={24} />

@@ -1,9 +1,16 @@
 import type { Metadata, Viewport } from "next";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import PanelShell from "@/src/components/PanelShell";
 import Providers from "@/src/components/Providers";
 import RegisterSW from "@/src/components/RegisterSW";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-outfit",
+});
 
 export const metadata: Metadata = {
   title: "Healhub Admin Panel",
@@ -20,7 +27,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={outfit.variable}>
       <body>
         <Providers>
           <PanelShell>{children}</PanelShell>

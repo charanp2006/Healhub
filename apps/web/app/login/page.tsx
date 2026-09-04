@@ -96,7 +96,7 @@ const Login = () => {
       onSubmit={onSubmitHandler}
       className="min-h-[80vh] flex items-center "
     >
-      <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-text-primaryLight text-sm shadow-lg bg-white">
+      <div className="flex flex-col gap-3 m-auto items-start p-6 md:p-8 w-full sm:w-auto sm:min-w-96 max-w-md border rounded-2xl md:rounded-xl text-text-primaryLight text-sm shadow-lg bg-white">
         <p className="text-2xl font-semibold">
           {state === "Sign up" ? "Create Account" : "Welcome Back"}
         </p>
@@ -108,7 +108,7 @@ const Login = () => {
           <div className="w-full">
             <p className="font-medium">Full Name</p>
             <input
-              className="border border-border-light rounded w-full p-2.5 mt-1 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+              className="border border-border-light rounded-lg md:rounded w-full p-3 md:p-2.5 mt-1 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
               type="text"
               placeholder="Enter your full name"
               onChange={(e) => setName(e.target.value)}
@@ -121,7 +121,7 @@ const Login = () => {
         <div className="w-full">
           <p className="font-medium">Email</p>
           <input
-            className="border border-border-light rounded w-full p-2.5 mt-1 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+            className="border border-border-light rounded-lg md:rounded w-full p-3 md:p-2.5 mt-1 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
             type="email"
             placeholder="Enter your email"
             onChange={(e) => setEmail(e.target.value)}
@@ -134,7 +134,7 @@ const Login = () => {
           <p className="font-medium">Password</p>
           <div className="relative">
             <input
-              className="border border-border-light rounded w-full p-2.5 pr-11 mt-1 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none"
+              className="border border-border-light rounded-lg md:rounded w-full p-3 md:p-2.5 pr-12 md:pr-11 mt-1 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none"
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               onChange={(e) => setPassword(e.target.value)}

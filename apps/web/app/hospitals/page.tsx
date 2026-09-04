@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { MapPin, LocateFixed, Search, SlidersHorizontal } from "lucide-react";
+import { MapPin, LocateFixed, Search, SlidersHorizontal, X } from "lucide-react";
 import { AppContext } from "@/src/context/AppContext";
 import { assets, specialityData } from "@/src/assets/assets";
 
@@ -107,34 +107,48 @@ const Hospitals = () => {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-text-primaryLight">
-          Hospitals & Clinics
-        </h1>
-        <p className="text-text-secondaryLight">
-          Found {pagination.total} hospital/clinic
-          {pagination.total === 1 ? "" : "s"}
-        </p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-text-primaryLight">
+            Hospitals & Clinics
+          </h1>
+          <p className="text-text-secondaryLight">
+            Found {pagination.total} hospital/clinic
+            {pagination.total === 1 ? "" : "s"}
+          </p>
+        </div>
+        <button
+          onClick={() => setShowFilter(true)}
+          className="lg:hidden flex items-center gap-2 bg-white border border-[#edeff2] rounded-full px-4 py-2.5 text-sm font-medium text-text-primaryLight shadow-sm touch-none-outline"
+        >
+          <SlidersHorizontal size={16} className="text-primary" />
+          Filters
+        </button>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="lg:w-1/4">
-          <div className="bg-background-cardLight border border-border-light rounded-lg p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-text-primaryLight">
-                Filters
-              </h3>
-              <button
-                onClick={() => setShowFilter((prev) => !prev)}
-                className="lg:hidden text-text-secondaryLight"
-              >
-                <SlidersHorizontal className="h-5 w-5" />
-              </button>
-            </div>
-
+          <div
+            className={`${showFilter ? "fixed inset-0 z-50" : "hidden"} lg:static lg:block`}
+          >
             <div
-              className={`space-y-4 ${showFilter ? "block" : "hidden lg:block"}`}
-            >
+              onClick={() => setShowFilter(false)}
+              className={`absolute inset-0 bg-black/40 lg:hidden ${showFilter ? "" : "hidden"}`}
+            />
+            <div className="relative bg-white lg:bg-background-cardLight border lg:border-border-light lg:rounded-lg rounded-t-3xl p-5 pb-8 lg:pb-5 max-h-[90vh] lg:max-h-none overflow-y-auto lg:overflow-visible">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-text-primaryLight">
+                  Filters
+                </h3>
+                <button
+                  onClick={() => setShowFilter(false)}
+                  className="p-2 rounded-full bg-[#f6f8fa] lg:hidden text-text-secondaryLight touch-none-outline"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-text-secondaryLight mb-2">
                   Hospital/Clinic name
@@ -236,6 +250,7 @@ const Hospitals = () => {
               </button>
             </div>
           </div>
+          </div>
         </div>
 
         <div className="lg:w-3/4">
@@ -257,18 +272,18 @@ const Hospitals = () => {
                 <div
                   onClick={() => router.push(`/hospital/${item._id}`)}
                   key={item._id}
-                  className="bg-background-cardLight border border-border-light rounded-lg p-5 cursor-pointer hover:shadow-sm transition-all"
+                  className="bg-white lg:bg-background-cardLight border border-[#edeff2] lg:border-border-light rounded-2xl lg:rounded-lg p-4 lg:p-5 cursor-pointer hover:shadow-sm transition-all"
                 >
                   <div className="flex flex-col md:flex-row gap-4">
                     <img
-                      className="w-full md:w-40 h-40 object-cover rounded-lg bg-primary-soft"
+                      className="w-full md:w-40 h-44 md:h-40 object-cover rounded-xl lg:rounded-lg bg-primary-soft"
                       src={item.image || assets.header_img.src}
                       alt=""
                     />
                     <div className="flex-1">
                       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
                         <div>
-                          <p className="text-text-primaryLight text-xl font-semibold">
+                          <p className="text-text-primaryLight text-lg md:text-xl font-semibold">
                             {item.name}
                           </p>
                           <p className="text-text-secondaryLight text-sm">

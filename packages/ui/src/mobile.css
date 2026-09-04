@@ -60,20 +60,22 @@
 }
 
 /* Horizontal scroll-snap row for carousels / lists on mobile */
-.snap-row {
-  display: flex;
-  gap: 0.85rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.snap-row > * {
-  scroll-snap-align: start;
-  flex-shrink: 0;
-}
-.snap-row::-webkit-scrollbar {
-  display: none;
+@media (max-width: 767px) {
+  .snap-row {
+    display: flex;
+    gap: 0.85rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .snap-row > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+  .snap-row::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Remove tap highlight on touch targets */
