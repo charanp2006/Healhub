@@ -31,6 +31,7 @@ const HospitalProfilePage = () => {
     if (hToken) {
       getProfileData();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hToken]);
 
   useEffect(() => {

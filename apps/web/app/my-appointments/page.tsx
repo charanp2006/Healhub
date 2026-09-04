@@ -299,6 +299,7 @@ const MyAppointments = () => {
     if (token) {
       getAppointments();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   return (
@@ -333,7 +334,7 @@ const MyAppointments = () => {
           >
             <div>
               <img
-                className="w-36 bg-primary-soft rounded-lg"
+                className="w-28 sm:w-36 bg-primary-soft rounded-lg"
                 src={item.docData.image}
                 alt=""
               />
@@ -472,8 +473,8 @@ const MyAppointments = () => {
 
       {/* ---------- Reschedule Modal ---------- */}
       {rescheduleId && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center sm:justify-center p-0 sm:p-4">
+          <div className="bg-white rounded-t-2xl sm:rounded-xl shadow-xl w-full sm:max-w-lg p-5 sm:p-6 max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-text-primaryLight">
                 Reschedule Appointment
@@ -541,8 +542,8 @@ const MyAppointments = () => {
 
       {/* ---------- Rating Modal ---------- */}
       {ratingView && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-white rounded-t-2xl sm:rounded-xl shadow-xl w-full sm:max-w-md p-5 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-text-primaryLight">
                 Rate Your Experience
@@ -616,8 +617,8 @@ const MyAppointments = () => {
 
       {/* ---------- Prescription Modal ---------- */}
       {prescriptionView && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-white rounded-t-2xl sm:rounded-xl shadow-xl w-full sm:max-w-md p-5 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-text-primaryLight flex items-center gap-2">
                 <FileText size={20} className="text-primary" /> Prescription

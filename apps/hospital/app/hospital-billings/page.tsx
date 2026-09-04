@@ -15,6 +15,7 @@ import {
   SlidersHorizontal,
   Plus,
 } from "lucide-react";
+import { SkeletonList } from "@healhub/ui";
 
 const HospitalBillings = () => {
   const { hToken, backendURL: backendUrl } = useContext(HospitalContext);
@@ -65,6 +66,7 @@ const HospitalBillings = () => {
 
   useEffect(() => {
     if (hToken) fetchBillings(1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hToken]);
 
   const handleSearch = (e) => {
@@ -313,7 +315,7 @@ const HospitalBillings = () => {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-gray-500">Loading...</div>
+          <SkeletonList rows={6} className="p-8" />
         ) : billings.length === 0 ? (
           <div className="p-8 text-center text-gray-500">No billings found</div>
         ) : (

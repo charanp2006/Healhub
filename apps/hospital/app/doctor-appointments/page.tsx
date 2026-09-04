@@ -3,24 +3,17 @@
 import { useContext, useEffect, useState } from "react";
 import { DoctorContext } from "@/src/context/DoctorContext";
 import { AppContext } from "@/src/context/AppContext";
-import { assets } from "@/src/assets/assets";
-import axios from "axios";
 import { toast } from "react-toastify";
-import { CalendarCheck, CalendarMinus, CircleCheck, CircleDollarSign, Video, Users, Clock, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { CalendarCheck, CircleCheck, Video, Users, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 const DoctorAppointments = () => {
-  const { backendURL, dToken, appointments, setAppointments, getDoctorAppointments, completeDoctorAppointment, cancelDoctorAppointment } = useContext(DoctorContext);
+  const { dToken, appointments, getDoctorAppointments, completeDoctorAppointment, cancelDoctorAppointment } = useContext(DoctorContext);
   const { calculateAge, slotDateFormat, currencySymbol } = useContext(AppContext);
   const [currentPage, setCurrentPage] = useState(1);
   const appointmentsPerPage = 10;
   const [loadingAction, setLoadingAction] = useState(null);
 
-  const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const slotDateFormatFull = (slotDate) => {
-    const parts = slotDate.split("_");
-    return `${months[Number(parts[0])]} ${Number(parts[1])}, ${parts[2]}`;
-  };
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (dToken) getDoctorAppointments(); }, [dToken]);
 
   const handleAction = async (action, appointmentId) => {

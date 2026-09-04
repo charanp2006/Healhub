@@ -26,7 +26,7 @@ const MobileAppHeader = () => {
           <div className="flex items-center gap-2">
             <img className="w-8 h-8" src={assets.logo_icon.src} alt="Healhub" />
             <span className="text-xl font-bold text-[#179E8D]">
-              Heal<span className="text-[#0F172A]">hub</span>
+              Heal<span className="text-[#179E8D]">hub</span>
             </span>
           </div>
         ) : (

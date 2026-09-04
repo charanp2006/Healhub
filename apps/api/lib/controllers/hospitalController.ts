@@ -4,10 +4,14 @@ import hospitalModel from "../models/hospitalModel";
 import doctorModel from "../models/doctorModel";
 import appointmentModel from "../models/appointmentModel";
 import { connectDB } from "../db";
-import { getCloudinary } from "../cloudinary";
 import { uploadImageToCloudinary } from "../upload";
-import { json, bad } from "../http";
+import { json, bad, tooMany } from "../http";
 import { verifyAdmin, verifyHospital, verifyUser, signAuthToken } from "../auth";
+import {
+  clientIp,
+  checkLoginRateGate,
+  recordLoginAttempt,
+} from "../ratelimit";
 import type { AnyDoc } from "../types";
 
 const escapeRegExp = (value: string) =>
@@ -299,11 +303,24 @@ export async function hospitalLogin(request: Request): Promise<Response> {
   try {
     await connectDB();
     const { email, password } = await request.json();
+
+    const ip = clientIp(request);
+    const gate = checkLoginRateGate({ role: "hospital", email, ip });
+    if (gate.blocked) {
+      return tooMany(
+        "Too many failed attempts. Try again in a few minutes.",
+        gate.retryAfterSeconds,
+        request
+      );
+    }
+
     const hospital = await hospitalModel.findOne({ email });
     if (!hospital) {
+      recordLoginAttempt({ role: "hospital", email, ip, ok: false });
       return json({ success: false, message: "Invalid email or password" }, undefined, request);
     }
     if (!hospital.isRegistered) {
+      recordLoginAttempt({ role: "hospital", email, ip, ok: false });
       return json({
         success: false,
         message: "Hospital is not registered. Contact admin.",
@@ -311,6 +328,7 @@ export async function hospitalLogin(request: Request): Promise<Response> {
     }
     const isMatch = await bcrypt.compare(password, hospital.password);
     if (!isMatch) {
+      recordLoginAttempt({ role: "hospital", email, ip, ok: false });
       return json({ success: false, message: "Invalid email or password" }, undefined, request);
     }
     const token = await signAuthToken({
@@ -320,10 +338,11 @@ export async function hospitalLogin(request: Request): Promise<Response> {
       name: hospital.name || "",
     });
     if (!token) return json({ success: false, message: "Could not create session" }, undefined, request);
+    recordLoginAttempt({ role: "hospital", email, ip, ok: true });
     return json({ success: true, token }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalLogin:", error);
-    return json({ success: false, message: (error as Error).message }, undefined, request);
+    return json({ success: false, message: "Something went wrong. Please try again." }, undefined, request);
   }
 }
 

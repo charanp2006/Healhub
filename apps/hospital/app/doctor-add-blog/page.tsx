@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { DoctorContext } from "@/src/context/DoctorContext";
-import { assets } from "@/src/assets/assets";
 import { ImagePlus, X } from "lucide-react";
 
 const categories = ["Health Tips","Nutrition","Mental Health","Fitness","Disease Awareness","Medical News","Hospital Updates","Other"];
@@ -41,6 +40,7 @@ function DoctorAddBlogContent() {
         } catch (error) { toast.error(error.message); }
       })();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editId, dToken]);
 
   const onSubmitHandler = async (e) => {

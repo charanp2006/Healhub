@@ -3,7 +3,8 @@
 import { useContext, useEffect } from "react";
 import { DoctorContext } from "@/src/context/DoctorContext";
 import { AppContext } from "@/src/context/AppContext";
-import { CalendarCheck, Users, CircleDollarSign, CalendarMinus, TrendingUp, Star, Video, CircleCheck, Clock } from "lucide-react";
+import { CalendarCheck, Users, CircleDollarSign, CalendarMinus, TrendingUp, Video, CircleCheck, Clock } from "lucide-react";
+import { SkeletonDashboard } from "@healhub/ui";
 
 const DoctorDashboard = () => {
   const { dToken, dashboardData, setDashboardData, getDashboardData } = useContext(DoctorContext);
@@ -12,6 +13,7 @@ const DoctorDashboard = () => {
   useEffect(() => {
     if (dToken) { getDashboardData(); }
     return () => setDashboardData(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dToken]);
 
   const dashData = dashboardData;
@@ -25,7 +27,11 @@ const DoctorDashboard = () => {
 
   const typeIcon = (t) => t === "video" ? <Video size={14} className="text-blue-500" /> : <Users size={14} className="text-emerald-500" />;
 
-  return dashData && (
+  if (!dashData) {
+    return <div className="m-5 w-full max-w-4xl"><SkeletonDashboard /></div>;
+  }
+
+  return (
     <div className="m-5 w-full max-w-4xl">
       <div className="flex flex-wrap gap-4 mb-8">
         {stats.map((s, i) => (

@@ -55,6 +55,7 @@ const AppContextProvider = ({ children }) => {
     } else {
       setUserData(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   useEffect(() => {

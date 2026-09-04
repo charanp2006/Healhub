@@ -52,12 +52,14 @@ const ManageRooms = () => {
     } catch (error) { toast.error(error.message); }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (aToken) fetchHospitals(); }, [aToken]);
   useEffect(() => {
     if (selectedHospitalId) {
       fetchCategories();
       setShowHistory(false); setShowAdmit(false); setShowForm(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedHospitalId]);
 
   const resetForm = () => { setEditingId(null); setFormName(""); setFormTotal(""); setFormAvailable(""); setShowForm(false); };

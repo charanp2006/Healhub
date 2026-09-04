@@ -5,9 +5,8 @@ import { DoctorContext } from '@/src/context/DoctorContext';
 import { AppContext } from '@/src/context/AppContext';
 import axios from 'axios';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { TrendingUp, TrendingDown, CalendarCheck, Users, CircleDollarSign, CalendarMinus, Clock } from 'lucide-react';
-
-const COLORS = ['#20C3AE', '#6366F1', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6'];
+import { TrendingUp, TrendingDown, CalendarCheck, Users, CircleDollarSign, CalendarMinus } from 'lucide-react';
+import { SkeletonDashboard } from "@healhub/ui";
 
 const DoctorAnalytics = () => {
   const { dToken, backendURL } = useContext(DoctorContext);
@@ -54,7 +53,7 @@ const DoctorAnalytics = () => {
       : <span className="flex items-center gap-0.5 text-xs text-red-500 font-medium"><TrendingDown size={12} /> {value}%</span>;
   };
 
-  if (loading) return <div className="m-5 w-full max-w-6xl flex items-center justify-center min-h-[60vh]"><div className="text-gray-400 text-lg">Loading analytics...</div></div>;
+  if (loading) return <div className="m-5 w-full max-w-6xl"><SkeletonDashboard /></div>;
 
   if (!overview) return <div className="m-5 w-full max-w-6xl flex items-center justify-center min-h-[60vh]"><p className="text-gray-400">No analytics data available</p></div>;
 

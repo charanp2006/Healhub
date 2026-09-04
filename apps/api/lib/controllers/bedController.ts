@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import roomCategoryModel from "../models/roomCategoryModel";
 import bedAllocationModel from "../models/bedAllocationModel";
 import hospitalModel from "../models/hospitalModel";
-import userModel from "../models/userModel";
 import { connectDB } from "../db";
 import { verifyHospital } from "../auth";
 import { json, bad } from "../http";

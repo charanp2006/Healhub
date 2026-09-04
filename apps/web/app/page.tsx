@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Header from "@/src/components/Header";
+import MobileHomeHero from "@/src/components/MobileHomeHero";
 import StatsButtons from "@/src/components/StatsButtons";
 import StatsCarousel from "@/src/components/StatsCarousel";
 import SpecialityMenu from "@/src/components/SpecialityMenu";
@@ -43,12 +44,14 @@ const faqs = [
 ];
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => (
-  <div className="border border-gray-200 rounded-lg overflow-hidden">
+  <div className="bg-white border border-gray-200 rounded-2xl md:rounded-lg overflow-hidden">
     <button
       onClick={onClick}
-      className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
+      className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors touch-none-outline"
     >
-      <span className="font-medium text-gray-800">{question}</span>
+      <span className="font-medium text-gray-800 text-sm md:text-base">
+        {question}
+      </span>
       {isOpen ? (
         <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" />
       ) : (
@@ -68,14 +71,17 @@ const Home = () => {
 
   return (
     <div>
-      <Header />
+      <div className="hidden md:block">
+        <Header />
+      </div>
+      <MobileHomeHero />
       <StatsButtons />
       <StatsCarousel />
       <SpecialityMenu />
       <Banner />
 
       {/* FAQs Section */}
-      <div className="my-16 md:mx-10">
+      <div className="my-10 md:my-16 md:mx-10">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-medium text-gray-800">
             Frequently Asked Questions
