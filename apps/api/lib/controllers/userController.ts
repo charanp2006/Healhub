@@ -1,6 +1,5 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import userModel from "../models/userModel";
 import doctorModel from "../models/doctorModel";
 import hospitalModel from "../models/hospitalModel";
@@ -9,7 +8,7 @@ import razorpay from "razorpay";
 import { connectDB } from "../db";
 import { uploadImageToCloudinary } from "../upload";
 import { json, bad } from "../http";
-import { verifyUser } from "../auth";
+import { verifyUser, signAuthToken } from "../auth";
 
 function getRazorpay() {
   return new razorpay({
@@ -23,28 +22,34 @@ export async function registerUser(request: Request): Promise<Response> {
     await connectDB();
     const { name, email, password } = await request.json();
     if (!name || !password || !email) {
-      return json({ success: false, message: "All fields are required" });
+      return json({ success: false, message: "All fields are required" }, undefined, request);
     }
     if (!validator.isEmail(email)) {
-      return json({ success: false, message: "Enter a valid email" });
+      return json({ success: false, message: "Enter a valid email" }, undefined, request);
     }
     if (!validator.isStrongPassword(password)) {
       return json({
         success: false,
         message:
           "Password is not strong enough. It should be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and symbols.",
-      });
+      }, undefined, request);
     }
     const salt = await bcrypt.genSalt(10);
     const hashedpassword = await bcrypt.hash(password, salt);
     const userData = { name, email, password: hashedpassword };
     const newUser = new userModel(userData);
     const user = await newUser.save();
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "");
-    return json({ success: true, token });
+    const token = await signAuthToken({
+      id: String(user._id),
+      role: "user",
+      email: user.email || "",
+      name: user.name || "",
+    });
+    if (!token) return json({ success: false, message: "Could not create session" }, undefined, request);
+    return json({ success: true, token }, undefined, request);
   } catch (error) {
     console.log("Error in add user to db:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
@@ -54,39 +59,45 @@ export async function loginUser(request: Request): Promise<Response> {
     const { email, password } = await request.json();
     const user = await userModel.findOne({ email });
     if (!user) {
-      return json({ success: false, message: "User not found" });
+      return json({ success: false, message: "User not found" }, undefined, request);
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "");
-      return json({ success: true, token });
+      const token = await signAuthToken({
+        id: String(user._id),
+        role: "user",
+        email: user.email || "",
+        name: user.name || "",
+      });
+      if (!token) return json({ success: false, message: "Could not create session" }, undefined, request);
+      return json({ success: true, token }, undefined, request);
     }
-    return json({ success: false, message: "Invalid credentials" });
+    return json({ success: false, message: "Invalid credentials" }, undefined, request);
   } catch (error) {
     console.log("Error in user login:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function getUserProfile(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyUser(request.headers.get("token"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyUser(request.headers.get("token"));
+    if (!auth.ok) return bad(auth.message, request);
     const userId = auth.userId;
     const userData = await userModel.findById(userId).select("-password");
-    return json({ success: true, userData });
+    return json({ success: true, userData }, undefined, request);
   } catch (error) {
     console.log("Error in getting user data:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function updateUserProfile(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyUser(request.headers.get("token"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyUser(request.headers.get("token"));
+    if (!auth.ok) return bad(auth.message, request);
     const userId = auth.userId;
 
     const formData = await request.formData();
@@ -102,7 +113,7 @@ export async function updateUserProfile(request: Request): Promise<Response> {
     const imageFile = formData.get("image");
 
     if (!name || !phone || !dob || !gender) {
-      return json({ success: false, message: "data Missing" });
+      return json({ success: false, message: "data Missing" }, undefined, request);
     }
 
     const updateData: Record<string, unknown> = {
@@ -127,18 +138,18 @@ export async function updateUserProfile(request: Request): Promise<Response> {
         await userModel.findByIdAndUpdate(userId, { image: imageUrl });
       }
     }
-    return json({ success: true, message: "Profile updated successfully" });
+    return json({ success: true, message: "Profile updated successfully" }, undefined, request);
   } catch (error) {
     console.log("Error in updating user profile:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function bookAppointment(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyUser(request.headers.get("token"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyUser(request.headers.get("token"));
+    if (!auth.ok) return bad(auth.message, request);
     const userId = auth.userId;
 
     const { docId, slotDate, slotTime, appointmentType, symptoms, notes } =
@@ -146,13 +157,13 @@ export async function bookAppointment(request: Request): Promise<Response> {
 
     const docData = await doctorModel.findById(docId).select("-password");
     if (!docData.available) {
-      return json({ success: false, message: "Doctor not available" });
+      return json({ success: false, message: "Doctor not available" }, undefined, request);
     }
 
     const slots_booked = docData.slots_booked || {};
     if (slots_booked[slotDate]) {
       if (slots_booked[slotDate].includes(slotTime)) {
-        return json({ success: false, message: "Slot not available" });
+        return json({ success: false, message: "Slot not available" }, undefined, request);
       }
       slots_booked[slotDate].push(slotTime);
     } else {
@@ -182,51 +193,51 @@ export async function bookAppointment(request: Request): Promise<Response> {
     const newAppointment = new appointmentModel(appointmentData);
     await newAppointment.save();
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
-    return json({ success: true, message: "Appointment booked successfully" });
+    return json({ success: true, message: "Appointment booked successfully" }, undefined, request);
   } catch (error) {
     console.log("Error in creating the appointment:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function getUserAppointments(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyUser(request.headers.get("token"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyUser(request.headers.get("token"));
+    if (!auth.ok) return bad(auth.message, request);
     const userId = auth.userId;
     const appointments = await appointmentModel.find({ userId });
-    return json({ success: true, appointments });
+    return json({ success: true, appointments }, undefined, request);
   } catch (error) {
     console.log("Error in fetching user appointments:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function rateAppointment(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyUser(request.headers.get("token"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyUser(request.headers.get("token"));
+    if (!auth.ok) return bad(auth.message, request);
     const userId = auth.userId;
 
     const { appointmentId, rating, review } = await request.json();
     if (!userId || !appointmentId || !rating) {
-      return json({ success: false, message: "Missing required data" });
+      return json({ success: false, message: "Missing required data" }, undefined, request);
     }
 
     const appointment = await appointmentModel.findById(appointmentId);
     if (!appointment) {
-      return json({ success: false, message: "Appointment not found" });
+      return json({ success: false, message: "Appointment not found" }, undefined, request);
     }
     if (appointment.userId !== userId) {
-      return json({ success: false, message: "Unauthorized" });
+      return json({ success: false, message: "Unauthorized" }, undefined, request);
     }
     if (!appointment.isCompleted) {
-      return json({ success: false, message: "Cannot rate before completion" });
+      return json({ success: false, message: "Cannot rate before completion" }, undefined, request);
     }
     if (appointment.rating) {
-      return json({ success: false, message: "Appointment already rated" });
+      return json({ success: false, message: "Appointment already rated" }, undefined, request);
     }
 
     appointment.rating = rating;
@@ -260,10 +271,10 @@ export async function rateAppointment(request: Request): Promise<Response> {
       }
     }
 
-    return json({ success: true, message: "Rating submitted successfully" });
+    return json({ success: true, message: "Rating submitted successfully" }, undefined, request);
   } catch (error) {
     console.log("Error in rateAppointment:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
@@ -273,24 +284,24 @@ export async function getStats(request: Request): Promise<Response> {
     const userCount = await userModel.countDocuments();
     const doctorCount = await doctorModel.countDocuments();
     const hospitalCount = await hospitalModel.countDocuments();
-    return json({ success: true, userCount, doctorCount, hospitalCount });
+    return json({ success: true, userCount, doctorCount, hospitalCount }, undefined, request);
   } catch (error) {
     console.log("Error in getStats:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function cancelUserAppointment(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyUser(request.headers.get("token"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyUser(request.headers.get("token"));
+    if (!auth.ok) return bad(auth.message, request);
     const userId = auth.userId;
 
     const { appointmentId } = await request.json();
     const appointmentData = await appointmentModel.findById(appointmentId);
     if (appointmentData.userId !== userId) {
-      return json({ success: false, message: "Unauthorized action" });
+      return json({ success: false, message: "Unauthorized action" }, undefined, request);
     }
     await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true });
 
@@ -301,44 +312,44 @@ export async function cancelUserAppointment(request: Request): Promise<Response>
       (time: string) => time !== slotTime
     );
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
-    return json({ success: true, message: "Appointment cancled successfully" });
+    return json({ success: true, message: "Appointment cancled successfully" }, undefined, request);
   } catch (error) {
     console.log("Error in cancelling user appointment:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function rescheduleAppointment(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyUser(request.headers.get("token"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyUser(request.headers.get("token"));
+    if (!auth.ok) return bad(auth.message, request);
     const userId = auth.userId;
 
     const { appointmentId, newSlotDate, newSlotTime } = await request.json();
     if (!appointmentId || !newSlotDate || !newSlotTime) {
-      return json({ success: false, message: "Missing required data" });
+      return json({ success: false, message: "Missing required data" }, undefined, request);
     }
 
     const appointment = await appointmentModel.findById(appointmentId);
     if (!appointment) {
-      return json({ success: false, message: "Appointment not found" });
+      return json({ success: false, message: "Appointment not found" }, undefined, request);
     }
     if (appointment.userId !== userId) {
-      return json({ success: false, message: "Unauthorized action" });
+      return json({ success: false, message: "Unauthorized action" }, undefined, request);
     }
     if (appointment.cancelled || appointment.isCompleted) {
-      return json({ success: false, message: "Cannot reschedule this appointment" });
+      return json({ success: false, message: "Cannot reschedule this appointment" }, undefined, request);
     }
 
     const docData = await doctorModel.findById(appointment.docId);
     if (!docData) {
-      return json({ success: false, message: "Doctor not found" });
+      return json({ success: false, message: "Doctor not found" }, undefined, request);
     }
 
     const slots_booked = docData.slots_booked || {};
     if (slots_booked[newSlotDate] && slots_booked[newSlotDate].includes(newSlotTime)) {
-      return json({ success: false, message: "New slot not available" });
+      return json({ success: false, message: "New slot not available" }, undefined, request);
     }
 
     const oldDate = appointment.slotDate;
@@ -362,18 +373,18 @@ export async function rescheduleAppointment(request: Request): Promise<Response>
     return json({
       success: true,
       message: "Appointment rescheduled successfully",
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in rescheduling appointment:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function paymentRazorpay(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyUser(request.headers.get("token"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyUser(request.headers.get("token"));
+    if (!auth.ok) return bad(auth.message, request);
 
     const { appointmentId } = await request.json();
     const appointmentData = await appointmentModel.findById(appointmentId);
@@ -381,7 +392,7 @@ export async function paymentRazorpay(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "Appointment cancelled or not found",
-      });
+      }, undefined, request);
     }
 
     const options = {
@@ -390,18 +401,18 @@ export async function paymentRazorpay(request: Request): Promise<Response> {
       receipt: appointmentId.toString(),
     };
     const order = await getRazorpay().orders.create(options);
-    return json({ success: true, order });
+    return json({ success: true, order }, undefined, request);
   } catch (error) {
     console.log("Error making payment:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function verifyRazorpay(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyUser(request.headers.get("token"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyUser(request.headers.get("token"));
+    if (!auth.ok) return bad(auth.message, request);
 
     const { razorpay_order_id } = await request.json();
     const orderInfo = await getRazorpay().orders.fetch(razorpay_order_id);
@@ -409,11 +420,11 @@ export async function verifyRazorpay(request: Request): Promise<Response> {
       await appointmentModel.findByIdAndUpdate(orderInfo.receipt, {
         payment: true,
       });
-      return json({ success: true, message: "Payment successfully" });
+      return json({ success: true, message: "Payment successfully" }, undefined, request);
     }
-    return json({ success: false, message: "Payment Failed" });
+    return json({ success: false, message: "Payment Failed" }, undefined, request);
   } catch (error) {
     console.log("Error making payment:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }

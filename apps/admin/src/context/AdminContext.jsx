@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { backendURL } from "@/src/lib/api";
@@ -8,11 +8,12 @@ import { backendURL } from "@/src/lib/api";
 export const AdminContext = createContext();
 
 const AdminContextProvider = ({ children }) => {
-  const [aToken, setAToken] = useState(
-    typeof window !== "undefined" && localStorage.getItem("aToken")
-      ? localStorage.getItem("aToken")
-      : ""
-  );
+  const [aToken, setAToken] = useState("");
+
+  useEffect(() => {
+    const stored = localStorage.getItem("aToken");
+    if (stored) setAToken(stored);
+  }, []);
   const [doctors, setDoctors] = useState([]);
   const [hospitals, setHospitals] = useState([]);
   const [appointments, setAppointments] = useState([]);

@@ -1,5 +1,10 @@
 /* ============================================================
-   HealHub mobile app design foundation (shared across apps)
+   HealHub mobile app design utilities (LAYER SEPARATION)
+   ------------------------------------------------------------
+   Status: ADD-ONLY. None of these classes are applied to any
+   rendered element yet, so this file does NOT alter the current
+   design at any breakpoint. They exist so the mobile layer can
+   be built on top without touching the desktop layer.
    ============================================================ */
 
 @theme inline {
@@ -9,7 +14,24 @@
   --radius-app: 1.15rem;
 }
 
-/* Fixed bottom tab bar */
+/* Full-bleed mobile app canvas (also the desktop app background) */
+.app-screen {
+  background: #f6f8fa;
+  min-height: 100vh;
+}
+
+/* Sticky top app bar (mobile header) */
+.mobile-app-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid #edeff2;
+}
+
+/* Fixed bottom navigation bar (mobile tab bar) */
 .mobile-tabbar {
   position: fixed;
   left: 0;
@@ -24,18 +46,7 @@
   box-shadow: 0 -6px 24px rgba(15, 23, 42, 0.06);
 }
 
-/* Sticky app header */
-.mobile-app-bar {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid #edeff2;
-}
-
-/* Push page content above the fixed bottom bar */
+/* Reserve space above the fixed bottom bar so content is not hidden */
 .mb-tab-safe {
   padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px));
 }
@@ -48,13 +59,7 @@
   border: 1px solid #edeff2;
 }
 
-/* Compact mobile screen container */
-.app-screen {
-  background: #f6f8fa;
-  min-height: 100vh;
-}
-
-/* Mobile-only scrollable horizontal snap rows */
+/* Horizontal scroll-snap row for carousels / lists on mobile */
 .snap-row {
   display: flex;
   gap: 0.85rem;
@@ -71,13 +76,8 @@
   display: none;
 }
 
-/* No visible focus ring on touch taps */
+/* Remove tap highlight on touch targets */
 .touch-none-outline {
   -webkit-tap-highlight-color: transparent;
   outline: none;
-}
-
-/* Full-bleed mobile page edges */
-.app-screen-inner {
-  padding: 1rem 1.1rem 6rem;
 }

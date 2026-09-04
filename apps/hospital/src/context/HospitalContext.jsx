@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { backendURL } from "@/src/lib/api";
@@ -8,11 +8,12 @@ import { backendURL } from "@/src/lib/api";
 export const HospitalContext = createContext();
 
 const HospitalContextProvider = ({ children }) => {
-  const [hToken, setHToken] = useState(
-    typeof window !== "undefined" && localStorage.getItem("hToken")
-      ? localStorage.getItem("hToken")
-      : ""
-  );
+  const [hToken, setHToken] = useState("");
+
+  useEffect(() => {
+    const stored = localStorage.getItem("hToken");
+    if (stored) setHToken(stored);
+  }, []);
   const [doctors, setDoctors] = useState([]);
   const [dashboardData, setDashboardData] = useState(false);
   const [profileData, setProfileData] = useState(false);

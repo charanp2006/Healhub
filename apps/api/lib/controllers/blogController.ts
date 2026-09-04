@@ -36,7 +36,7 @@ export async function addBlog(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "Title and content are required",
-      });
+      }, undefined, request);
     }
 
     const baseSlug = slugify(title);
@@ -76,10 +76,10 @@ export async function addBlog(request: Request): Promise<Response> {
     });
 
     await blog.save();
-    return json({ success: true, message: "Blog created", blog });
+    return json({ success: true, message: "Blog created", blog }, undefined, request);
   } catch (error) {
     console.log("Error in addBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -100,12 +100,12 @@ export async function updateBlog(request: Request): Promise<Response> {
     const imageFile = getFile(formData, "image");
 
     if (!blogId) {
-      return json({ success: false, message: "Blog ID is required" });
+      return json({ success: false, message: "Blog ID is required" }, undefined, request);
     }
 
     const blog = await blogModel.findById(blogId);
     if (!blog) {
-      return json({ success: false, message: "Blog not found" });
+      return json({ success: false, message: "Blog not found" }, undefined, request);
     }
 
     if (title) {
@@ -146,10 +146,10 @@ export async function updateBlog(request: Request): Promise<Response> {
     }
 
     await blog.save();
-    return json({ success: true, message: "Blog updated", blog });
+    return json({ success: true, message: "Blog updated", blog }, undefined, request);
   } catch (error) {
     console.log("Error in updateBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -158,16 +158,16 @@ export async function deleteBlog(request: Request): Promise<Response> {
     await connectDB();
     const { blogId } = await request.json();
     if (!blogId) {
-      return json({ success: false, message: "Blog ID is required" });
+      return json({ success: false, message: "Blog ID is required" }, undefined, request);
     }
     const blog = await blogModel.findByIdAndDelete(blogId);
     if (!blog) {
-      return json({ success: false, message: "Blog not found" });
+      return json({ success: false, message: "Blog not found" }, undefined, request);
     }
-    return json({ success: true, message: "Blog deleted" });
+    return json({ success: true, message: "Blog deleted" }, undefined, request);
   } catch (error) {
     console.log("Error in deleteBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -211,10 +211,10 @@ export async function adminListBlogs(request: Request): Promise<Response> {
         limit: limitNumber,
         total: totalCount,
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in adminListBlogs:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -226,12 +226,12 @@ export async function adminGetBlog(
     await connectDB();
     const blog = await blogModel.findById(blogId);
     if (!blog) {
-      return json({ success: false, message: "Blog not found" });
+      return json({ success: false, message: "Blog not found" }, undefined, request);
     }
-    return json({ success: true, blog });
+    return json({ success: true, blog }, undefined, request);
   } catch (error) {
     console.log("Error in adminGetBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -275,10 +275,10 @@ export async function listBlogs(request: Request): Promise<Response> {
         limit: limitNumber,
         total: totalCount,
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in listBlogs:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -298,7 +298,7 @@ export async function getBlogBySlug(
       .populate("doctorId", "name speciality image");
 
     if (!blog) {
-      return json({ success: false, message: "Blog not found" });
+      return json({ success: false, message: "Blog not found" }, undefined, request);
     }
 
     const related = await blogModel
@@ -309,18 +309,18 @@ export async function getBlogBySlug(
       .limit(3)
       .select("-content");
 
-    return json({ success: true, blog, related });
+    return json({ success: true, blog, related }, undefined, request);
   } catch (error) {
     console.log("Error in getBlogBySlug:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function doctorAddBlog(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const formData = await request.formData();
@@ -336,12 +336,12 @@ export async function doctorAddBlog(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "Title and content are required",
-      });
+      }, undefined, request);
     }
 
     const doctor = await doctorModel.findById(docId).select("name hospitalId");
     if (!doctor) {
-      return json({ success: false, message: "Doctor not found" });
+      return json({ success: false, message: "Doctor not found" }, undefined, request);
     }
 
     const baseSlug = slugify(title);
@@ -380,18 +380,18 @@ export async function doctorAddBlog(request: Request): Promise<Response> {
     });
 
     await blog.save();
-    return json({ success: true, message: "Blog created", blog });
+    return json({ success: true, message: "Blog created", blog }, undefined, request);
   } catch (error) {
     console.log("Error in doctorAddBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function doctorUpdateBlog(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const formData = await request.formData();
@@ -405,12 +405,12 @@ export async function doctorUpdateBlog(request: Request): Promise<Response> {
     const imageFile = getFile(formData, "image");
 
     if (!blogId)
-      return json({ success: false, message: "Blog ID is required" });
+      return json({ success: false, message: "Blog ID is required" }, undefined, request);
 
     const blog = await blogModel.findById(blogId);
-    if (!blog) return json({ success: false, message: "Blog not found" });
+    if (!blog) return json({ success: false, message: "Blog not found" }, undefined, request);
     if (blog.doctorId?.toString() !== docId) {
-      return json({ success: false, message: "Unauthorized" });
+      return json({ success: false, message: "Unauthorized" }, undefined, request);
     }
 
     if (title) {
@@ -443,43 +443,43 @@ export async function doctorUpdateBlog(request: Request): Promise<Response> {
     }
 
     await blog.save();
-    return json({ success: true, message: "Blog updated", blog });
+    return json({ success: true, message: "Blog updated", blog }, undefined, request);
   } catch (error) {
     console.log("Error in doctorUpdateBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function doctorDeleteBlog(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const { blogId } = await request.json();
     if (!blogId)
-      return json({ success: false, message: "Blog ID is required" });
+      return json({ success: false, message: "Blog ID is required" }, undefined, request);
 
     const blog = await blogModel.findById(blogId);
-    if (!blog) return json({ success: false, message: "Blog not found" });
+    if (!blog) return json({ success: false, message: "Blog not found" }, undefined, request);
     if (blog.doctorId?.toString() !== docId) {
-      return json({ success: false, message: "Unauthorized" });
+      return json({ success: false, message: "Unauthorized" }, undefined, request);
     }
 
     await blogModel.findByIdAndDelete(blogId);
-    return json({ success: true, message: "Blog deleted" });
+    return json({ success: true, message: "Blog deleted" }, undefined, request);
   } catch (error) {
     console.log("Error in doctorDeleteBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function doctorListBlogs(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const url = new URL(request.url);
@@ -514,10 +514,10 @@ export async function doctorListBlogs(request: Request): Promise<Response> {
         limit: limitNumber,
         total: totalCount,
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in doctorListBlogs:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -527,27 +527,27 @@ export async function doctorGetBlog(
 ): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const blog = await blogModel.findById(blogId);
-    if (!blog) return json({ success: false, message: "Blog not found" });
+    if (!blog) return json({ success: false, message: "Blog not found" }, undefined, request);
     if (blog.doctorId?.toString() !== docId) {
-      return json({ success: false, message: "Unauthorized" });
+      return json({ success: false, message: "Unauthorized" }, undefined, request);
     }
-    return json({ success: true, blog });
+    return json({ success: true, blog }, undefined, request);
   } catch (error) {
     console.log("Error in doctorGetBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function hospitalAddBlog(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId!;
 
     const formData = await request.formData();
@@ -563,12 +563,12 @@ export async function hospitalAddBlog(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "Title and content are required",
-      });
+      }, undefined, request);
     }
 
     const hospital = await hospitalModel.findById(hospitalId).select("name");
     if (!hospital) {
-      return json({ success: false, message: "Hospital not found" });
+      return json({ success: false, message: "Hospital not found" }, undefined, request);
     }
 
     const baseSlug = slugify(title);
@@ -607,18 +607,18 @@ export async function hospitalAddBlog(request: Request): Promise<Response> {
     });
 
     await blog.save();
-    return json({ success: true, message: "Blog created", blog });
+    return json({ success: true, message: "Blog created", blog }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalAddBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function hospitalUpdateBlog(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId!;
 
     const formData = await request.formData();
@@ -632,12 +632,12 @@ export async function hospitalUpdateBlog(request: Request): Promise<Response> {
     const imageFile = getFile(formData, "image");
 
     if (!blogId)
-      return json({ success: false, message: "Blog ID is required" });
+      return json({ success: false, message: "Blog ID is required" }, undefined, request);
 
     const blog = await blogModel.findById(blogId);
-    if (!blog) return json({ success: false, message: "Blog not found" });
+    if (!blog) return json({ success: false, message: "Blog not found" }, undefined, request);
     if (blog.hospitalId?.toString() !== hospitalId) {
-      return json({ success: false, message: "Unauthorized" });
+      return json({ success: false, message: "Unauthorized" }, undefined, request);
     }
 
     if (title) {
@@ -670,43 +670,43 @@ export async function hospitalUpdateBlog(request: Request): Promise<Response> {
     }
 
     await blog.save();
-    return json({ success: true, message: "Blog updated", blog });
+    return json({ success: true, message: "Blog updated", blog }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalUpdateBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function hospitalDeleteBlog(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId!;
 
     const { blogId } = await request.json();
     if (!blogId)
-      return json({ success: false, message: "Blog ID is required" });
+      return json({ success: false, message: "Blog ID is required" }, undefined, request);
 
     const blog = await blogModel.findById(blogId);
-    if (!blog) return json({ success: false, message: "Blog not found" });
+    if (!blog) return json({ success: false, message: "Blog not found" }, undefined, request);
     if (blog.hospitalId?.toString() !== hospitalId) {
-      return json({ success: false, message: "Unauthorized" });
+      return json({ success: false, message: "Unauthorized" }, undefined, request);
     }
 
     await blogModel.findByIdAndDelete(blogId);
-    return json({ success: true, message: "Blog deleted" });
+    return json({ success: true, message: "Blog deleted" }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalDeleteBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function hospitalListBlogs(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId!;
 
     const url = new URL(request.url);
@@ -744,10 +744,10 @@ export async function hospitalListBlogs(request: Request): Promise<Response> {
         limit: limitNumber,
         total: totalCount,
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalListBlogs:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -757,18 +757,18 @@ export async function hospitalGetBlog(
 ): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId!;
 
     const blog = await blogModel.findById(blogId);
-    if (!blog) return json({ success: false, message: "Blog not found" });
+    if (!blog) return json({ success: false, message: "Blog not found" }, undefined, request);
     if (blog.hospitalId?.toString() !== hospitalId) {
-      return json({ success: false, message: "Unauthorized" });
+      return json({ success: false, message: "Unauthorized" }, undefined, request);
     }
-    return json({ success: true, blog });
+    return json({ success: true, blog }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalGetBlog:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }

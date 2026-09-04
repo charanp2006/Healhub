@@ -6,10 +6,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { assets } from "@/src/assets/assets";
 import { HospitalContext } from "@/src/context/HospitalContext";
-import { BarChart3, DollarSign, FileText, BedDouble } from "lucide-react";
+import { DoctorContext } from "@/src/context/DoctorContext";
+import {
+  BarChart3,
+  DollarSign,
+  FileText,
+  BedDouble,
+  Calendar,
+} from "lucide-react";
 
 const Sidebar = () => {
   const { hToken } = useContext(HospitalContext);
+  const { dToken } = useContext(DoctorContext);
   const pathname = usePathname();
 
   const active = (to) =>
@@ -20,7 +28,7 @@ const Sidebar = () => {
   return (
     <div className="min-h-screen bg-background-cardLight border-r border-border-light">
       {hToken && (
-        <ul className="text-text-secondaryLight mt-5 ">
+        <ul className="text-text-secondaryLight mt-5">
           <Link href="/hospital-dashboard" className={active("/hospital-dashboard")}>
             <img src={assets.home_icon} alt="" />
             <p className="hidden md:block">Dashboard</p>
@@ -51,7 +59,40 @@ const Sidebar = () => {
           </Link>
           <Link href="/hospital-profile" className={active("/hospital-profile")}>
             <img src={assets.add_icon} alt="" />
-            <p className="hidden md:block ">Profile</p>
+            <p className="hidden md:block">Profile</p>
+          </Link>
+        </ul>
+      )}
+
+      {dToken && (
+        <ul className="text-text-secondaryLight mt-5">
+          <Link href="/doctor-dashboard" className={active("/doctor-dashboard")}>
+            <img src={assets.home_icon} alt="" />
+            <p className="hidden md:block">Dashboard</p>
+          </Link>
+          <Link href="/doctor-appointments" className={active("/doctor-appointments")}>
+            <img src={assets.appointment_icon} alt="" />
+            <p className="hidden md:block">Appointments</p>
+          </Link>
+          <Link href="/doctor-availability" className={active("/doctor-availability")}>
+            <Calendar size={20} />
+            <p className="hidden md:block">Availability</p>
+          </Link>
+          <Link href="/doctor-analytics" className={active("/doctor-analytics")}>
+            <BarChart3 size={20} />
+            <p className="hidden md:block">Analytics</p>
+          </Link>
+          <Link href="/doctor-blogs" className={active("/doctor-blogs")}>
+            <FileText size={20} />
+            <p className="hidden md:block">Blog Posts</p>
+          </Link>
+          <Link href="/doctor-add-blog" className={active("/doctor-add-blog")}>
+            <img src={assets.add_icon} alt="" />
+            <p className="hidden md:block">Add Blog</p>
+          </Link>
+          <Link href="/doctor-profile" className={active("/doctor-profile")}>
+            <img src={assets.add_icon} alt="" />
+            <p className="hidden md:block">Profile</p>
           </Link>
         </ul>
       )}

@@ -2,41 +2,30 @@
 
 import React, { useState, useEffect } from "react";
 import { assets } from "@/src/assets/assets";
-import { AdminContext } from "@/src/context/AdminContext";
 import axios from "axios";
 import { useContext } from "react";
 import { toast } from "react-toastify";
 import { DoctorContext } from "@/src/context/DoctorContext";
 import { HospitalContext } from "@/src/context/HospitalContext";
-import {
-  Eye,
-  EyeOff,
-  Shield,
-  Building2,
-  Stethoscope,
-  Loader2,
-} from "lucide-react";
+import { Eye, EyeOff, Building2, Stethoscope, Loader2 } from "lucide-react";
 
 const Login = () => {
-  const [state, setState] = useState("Admin");
+  const [state, setState] = useState("Hospital");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
 
   useEffect(() => {
-    document.title = "Healhub Panel";
+    document.title = "Healhub Clinic";
   }, []);
 
-  const { setAToken, backendURL } = useContext(AdminContext);
-  const { setDToken, backendURL: backendUrl } = useContext(DoctorContext);
-  const { setHToken } = useContext(HospitalContext);
+  const { setHToken, backendURL } = useContext(HospitalContext);
+  const { setDToken, backendURL: doctorBackendURL } = useContext(DoctorContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const demoAdminEmail = process.env.NEXT_PUBLIC_DEMO_ADMIN_EMAIL;
-  const demoAdminPassword = process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD;
   const demoHospitalEmail = process.env.NEXT_PUBLIC_DEMO_HOSPITAL_EMAIL;
   const demoHospitalPassword = process.env.NEXT_PUBLIC_DEMO_HOSPITAL_PASSWORD;
   const demoDoctorEmail = process.env.NEXT_PUBLIC_DEMO_DOCTOR_EMAIL;
@@ -80,35 +69,26 @@ const Login = () => {
         localStorage.removeItem("rememberedRole");
       }
 
-      if (state === "Admin") {
-        const { data } = await axios.post(`${backendURL}/api/admin/login`, {
-          email,
-          password,
-        });
-        if (data.success) {
-          localStorage.setItem("aToken", data.token);
-          setAToken(data.token);
-          toast.success("Welcome back, Admin!");
-        } else {
-          toast.error(data.message);
-        }
-      } else if (state === "Hospital") {
-        const { data } = await axios.post(`${backendUrl}/api/hospital/login`, {
+      if (state === "Hospital") {
+        const { data } = await axios.post(`${backendURL}/api/hospital/login`, {
           email,
           password,
         });
         if (data.success) {
           localStorage.setItem("hToken", data.token);
           setHToken(data.token);
-          toast.success("Welcome back!");
+          toast.success("Welcome back, Clinic!");
         } else {
           toast.error(data.message);
         }
       } else {
-        const { data } = await axios.post(`${backendUrl}/api/doctor/login`, {
-          email,
-          password,
-        });
+        const { data } = await axios.post(
+          `${doctorBackendURL}/api/doctor/login`,
+          {
+            email,
+            password,
+          }
+        );
         if (data.success) {
           localStorage.setItem("dToken", data.token);
           setDToken(data.token);
@@ -132,12 +112,6 @@ const Login = () => {
   };
 
   const roleConfig = {
-    Admin: {
-      icon: Shield,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-      border: "border-blue-500",
-    },
     Hospital: {
       icon: Building2,
       color: "text-green-600",
@@ -153,22 +127,26 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-emerald-50 to-teal-100 flex items-center justify-center p-4">
       <form onSubmit={onSubmitHandler} className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-6">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <img src={assets.logo_icon} alt="Logo" className="h-10" />
+              <img
+                src={assets.logo_icon}
+                alt="Logo"
+                className="h-10 w-10 object-contain"
+              />
               <span className="text-2xl font-bold">
                 <span className="text-primary">Heal</span>
                 <span className="text-primary">hub</span>
               </span>
             </div>
-            <p className="text-gray-500 text-sm">Management Portal</p>
+            <p className="text-gray-500 text-sm">Clinic &amp; Doctor Portal</p>
           </div>
 
           <div className="flex gap-2 mb-6 p-1 bg-gray-100 rounded-xl">
-            {["Admin", "Hospital", "Doctor"].map((role) => {
+            {["Hospital", "Doctor"].map((role) => {
               const RoleIcon = roleConfig[role].icon;
               const isActive = state === role;
               return (
@@ -191,7 +169,7 @@ const Login = () => {
 
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-gray-800">
-              {state} Login
+              {state === "Hospital" ? "Hospital Login" : "Doctor Login"}
             </h2>
             <p className="text-gray-500 text-sm mt-1">
               Enter your credentials to access the {state.toLowerCase()}{" "}
@@ -300,31 +278,13 @@ const Login = () => {
             </div>
             <div className="mt-4 space-y-4 text-xs text-gray-700">
               <div>
-                <p className="font-medium text-gray-800">Admin</p>
-                <p>
-                  <span className="text-gray-500">Email:</span>{" "}
-                  <span className="font-mono text-gray-800">
-                    {formatDemoValue(demoAdminEmail, "NEXT_PUBLIC_DEMO_ADMIN_EMAIL")}
-                  </span>
-                </p>
-                <p>
-                  <span className="text-gray-500">Password:</span>{" "}
-                  <span className="font-mono text-gray-800">
-                    {formatDemoValue(
-                      demoAdminPassword,
-                      "NEXT_PUBLIC_DEMO_ADMIN_PASSWORD",
-                    )}
-                  </span>
-                </p>
-              </div>
-              <div>
                 <p className="font-medium text-gray-800">Hospital</p>
                 <p>
                   <span className="text-gray-500">Email:</span>{" "}
                   <span className="font-mono text-gray-800">
                     {formatDemoValue(
                       demoHospitalEmail,
-                      "NEXT_PUBLIC_DEMO_HOSPITAL_EMAIL",
+                      "NEXT_PUBLIC_DEMO_HOSPITAL_EMAIL"
                     )}
                   </span>
                 </p>
@@ -333,7 +293,7 @@ const Login = () => {
                   <span className="font-mono text-gray-800">
                     {formatDemoValue(
                       demoHospitalPassword,
-                      "NEXT_PUBLIC_DEMO_HOSPITAL_PASSWORD",
+                      "NEXT_PUBLIC_DEMO_HOSPITAL_PASSWORD"
                     )}
                   </span>
                 </p>
@@ -343,7 +303,10 @@ const Login = () => {
                 <p>
                   <span className="text-gray-500">Email:</span>{" "}
                   <span className="font-mono text-gray-800">
-                    {formatDemoValue(demoDoctorEmail, "NEXT_PUBLIC_DEMO_DOCTOR_EMAIL")}
+                    {formatDemoValue(
+                      demoDoctorEmail,
+                      "NEXT_PUBLIC_DEMO_DOCTOR_EMAIL"
+                    )}
                   </span>
                 </p>
                 <p>
@@ -351,7 +314,7 @@ const Login = () => {
                   <span className="font-mono text-gray-800">
                     {formatDemoValue(
                       demoDoctorPassword,
-                      "NEXT_PUBLIC_DEMO_DOCTOR_PASSWORD",
+                      "NEXT_PUBLIC_DEMO_DOCTOR_PASSWORD"
                     )}
                   </span>
                 </p>

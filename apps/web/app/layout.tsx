@@ -6,15 +6,19 @@ import Navbar from "@/src/components/Navbar";
 import Footer from "@/src/components/Footer";
 import FloatingDemoButton from "@/src/components/FloatingDemoButton";
 import ToastWrapper from "@/src/components/ToastWrapper";
+import RegisterSW from "@/src/components/RegisterSW";
 
 export const metadata: Metadata = {
   title: "HealHub - Book Appointments Online",
   description: "Book doctors and hospital appointments online.",
   manifest: "/manifest.json",
+  icons: {
+    apple: "/logo.png",
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#20C3AE",
+  themeColor: "#5f6FFF",
 };
 
 export default function RootLayout({
@@ -33,6 +37,7 @@ export default function RootLayout({
             <Footer />
             <FloatingDemoButton />
           </div>
+          <RegisterSW />
         </AppContextProvider>
       </body>
     </html>

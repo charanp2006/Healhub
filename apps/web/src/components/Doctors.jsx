@@ -1,13 +1,13 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { useRouter, useParams, usePathname } from "next/navigation";
 import { AppContext } from "@/src/context/AppContext";
 import { Star } from "lucide-react";
 
 const Doctors = () => {
   const { speciality } = useParams();
-  const [searchParams] = useSearchParams();
+  const pathname = usePathname();
   const [filterDoc, setFilterDoc] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
 
@@ -16,7 +16,10 @@ const Doctors = () => {
   const { doctors } = useContext(AppContext);
 
   const applyFilter = () => {
-    const hospitalId = searchParams.get("hospitalId");
+    const params = new URLSearchParams(
+      typeof window !== "undefined" ? window.location.search : ""
+    );
+    const hospitalId = params.get("hospitalId");
     let filtered = doctors;
 
     if (hospitalId) {
@@ -34,7 +37,7 @@ const Doctors = () => {
 
   useEffect(() => {
     applyFilter();
-  }, [doctors, speciality, searchParams]);
+  }, [doctors, speciality, pathname]);
 
   return (
     <div>

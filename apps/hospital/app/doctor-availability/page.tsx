@@ -9,11 +9,28 @@ import { Clock, Copy, Check, RotateCcw, Save, AlertCircle } from "lucide-react";
 const DoctorAvailability = () => {
   const { backendURL, dToken, profileData, getProfileData, setProfileData } = useContext(DoctorContext);
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const dayKeyMap = { Mon: "monday", Tue: "tuesday", Wed: "wednesday", Thu: "thursday", Fri: "friday", Sat: "saturday", Sun: "sunday" };
 
   const [schedule, setSchedule] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copiedDay, setCopiedDay] = useState(null);
   const [activePreset, setActivePreset] = useState(null);
+
+  const toMinutes = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+  const toTime = (mins) => { const h = Math.floor(mins / 60); const m = mins % 60; return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`; };
+
+  const slotsBetween = (start, end) => {
+    if (!start || !end) return [];
+    const slots = [];
+    for (let t = toMinutes(start); t < toMinutes(end); t += 30) slots.push(toTime(t));
+    return slots;
+  };
+
+  const collapseSlots = (slots) => {
+    if (!slots || slots.length === 0) return { enabled: false, startTime: "09:00", endTime: "09:00" };
+    const sorted = [...slots].sort();
+    return { enabled: true, startTime: sorted[0], endTime: toTime(toMinutes(sorted[sorted.length - 1]) + 30) };
+  };
 
   const timeSlots = {
     morning: ["09:00","09:30","10:00","10:30","11:00","11:30"],
@@ -22,21 +39,18 @@ const DoctorAvailability = () => {
     full: ["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30"]
   };
 
+  const allTimeSlots = [...new Set(Object.values(timeSlots).flat())].sort();
+
   useEffect(() => {
     if (dToken) getProfileData();
   }, [dToken]);
 
   useEffect(() => {
-    if (profileData?.availableSlots) {
+    if (profileData?.schedule) {
       const normalizedSchedule = {};
       daysOfWeek.forEach(day => {
-        const dayLower = day.toLowerCase();
-        const slots = profileData.availableSlots[dayLower] || profileData.availableSlots[day] || [];
-        normalizedSchedule[day] = slots.map(slot => {
-          if (typeof slot === 'string') return slot;
-          if (slot && slot.time) return slot.time;
-          return null;
-        }).filter(Boolean);
+        const entry = profileData.schedule[dayKeyMap[day]] || profileData.schedule[day.toLowerCase()];
+        normalizedSchedule[day] = entry && entry.enabled ? slotsBetween(entry.startTime, entry.endTime) : [];
       });
       setSchedule(normalizedSchedule);
     }
@@ -82,9 +96,9 @@ const DoctorAvailability = () => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      const apiPayload = {};
-      daysOfWeek.forEach(day => { apiPayload[day.toLowerCase()] = schedule[day] || []; });
-      const { data } = await axios.post(`${backendURL}/api/doctor/update-slots`, { availableSlots: apiPayload }, { headers: { dToken } });
+      const schedulePayload = {};
+      daysOfWeek.forEach(day => { schedulePayload[dayKeyMap[day]] = collapseSlots(schedule[day] || []); });
+      const { data } = await axios.post(`${backendURL}/api/doctor/update-schedule`, { schedule: schedulePayload }, { headers: { dToken } });
       if (data.success) {
         toast.success(data.message || "Schedule saved successfully!");
         getProfileData();
@@ -132,7 +146,7 @@ const DoctorAvailability = () => {
               </div>
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-2">
-              {Object.values(timeSlots).flat().sort().map(time => (
+              {allTimeSlots.map(time => (
                 <button key={`${day}-${time}`} onClick={() => toggleSlot(day, time)} className={`px-2 py-2 text-xs rounded-lg border font-medium transition-all cursor-pointer ${(schedule[day] || []).includes(time) ? "bg-primary text-white border-primary shadow-sm" : "bg-gray-50 text-gray-500 border-gray-200 hover:border-primary hover:bg-primary/5 hover:text-primary"}`}>{formatTime(time)}</button>
               ))}
             </div>

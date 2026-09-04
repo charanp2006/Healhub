@@ -114,10 +114,10 @@ export async function getOverviewStats(request: Request): Promise<Response> {
         onlinePayments,
         cashPayments,
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in getOverviewStats:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -163,10 +163,10 @@ export async function getAppointmentTrends(request: Request): Promise<Response> 
       trends.push({ month: monthLabel, booked, completed, cancelled, revenue });
     }
 
-    return json({ success: true, trends });
+    return json({ success: true, trends }, undefined, request);
   } catch (error) {
     console.log("Error in getAppointmentTrends:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -210,10 +210,10 @@ export async function getDoctorPerformance(request: Request): Promise<Response> 
 
     performance.sort((a, b) => b.revenue - a.revenue);
 
-    return json({ success: true, performance });
+    return json({ success: true, performance }, undefined, request);
   } catch (error) {
     console.log("Error in getDoctorPerformance:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -242,10 +242,10 @@ export async function getSpecialityStats(request: Request): Promise<Response> {
       .map(([name, data]) => ({ name, ...data }))
       .sort((a, b) => b.total - a.total);
 
-    return json({ success: true, specialities });
+    return json({ success: true, specialities }, undefined, request);
   } catch (error) {
     console.log("Error in getSpecialityStats:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -281,10 +281,10 @@ export async function getRecentActivity(request: Request): Promise<Response> {
       };
     });
 
-    return json({ success: true, activities });
+    return json({ success: true, activities }, undefined, request);
   } catch (error) {
     console.log("Error in getRecentActivity:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -303,7 +303,7 @@ export async function getHospitalAnalytics(request: Request): Promise<Response> 
       .lean()) as AnyDoc[];
 
     if (hospitals.length === 0) {
-      return json({ success: true, hospitals: [] });
+      return json({ success: true, hospitals: [] }, undefined, request);
     }
 
     const hospitalIds = hospitals.map((h) => h._id);
@@ -502,9 +502,9 @@ export async function getHospitalAnalytics(request: Request): Promise<Response> 
       };
     });
 
-    return json({ success: true, hospitals: hospitalAnalytics });
+    return json({ success: true, hospitals: hospitalAnalytics }, undefined, request);
   } catch (error) {
     console.log("Error in getHospitalAnalytics:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }

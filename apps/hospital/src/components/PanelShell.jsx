@@ -1,15 +1,40 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { HospitalContext } from "@/src/context/HospitalContext";
+import { DoctorContext } from "@/src/context/DoctorContext";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Login from "./Login";
 
 const PanelShell = ({ children }) => {
   const { hToken } = useContext(HospitalContext);
+  const {
+    dToken,
+    profileData: doctorProfile,
+    getProfileData: fetchDoctorProfile,
+  } = useContext(DoctorContext);
 
-  if (!hToken) {
+  useEffect(() => {
+    if (dToken && !doctorProfile) {
+      fetchDoctorProfile();
+    }
+  }, [dToken, doctorProfile, fetchDoctorProfile]);
+
+  useEffect(() => {
+    let title = "Healhub Clinic";
+    if (hToken) {
+      title = "Clinic Panel";
+    } else if (dToken) {
+      title =
+        doctorProfile && doctorProfile.name
+          ? `${doctorProfile.name} - Doctor`
+          : "Doctor Panel";
+    }
+    document.title = title;
+  }, [dToken, hToken, doctorProfile]);
+
+  if (!hToken && !dToken) {
     return <Login />;
   }
 

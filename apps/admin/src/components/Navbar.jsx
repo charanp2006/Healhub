@@ -3,18 +3,14 @@ import { assets } from "@/src/assets/assets";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { AdminContext } from "@/src/context/AdminContext";
-import { DoctorContext } from "@/src/context/DoctorContext";
 
 const Navbar = () => {
   const router = useRouter();
-  const { aToken, setAToken } = useContext(AdminContext);
-  const { dToken, setDToken } = useContext(DoctorContext);
+  const { setAToken } = useContext(AdminContext);
 
   const logout = () => {
-    aToken && setAToken("");
-    aToken && localStorage.removeItem("aToken");
-    dToken && setDToken("");
-    dToken && localStorage.removeItem("dToken");
+    setAToken("");
+    localStorage.removeItem("aToken");
     router.push("/");
   };
 
@@ -32,7 +28,7 @@ const Navbar = () => {
           <span className="text-3xl font-bold text-[#179E8D]">hub</span>
         </div>
         <p className="border px-2.5 py-0.5 rounded-full border-border-light text-text-secondaryLight">
-          {aToken ? "Admin" : "Doctor"}
+          Admin
         </p>
       </div>
       <button

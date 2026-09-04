@@ -1,4 +1,5 @@
 import billingModel from "../models/billingModel";
+import roomCategoryModel from "../models/roomCategoryModel";
 import hospitalModel from "../models/hospitalModel";
 import doctorModel from "../models/doctorModel";
 import appointmentModel from "../models/appointmentModel";
@@ -21,19 +22,19 @@ export async function generateBilling(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "Hospital ID and billing period are required",
-      });
+      }, undefined, request);
     }
 
     const hospital = await hospitalModel.findById(hospitalId);
     if (!hospital) {
-      return json({ success: false, message: "Hospital not found" });
+      return json({ success: false, message: "Hospital not found" }, undefined, request);
     }
 
     const startDate = new Date(billingPeriodStart);
     const endDate = new Date(billingPeriodEnd);
 
     if (startDate >= endDate) {
-      return json({ success: false, message: "Invalid date range" });
+      return json({ success: false, message: "Invalid date range" }, undefined, request);
     }
 
     const doctors = await doctorModel.find({ hospitalId }).select("_id");
@@ -43,7 +44,7 @@ export async function generateBilling(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "No doctors found for this hospital",
-      });
+      }, undefined, request);
     }
 
     const appointments = await appointmentModel.find({
@@ -118,10 +119,10 @@ export async function generateBilling(request: Request): Promise<Response> {
       success: true,
       message: "Billing generated successfully",
       billing,
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in generateBilling:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -159,10 +160,10 @@ export async function listBillings(request: Request): Promise<Response> {
         total,
         totalPages: Math.ceil(total / limitNum),
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in listBillings:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -172,36 +173,36 @@ export async function markBillingPaid(request: Request): Promise<Response> {
     const { billingId } = await request.json();
 
     if (!billingId) {
-      return json({ success: false, message: "Billing ID is required" });
+      return json({ success: false, message: "Billing ID is required" }, undefined, request);
     }
 
     const billing = await billingModel.findById(billingId);
     if (!billing) {
-      return json({ success: false, message: "Billing not found" });
+      return json({ success: false, message: "Billing not found" }, undefined, request);
     }
 
     if (billing.status === "Paid") {
       return json({
         success: false,
         message: "Billing is already marked as paid",
-      });
+      }, undefined, request);
     }
 
     billing.status = "Paid";
     await billing.save();
 
-    return json({ success: true, message: "Billing marked as paid" });
+    return json({ success: true, message: "Billing marked as paid" }, undefined, request);
   } catch (error) {
     console.log("Error in markBillingPaid:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function getHospitalBillings(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId!;
 
     const url = new URL(request.url);
@@ -232,10 +233,10 @@ export async function getHospitalBillings(request: Request): Promise<Response> {
         total,
         totalPages: Math.ceil(total / limitNum),
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in getHospitalBillings:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -244,8 +245,8 @@ export async function hospitalGenerateBilling(
 ): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId!;
 
     const {
@@ -255,19 +256,19 @@ export async function hospitalGenerateBilling(
     } = await request.json();
 
     if (!billingPeriodStart || !billingPeriodEnd) {
-      return json({ success: false, message: "Billing period is required" });
+      return json({ success: false, message: "Billing period is required" }, undefined, request);
     }
 
     const hospital = await hospitalModel.findById(hospitalId);
     if (!hospital) {
-      return json({ success: false, message: "Hospital not found" });
+      return json({ success: false, message: "Hospital not found" }, undefined, request);
     }
 
     const startDate = new Date(billingPeriodStart);
     const endDate = new Date(billingPeriodEnd);
 
     if (startDate >= endDate) {
-      return json({ success: false, message: "Invalid date range" });
+      return json({ success: false, message: "Invalid date range" }, undefined, request);
     }
 
     const doctors = await doctorModel.find({ hospitalId }).select("_id");
@@ -277,7 +278,7 @@ export async function hospitalGenerateBilling(
       return json({
         success: false,
         message: "No doctors found for this hospital",
-      });
+      }, undefined, request);
     }
 
     const appointments = await appointmentModel.find({
@@ -352,9 +353,9 @@ export async function hospitalGenerateBilling(
       success: true,
       message: "Billing generated successfully",
       billing,
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalGenerateBilling:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }

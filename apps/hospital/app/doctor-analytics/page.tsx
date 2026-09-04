@@ -21,12 +21,26 @@ const DoctorAnalytics = () => {
       if (!dToken) return;
       setLoading(true);
       try {
-        const [overviewRes, trendsRes] = await Promise.all([
-          axios.get(`${backendURL}/api/doctor/analytics/overview`, { headers: { dToken } }),
-          axios.get(`${backendURL}/api/doctor/analytics/trends`, { headers: { dToken } }),
-        ]);
-        if (overviewRes.data.success) setOverview(overviewRes.data.stats);
-        if (trendsRes.data.success) setTrends(trendsRes.data.trends);
+        const analyticsRes = await axios.get(`${backendURL}/api/doctor/analytics`, { headers: { dToken } });
+        const a = analyticsRes.data.analytics;
+        if (analyticsRes.data.success && a) {
+          setOverview({
+            ...a.stats,
+            totalRevenue: a.revenue?.totalRevenue,
+            thisMonthRevenue: a.revenue?.thisMonthRevenue,
+            revenueGrowth: a.revenue?.revenueGrowth,
+            cancelledCount: a.stats?.cancelledAppointments,
+            activeCount: a.stats?.activeAppointments,
+            inPersonCount: a.breakdown?.inPersonCount,
+            videoCount: a.breakdown?.videoCount,
+          });
+          setTrends((a.monthlyTrend || []).map((m) => ({
+            month: m.month,
+            booked: m.appointments,
+            completed: m.completed,
+            cancelled: m.cancelled ?? 0,
+          })));
+        }
       } catch (error) { console.log('Error fetching analytics:', error); }
       setLoading(false);
     };
