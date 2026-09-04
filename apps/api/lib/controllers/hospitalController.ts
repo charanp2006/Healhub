@@ -1,6 +1,5 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import hospitalModel from "../models/hospitalModel";
 import doctorModel from "../models/doctorModel";
 import appointmentModel from "../models/appointmentModel";
@@ -8,7 +7,7 @@ import { connectDB } from "../db";
 import { getCloudinary } from "../cloudinary";
 import { uploadImageToCloudinary } from "../upload";
 import { json, bad } from "../http";
-import { verifyAdmin, verifyHospital, verifyUser } from "../auth";
+import { verifyAdmin, verifyHospital, verifyUser, signAuthToken } from "../auth";
 import type { AnyDoc } from "../types";
 
 const escapeRegExp = (value: string) =>
@@ -22,8 +21,8 @@ const parseNumber = (value: unknown) => {
 export async function addHospital(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyAdmin(request.headers.get("atoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyAdmin(request.headers.get("atoken"));
+    if (!auth.ok) return bad(auth.message, request);
 
     const body = await request.json();
     const {
@@ -46,23 +45,23 @@ export async function addHospital(request: Request): Promise<Response> {
     } = body;
 
     if (!name || !email || !password || !city || lat === undefined || lng === undefined) {
-      return json({ success: false, message: "Required data missing" });
+      return json({ success: false, message: "Required data missing" }, undefined, request);
     }
 
     const latitude = parseNumber(lat);
     const longitude = parseNumber(lng);
     if (latitude === null || longitude === null) {
-      return json({ success: false, message: "Invalid coordinates" });
+      return json({ success: false, message: "Invalid coordinates" }, undefined, request);
     }
     if (!validator.isEmail(email)) {
-      return json({ success: false, message: "Invalid email address" });
+      return json({ success: false, message: "Invalid email address" }, undefined, request);
     }
     if (!validator.isStrongPassword(password)) {
       return json({
         success: false,
         message:
           "Password is not strong enough. It should be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and symbols.",
-      });
+      }, undefined, request);
     }
 
     const existingHospital = await hospitalModel.findOne({ email });
@@ -70,7 +69,7 @@ export async function addHospital(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "A hospital with this email already exists",
-      });
+      }, undefined, request);
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -86,13 +85,13 @@ export async function addHospital(request: Request): Promise<Response> {
     const totalBedsValue = parseNumber(totalBeds) ?? 0;
     const availableBedsValue = parseNumber(availableBeds) ?? 0;
     if (availableBedsValue < 0 || totalBedsValue < 0) {
-      return json({ success: false, message: "Bed counts cannot be negative" });
+      return json({ success: false, message: "Bed counts cannot be negative" }, undefined, request);
     }
     if (availableBedsValue > totalBedsValue) {
       return json({
         success: false,
         message: "Available beds cannot exceed total beds",
-      });
+      }, undefined, request);
     }
 
     const hospitalData = {
@@ -118,10 +117,10 @@ export async function addHospital(request: Request): Promise<Response> {
 
     const newHospital = new hospitalModel(hospitalData);
     await newHospital.save();
-    return json({ success: true, message: "Hospital added successfully" });
+    return json({ success: true, message: "Hospital added successfully" }, undefined, request);
   } catch (error) {
     console.log("Error in addHospital:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
@@ -176,7 +175,7 @@ export async function listHospitals(request: Request): Promise<Response> {
       const latitude = parseNumber(lat);
       const longitude = parseNumber(lng);
       if (latitude === null || longitude === null) {
-        return json({ success: false, message: "Invalid coordinates" });
+        return json({ success: false, message: "Invalid coordinates" }, undefined, request);
       }
       const radiusKm = parseNumber(radius) ?? null;
       const maxDistance = radiusKm ? radiusKm * 1000 : undefined;
@@ -215,7 +214,7 @@ export async function listHospitals(request: Request): Promise<Response> {
         success: true,
         hospitals: result?.data || [],
         pagination: { page: pageNumber, limit: limitNumber, total: totalCount },
-      });
+      }, undefined, request);
     }
 
     const hospitals = await hospitalModel
@@ -229,10 +228,10 @@ export async function listHospitals(request: Request): Promise<Response> {
       success: true,
       hospitals,
       pagination: { page: pageNumber, limit: limitNumber, total: totalCount },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in listHospitals:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
@@ -246,38 +245,38 @@ export async function getHospitalProfile(
       .findById(hospitalId)
       .select("-password -__v");
     if (!hospital) {
-      return json({ success: false, message: "Hospital not found" });
+      return json({ success: false, message: "Hospital not found" }, undefined, request);
     }
     const doctors = await doctorModel
       .find({ hospitalId })
       .select(["-password", "-email"]);
-    return json({ success: true, hospital, doctors });
+    return json({ success: true, hospital, doctors }, undefined, request);
   } catch (error) {
     console.log("Error in getHospitalProfile:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function validateHospitalBooking(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyUser(request.headers.get("token"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyUser(request.headers.get("token"));
+    if (!auth.ok) return bad(auth.message, request);
     const { hospitalId } = await request.json();
     const hospital = await hospitalModel.findById(hospitalId).select("isRegistered");
     if (!hospital) {
-      return json({ success: false, message: "Hospital not found" });
+      return json({ success: false, message: "Hospital not found" }, undefined, request);
     }
     if (!hospital.isRegistered) {
       return json({
         success: false,
         message: "Hospital is not registered for bookings",
-      });
+      }, undefined, request);
     }
-    return json({ success: true, message: "Booking eligible" });
+    return json({ success: true, message: "Booking eligible" }, undefined, request);
   } catch (error) {
     console.log("Error in validateHospitalBooking:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
@@ -289,10 +288,10 @@ export async function getRegisteredHospitals(request: Request): Promise<Response
       .select("name city")
       .sort({ name: 1 })
       .lean();
-    return json({ success: true, hospitals });
+    return json({ success: true, hospitals }, undefined, request);
   } catch (error) {
     console.log("Error in getRegisteredHospitals:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
@@ -302,31 +301,37 @@ export async function hospitalLogin(request: Request): Promise<Response> {
     const { email, password } = await request.json();
     const hospital = await hospitalModel.findOne({ email });
     if (!hospital) {
-      return json({ success: false, message: "Invalid email or password" });
+      return json({ success: false, message: "Invalid email or password" }, undefined, request);
     }
     if (!hospital.isRegistered) {
       return json({
         success: false,
         message: "Hospital is not registered. Contact admin.",
-      });
+      }, undefined, request);
     }
     const isMatch = await bcrypt.compare(password, hospital.password);
     if (!isMatch) {
-      return json({ success: false, message: "Invalid email or password" });
+      return json({ success: false, message: "Invalid email or password" }, undefined, request);
     }
-    const token = jwt.sign({ id: hospital._id }, process.env.JWT_SECRET || "");
-    return json({ success: true, token });
+    const token = await signAuthToken({
+      id: String(hospital._id),
+      role: "hospital",
+      email: hospital.email || "",
+      name: hospital.name || "",
+    });
+    if (!token) return json({ success: false, message: "Could not create session" }, undefined, request);
+    return json({ success: true, token }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalLogin:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function hospitalDashboard(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId;
 
     const doctors = await doctorModel.find({ hospitalId }).select("-password");
@@ -338,18 +343,18 @@ export async function hospitalDashboard(request: Request): Promise<Response> {
       appointments: appointments.length,
       latestAppointments: appointments.slice(-5),
     };
-    return json({ success: true, dashboardData });
+    return json({ success: true, dashboardData }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalDashboard:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function hospitalAddDoctor(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId;
 
     const formData = await request.formData();
@@ -367,31 +372,31 @@ export async function hospitalAddDoctor(request: Request): Promise<Response> {
     };
 
     if (!name || !email || !password || !speciality || !experience || !degree || !about || !fees || !address) {
-      return json({ success: false, message: "All fields are required" });
+      return json({ success: false, message: "All fields are required" }, undefined, request);
     }
 
     const hospital = await hospitalModel.findById(hospitalId);
     if (!hospital) {
-      return json({ success: false, message: "Hospital not found" });
+      return json({ success: false, message: "Hospital not found" }, undefined, request);
     }
     if (!hospital.isRegistered) {
-      return json({ success: false, message: "Hospital is not registered" });
+      return json({ success: false, message: "Hospital is not registered" }, undefined, request);
     }
 
     if (!validator.isEmail(String(email))) {
-      return json({ success: false, message: "Invalid email address" });
+      return json({ success: false, message: "Invalid email address" }, undefined, request);
     }
     if (!validator.isStrongPassword(String(password))) {
       return json({
         success: false,
         message:
           "Password is not strong enough. It should be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and symbols.",
-      });
+      }, undefined, request);
     }
 
     const existingDoctor = await doctorModel.findOne({ email });
     if (existingDoctor) {
-      return json({ success: false, message: "A doctor with this email already exists" });
+      return json({ success: false, message: "A doctor with this email already exists" }, undefined, request);
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -419,49 +424,49 @@ export async function hospitalAddDoctor(request: Request): Promise<Response> {
     };
     const newDoctor = new doctorModel(doctorData);
     await newDoctor.save();
-    return json({ success: true, message: "Doctor added successfully" });
+    return json({ success: true, message: "Doctor added successfully" }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalAddDoctor:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function hospitalGetDoctors(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId;
     const doctors = await doctorModel.find({ hospitalId }).select("-password");
-    return json({ success: true, doctors });
+    return json({ success: true, doctors }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalGetDoctors:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function hospitalProfile(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId;
     const hospital = await hospitalModel.findById(hospitalId).select("-password");
     if (!hospital) {
-      return json({ success: false, message: "Hospital not found" });
+      return json({ success: false, message: "Hospital not found" }, undefined, request);
     }
-    return json({ success: true, profileData: hospital });
+    return json({ success: true, profileData: hospital }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalProfile:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function updateHospitalProfile(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId;
 
     const formData = await request.formData();
@@ -504,23 +509,23 @@ export async function updateHospitalProfile(request: Request): Promise<Response>
     }
 
     await hospitalModel.findByIdAndUpdate(hospitalId, updateData);
-    return json({ success: true, message: "Profile updated successfully" });
+    return json({ success: true, message: "Profile updated successfully" }, undefined, request);
   } catch (error) {
     console.log("Error in updateHospitalProfile:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function hospitalPanelAnalytics(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyHospital(request.headers.get("htoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const hospitalId = auth.hospitalId;
 
     const hospital = await hospitalModel.findById(hospitalId).select("name city").lean();
     if (!hospital) {
-      return json({ success: false, message: "Hospital not found" });
+      return json({ success: false, message: "Hospital not found" }, undefined, request);
     }
 
     const doctors = (await doctorModel.find({ hospitalId }).lean()) as AnyDoc[];
@@ -656,9 +661,9 @@ export async function hospitalPanelAnalytics(request: Request): Promise<Response
         specialityBreakdown,
         monthlyTrend,
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalPanelAnalytics:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }

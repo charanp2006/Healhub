@@ -5,7 +5,7 @@ import { AdminContext } from '@/src/context/AdminContext';
 import { AppContext } from '@/src/context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Search, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight, Download, Receipt, Filter } from 'lucide-react';
+import { Search, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight, Receipt, Filter } from 'lucide-react';
 
 const BillingList = () => {
   const { aToken, backendURL } = useContext(AdminContext);
@@ -29,13 +29,12 @@ const BillingList = () => {
     try {
       const params = new URLSearchParams();
       params.set("page", pageNum); params.set("limit", LIMIT);
+      if (filterStatus) params.set("status", filterStatus === "overdue" ? "Pending" : filterStatus === "paid" ? "Paid" : "Pending");
       if (filterSearch.trim()) params.set("search", filterSearch.trim());
-      if (filterStatus) params.set("status", filterStatus);
-      if (filterPaymentMethod) params.set("paymentMethod", filterPaymentMethod);
       if (filterDateFrom) params.set("dateFrom", filterDateFrom);
       if (filterDateTo) params.set("dateTo", filterDateTo);
-      const { data } = await axios.get(`${backendURL}/api/admin/bills?${params.toString()}`, { headers: { aToken } });
-      if (data.success) { setBills(data.bills || []); setTotalCount(data.pagination?.total || 0); setPage(data.pagination?.page || 1); }
+      const { data } = await axios.get(`${backendURL}/api/billing/admin/list?${params.toString()}`, { headers: { aToken } });
+      if (data.success) { setBills(data.billings || []); setTotalCount(data.pagination?.total || 0); setPage(data.pagination?.page || 1); }
       else toast.error(data.message);
     } catch (error) { toast.error(error.message); } finally { setLoading(false); }
   };
@@ -66,13 +65,13 @@ const BillingList = () => {
     }
   };
 
-  const downloadReceipt = async (billId) => {
+  const markAsPaid = async (billId, e) => {
+    e?.stopPropagation();
     try {
-      const { data } = await axios.get(`${backendURL}/api/admin/bills/${billId}/receipt`, { headers: { aToken }, responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([data]));
-      const link = document.createElement('a'); link.href = url; link.setAttribute('download', `receipt-${billId}.pdf`);
-      document.body.appendChild(link); link.click(); link.remove(); window.URL.revokeObjectURL(url);
-    } catch (error) { toast.error("Failed to download receipt"); }
+      const { data } = await axios.post(`${backendURL}/api/billing/admin/mark-paid`, { billingId: billId }, { headers: { aToken } });
+      if (data.success) { toast.success(data.message); fetchBills(page); }
+      else toast.error(data.message);
+    } catch (error) { toast.error(error.message); }
   };
 
   const hasActiveFilters = filterSearch || filterStatus || filterPaymentMethod || filterDateFrom || filterDateTo;
@@ -133,7 +132,7 @@ const BillingList = () => {
       <p className="text-sm text-text-secondaryLight mb-4">{loading ? "Loading..." : `${totalCount} bill${totalCount !== 1 ? "s" : ""} total`}</p>
       <div className="bg-background-cardLight border border-border-light rounded-lg overflow-hidden">
         <div className="hidden sm:grid grid-cols-[1.5fr_2fr_1.5fr_1fr_1fr_1fr_auto] gap-2 py-3 px-6 border-b border-border-light text-sm font-medium text-text-secondaryLight">
-          <p>Bill ID</p><p>Patient / Doctor</p><p>Amount</p><p>Status</p><p>Method</p><p>Date</p><p>Actions</p>
+          <p>Bill ID</p><p>Hospital</p><p>Amount</p><p>Status</p><p>Appointments</p><p>Date</p><p>Actions</p>
         </div>
         {bills.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-text-secondaryLight"><Receipt size={40} className="mb-3 opacity-40" /><p>No bills found</p></div>
@@ -141,13 +140,15 @@ const BillingList = () => {
           bills.map((bill) => (
             <div key={bill._id} className="flex flex-wrap justify-between items-center gap-2 sm:grid sm:grid-cols-[1.5fr_2fr_1.5fr_1fr_1fr_1fr_auto] py-3 px-6 border-b border-border-light text-sm hover:bg-primary-soft/30">
               <p className="font-mono text-xs text-text-secondaryLight truncate">{bill._id?.slice(-8) || '—'}</p>
-              <div><p className="font-medium text-text-primaryLight truncate">{bill.patientName || bill.userId?.name || '—'}</p><p className="text-xs text-text-secondaryLight">{bill.doctorName || bill.doctorId?.name || '—'}</p></div>
-              <p className="font-semibold text-text-primaryLight">{currencySymbol}{bill.amount?.toLocaleString() || 0}</p>
-              {getStatusBadge(bill.paymentStatus)}
-              {getPaymentMethodBadge(bill.paymentMethod)}
-              <p className="text-text-secondaryLight">{formatDate(bill.createdAt)}</p>
+              <div><p className="font-medium text-text-primaryLight truncate">{bill.hospitalId?.name || '—'}</p><p className="text-xs text-text-secondaryLight">Commission: {currencySymbol}{(bill.commissionAmount || 0).toLocaleString()}</p></div>
+              <p className="font-semibold text-text-primaryLight">{currencySymbol}{bill.grandTotal?.toLocaleString() || 0}</p>
+              {getStatusBadge((bill.status || '').toLowerCase())}
+              <p className="text-text-secondaryLight">{bill.totalAppointments || 0}{bill.bedAllocations ? ` + ${bill.bedAllocations} beds` : ''}</p>
+              <p className="text-text-secondaryLight">{formatDate(bill.billingPeriodEnd || bill.createdAt)}</p>
               <div className="flex items-center gap-3">
-                <button onClick={() => downloadReceipt(bill._id)} className="text-primary cursor-pointer hover:underline" title="Download Receipt"><Download size={15} /></button>
+                {(bill.status || '') === 'Pending' && (
+                  <button onClick={(e) => markAsPaid(bill._id, e)} className="text-xs bg-primary text-white px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary-hover transition-colors" title="Mark as paid">Mark Paid</button>
+                )}
               </div>
             </div>
           ))

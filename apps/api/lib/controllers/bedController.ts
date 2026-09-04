@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 import roomCategoryModel from "../models/roomCategoryModel";
 import bedAllocationModel from "../models/bedAllocationModel";
 import hospitalModel from "../models/hospitalModel";
+import userModel from "../models/userModel";
 import { connectDB } from "../db";
+import { verifyHospital } from "../auth";
 import { json, bad } from "../http";
 
 const recalcHospitalBeds = async (hospitalId: string) => {
@@ -21,25 +23,25 @@ export async function addRoomCategory(request: Request): Promise<Response> {
     const { hospitalId, name, totalBeds, availableBeds } = await request.json();
 
     if (!hospitalId || !name || totalBeds === undefined) {
-      return json({ success: false, message: "Required data missing" });
+      return json({ success: false, message: "Required data missing" }, undefined, request);
     }
 
     const hospital = await hospitalModel.findById(hospitalId);
     if (!hospital) {
-      return json({ success: false, message: "Hospital not found" });
+      return json({ success: false, message: "Hospital not found" }, undefined, request);
     }
 
     const total = Number(totalBeds);
     const available = Number(availableBeds ?? totalBeds);
 
     if (total < 0 || available < 0) {
-      return json({ success: false, message: "Bed counts cannot be negative" });
+      return json({ success: false, message: "Bed counts cannot be negative" }, undefined, request);
     }
     if (available > total) {
       return json({
         success: false,
         message: "Available beds cannot exceed total beds",
-      });
+      }, undefined, request);
     }
 
     const existing = await roomCategoryModel.findOne({ hospitalId, name });
@@ -47,7 +49,7 @@ export async function addRoomCategory(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "Room category already exists for this hospital",
-      });
+      }, undefined, request);
     }
 
     const category = new roomCategoryModel({
@@ -59,10 +61,10 @@ export async function addRoomCategory(request: Request): Promise<Response> {
     await category.save();
     await recalcHospitalBeds(hospitalId);
 
-    return json({ success: true, message: "Room category added", category });
+    return json({ success: true, message: "Room category added", category }, undefined, request);
   } catch (error) {
     console.log("Error in addRoomCategory:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -76,7 +78,7 @@ export async function updateRoomCategory(request: Request): Promise<Response> {
     if (!categoryId) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Category ID required" });
+      return json({ success: false, message: "Category ID required" }, undefined, request);
     }
 
     const category = await roomCategoryModel
@@ -85,7 +87,7 @@ export async function updateRoomCategory(request: Request): Promise<Response> {
     if (!category) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Category not found" });
+      return json({ success: false, message: "Category not found" }, undefined, request);
     }
 
     const newTotal =
@@ -98,7 +100,7 @@ export async function updateRoomCategory(request: Request): Promise<Response> {
     if (newTotal < 0 || newAvailable < 0) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Bed counts cannot be negative" });
+      return json({ success: false, message: "Bed counts cannot be negative" }, undefined, request);
     }
     if (newAvailable > newTotal) {
       await session.abortTransaction();
@@ -106,7 +108,7 @@ export async function updateRoomCategory(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "Available beds cannot exceed total beds",
-      });
+      }, undefined, request);
     }
 
     category.totalBeds = newTotal;
@@ -119,12 +121,12 @@ export async function updateRoomCategory(request: Request): Promise<Response> {
 
     await recalcHospitalBeds(category.hospitalId.toString());
 
-    return json({ success: true, message: "Room category updated", category });
+    return json({ success: true, message: "Room category updated", category }, undefined, request);
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
     console.log("Error in updateRoomCategory:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -135,10 +137,10 @@ export async function getRoomCategories(
   try {
     await connectDB();
     const categories = await roomCategoryModel.find({ hospitalId });
-    return json({ success: true, categories });
+    return json({ success: true, categories }, undefined, request);
   } catch (error) {
     console.log("Error in getRoomCategories:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -151,10 +153,10 @@ export async function getPublicRoomAvailability(
     const categories = await roomCategoryModel
       .find({ hospitalId })
       .select("name availableBeds totalBeds");
-    return json({ success: true, categories });
+    return json({ success: true, categories }, undefined, request);
   } catch (error) {
     console.log("Error in getPublicRoomAvailability:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -169,7 +171,7 @@ export async function admitPatient(request: Request): Promise<Response> {
     if (!hospitalId || !roomCategoryId || !patientId) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Required data missing" });
+      return json({ success: false, message: "Required data missing" }, undefined, request);
     }
 
     const category = await roomCategoryModel
@@ -178,7 +180,7 @@ export async function admitPatient(request: Request): Promise<Response> {
     if (!category) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Room category not found" });
+      return json({ success: false, message: "Room category not found" }, undefined, request);
     }
 
     if (category.availableBeds <= 0) {
@@ -187,7 +189,7 @@ export async function admitPatient(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "No beds available in this category",
-      });
+      }, undefined, request);
     }
 
     category.availableBeds -= 1;
@@ -207,12 +209,12 @@ export async function admitPatient(request: Request): Promise<Response> {
 
     await recalcHospitalBeds(hospitalId);
 
-    return json({ success: true, message: "Patient admitted", allocation });
+    return json({ success: true, message: "Patient admitted", allocation }, undefined, request);
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
     console.log("Error in admitPatient:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -226,7 +228,7 @@ export async function dischargePatient(request: Request): Promise<Response> {
     if (!allocationId) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Allocation ID required" });
+      return json({ success: false, message: "Allocation ID required" }, undefined, request);
     }
 
     const allocation = await bedAllocationModel
@@ -235,7 +237,7 @@ export async function dischargePatient(request: Request): Promise<Response> {
     if (!allocation) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Allocation not found" });
+      return json({ success: false, message: "Allocation not found" }, undefined, request);
     }
 
     if (allocation.status !== "admitted") {
@@ -244,7 +246,7 @@ export async function dischargePatient(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "Patient is not currently admitted",
-      });
+      }, undefined, request);
     }
 
     allocation.status = "discharged";
@@ -267,12 +269,12 @@ export async function dischargePatient(request: Request): Promise<Response> {
 
     await recalcHospitalBeds(allocation.hospitalId.toString());
 
-    return json({ success: true, message: "Patient discharged", allocation });
+    return json({ success: true, message: "Patient discharged", allocation }, undefined, request);
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
     console.log("Error in dischargePatient:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -302,10 +304,10 @@ export async function getAllocationHistory(
       success: true,
       allocations,
       pagination: { page: pageNumber, limit: limitNumber, total: totalCount },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in getAllocationHistory:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -314,31 +316,34 @@ export async function hospitalAddRoomCategory(
 ): Promise<Response> {
   try {
     await connectDB();
-    const { hospitalId, name, totalBeds, availableBeds } = await request.json();
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
+    const hospitalId = auth.hospitalId!;
+    const { name, totalBeds, availableBeds } = await request.json();
 
     if (!name || totalBeds === undefined) {
       return json({
         success: false,
         message: "Name and total beds required",
-      });
+      }, undefined, request);
     }
 
     const total = Number(totalBeds);
     const available = Number(availableBeds ?? totalBeds);
     if (total < 0 || available < 0)
-      return json({ success: false, message: "Bed counts cannot be negative" });
+      return json({ success: false, message: "Bed counts cannot be negative" }, undefined, request);
     if (available > total)
       return json({
         success: false,
         message: "Available beds cannot exceed total beds",
-      });
+      }, undefined, request);
 
     const existing = await roomCategoryModel.findOne({ hospitalId, name });
     if (existing)
       return json({
         success: false,
         message: "Room category already exists",
-      });
+      }, undefined, request);
 
     const category = new roomCategoryModel({
       hospitalId,
@@ -349,10 +354,10 @@ export async function hospitalAddRoomCategory(
     await category.save();
     await recalcHospitalBeds(hospitalId);
 
-    return json({ success: true, message: "Room category added", category });
+    return json({ success: true, message: "Room category added", category }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalAddRoomCategory:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -363,12 +368,19 @@ export async function hospitalUpdateRoomCategory(
   session.startTransaction();
   try {
     await connectDB();
-    const { hospitalId, categoryId, totalBeds, availableBeds, name } =
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) {
+      await session.abortTransaction();
+      session.endSession();
+      return bad(auth.message, request);
+    }
+    const hospitalId = auth.hospitalId!;
+    const { categoryId, totalBeds, availableBeds, name } =
       await request.json();
     if (!categoryId) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Category ID required" });
+      return json({ success: false, message: "Category ID required" }, undefined, request);
     }
 
     const category = await roomCategoryModel
@@ -377,12 +389,12 @@ export async function hospitalUpdateRoomCategory(
     if (!category) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Category not found" });
+      return json({ success: false, message: "Category not found" }, undefined, request);
     }
     if (category.hospitalId.toString() !== hospitalId) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Unauthorized" });
+      return json({ success: false, message: "Unauthorized" }, undefined, request);
     }
 
     const newTotal =
@@ -394,7 +406,7 @@ export async function hospitalUpdateRoomCategory(
     if (newTotal < 0 || newAvailable < 0) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Bed counts cannot be negative" });
+      return json({ success: false, message: "Bed counts cannot be negative" }, undefined, request);
     }
     if (newAvailable > newTotal) {
       await session.abortTransaction();
@@ -402,7 +414,7 @@ export async function hospitalUpdateRoomCategory(
       return json({
         success: false,
         message: "Available beds cannot exceed total beds",
-      });
+      }, undefined, request);
     }
 
     category.totalBeds = newTotal;
@@ -414,12 +426,12 @@ export async function hospitalUpdateRoomCategory(
     session.endSession();
     await recalcHospitalBeds(hospitalId);
 
-    return json({ success: true, message: "Room category updated", category });
+    return json({ success: true, message: "Room category updated", category }, undefined, request);
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
     console.log("Error in hospitalUpdateRoomCategory:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -428,12 +440,13 @@ export async function hospitalGetRoomCategories(
 ): Promise<Response> {
   try {
     await connectDB();
-    const { hospitalId } = await request.json();
-    const categories = await roomCategoryModel.find({ hospitalId });
-    return json({ success: true, categories });
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
+    const categories = await roomCategoryModel.find({ hospitalId: auth.hospitalId });
+    return json({ success: true, categories }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalGetRoomCategories:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -444,12 +457,19 @@ export async function hospitalAdmitPatient(
   session.startTransaction();
   try {
     await connectDB();
-    const { hospitalId, roomCategoryId, patientId, admissionDate } =
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) {
+      await session.abortTransaction();
+      session.endSession();
+      return bad(auth.message, request);
+    }
+    const hospitalId = auth.hospitalId!;
+    const { roomCategoryId, patientId, admissionDate } =
       await request.json();
     if (!roomCategoryId || !patientId) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Required data missing" });
+      return json({ success: false, message: "Required data missing" }, undefined, request);
     }
 
     const category = await roomCategoryModel
@@ -458,17 +478,17 @@ export async function hospitalAdmitPatient(
     if (!category) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Room category not found" });
+      return json({ success: false, message: "Room category not found" }, undefined, request);
     }
     if (category.hospitalId.toString() !== hospitalId) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Unauthorized" });
+      return json({ success: false, message: "Unauthorized" }, undefined, request);
     }
     if (category.availableBeds <= 0) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "No beds available" });
+      return json({ success: false, message: "No beds available" }, undefined, request);
     }
 
     category.availableBeds -= 1;
@@ -487,12 +507,12 @@ export async function hospitalAdmitPatient(
     session.endSession();
     await recalcHospitalBeds(hospitalId);
 
-    return json({ success: true, message: "Patient admitted", allocation });
+    return json({ success: true, message: "Patient admitted", allocation }, undefined, request);
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
     console.log("Error in hospitalAdmitPatient:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -503,11 +523,18 @@ export async function hospitalDischargePatient(
   session.startTransaction();
   try {
     await connectDB();
-    const { hospitalId, allocationId, dischargeDate } = await request.json();
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) {
+      await session.abortTransaction();
+      session.endSession();
+      return bad(auth.message, request);
+    }
+    const hospitalId = auth.hospitalId!;
+    const { allocationId, dischargeDate } = await request.json();
     if (!allocationId) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Allocation ID required" });
+      return json({ success: false, message: "Allocation ID required" }, undefined, request);
     }
 
     const allocation = await bedAllocationModel
@@ -516,12 +543,12 @@ export async function hospitalDischargePatient(
     if (!allocation) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Allocation not found" });
+      return json({ success: false, message: "Allocation not found" }, undefined, request);
     }
     if (allocation.hospitalId.toString() !== hospitalId) {
       await session.abortTransaction();
       session.endSession();
-      return json({ success: false, message: "Unauthorized" });
+      return json({ success: false, message: "Unauthorized" }, undefined, request);
     }
     if (allocation.status !== "admitted") {
       await session.abortTransaction();
@@ -529,7 +556,7 @@ export async function hospitalDischargePatient(
       return json({
         success: false,
         message: "Patient is not currently admitted",
-      });
+      }, undefined, request);
     }
 
     allocation.status = "discharged";
@@ -551,12 +578,12 @@ export async function hospitalDischargePatient(
     session.endSession();
     await recalcHospitalBeds(hospitalId);
 
-    return json({ success: true, message: "Patient discharged", allocation });
+    return json({ success: true, message: "Patient discharged", allocation }, undefined, request);
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
     console.log("Error in hospitalDischargePatient:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -565,7 +592,8 @@ export async function hospitalGetAllocationHistory(
 ): Promise<Response> {
   try {
     await connectDB();
-    const { hospitalId } = await request.json();
+    const auth = await verifyHospital(request.headers.get("htoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const url = new URL(request.url);
     const page = url.searchParams.get("page") || "1";
     const limit = url.searchParams.get("limit") || "20";
@@ -575,7 +603,7 @@ export async function hospitalGetAllocationHistory(
     const limitNumber = Math.min(Math.max(parseInt(limit, 10), 1), 100);
     const skipCount = (pageNumber - 1) * limitNumber;
 
-    const filter: Record<string, unknown> = { hospitalId };
+    const filter: Record<string, unknown> = { hospitalId: auth.hospitalId };
     if (
       status &&
       ["admitted", "discharged", "transferred"].includes(status)
@@ -601,9 +629,9 @@ export async function hospitalGetAllocationHistory(
         limit: limitNumber,
         total: totalCount,
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalGetAllocationHistory:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }

@@ -3,39 +3,64 @@ const CORS_ORIGINS = (process.env.CORS_ORIGIN || "")
   .map((o) => o.trim())
   .filter(Boolean);
 
-export function corsHeaders(): Record<string, string> {
-  const origins = CORS_ORIGINS.length ? CORS_ORIGINS : ["*"];
+function normalizeOrigin(origin?: string | null): string | null {
+  if (!origin) return null;
+  // Strip a trailing slash if present (e.g. http://localhost:3000/)
+  return origin.replace(/\/+$/, "");
+}
+
+export function corsHeaders(request?: Request): Record<string, string> {
+  const allowed = CORS_ORIGINS.length ? CORS_ORIGINS : ["*"];
+  const reqOrigin = normalizeOrigin(request?.headers.get("Origin"));
+
+  let allowOrigin: string;
+  if (allowed.length === 1 && allowed[0] === "*") {
+    allowOrigin = "*";
+  } else if (reqOrigin && allowed.map(normalizeOrigin).includes(reqOrigin)) {
+    // Echo only the single, explicitly-allowlisted origin that made the request.
+    allowOrigin = reqOrigin;
+  } else {
+    // No matching/recognized origin: do not allow the browser to proceed.
+    // (Cannot use "*" alongside credentials, so omit the header entirely.)
+    allowOrigin = "";
+  }
+
   return {
-    "Access-Control-Allow-Origin": origins.length === 1 ? origins[0] : origins.join(", "),
+    ...(allowOrigin ? { "Access-Control-Allow-Origin": allowOrigin } : {}),
     "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization, token, atoken, dtoken, htoken",
     "Access-Control-Allow-Credentials": "true",
+    "Vary": "Origin",
   };
 }
 
-export function json(body: unknown, status = 200): Response {
+export function json(
+  body: unknown,
+  status = 200,
+  request?: Request
+): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       "Content-Type": "application/json",
-      ...corsHeaders(),
+      ...corsHeaders(request),
     },
   });
 }
 
-export function handleOptions(): Response {
+export function handleOptions(request?: Request): Response {
   return new Response(null, {
     status: 204,
-    headers: corsHeaders(),
+    headers: corsHeaders(request),
   });
 }
 
-export function ok(data: Record<string, unknown>): Response {
-  return json({ success: true, ...data });
+export function ok(data: Record<string, unknown>, request?: Request): Response {
+  return json({ success: true, ...data }, 200, request);
 }
 
-export function bad(message: string): Response {
-  return json({ success: false, message });
+export function bad(message: string, request?: Request): Response {
+  return json({ success: false, message }, 401, request);
 }
 
 export async function parseJson<T = Record<string, unknown>>(

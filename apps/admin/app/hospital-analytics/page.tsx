@@ -24,12 +24,31 @@ const HospitalAnalytics = () => {
     if (!hospitalId) { setStats(null); setTopDoctors([]); return; }
     setLoading(true);
     try {
-      const [statsRes, doctorsRes] = await Promise.all([
-        axios.get(`${backendURL}/api/hospital/admin/${hospitalId}/stats`, { headers: { aToken } }),
-        axios.get(`${backendURL}/api/hospital/admin/${hospitalId}/top-doctors`, { headers: { aToken } }),
-      ]);
-      if (statsRes.data.success) setStats(statsRes.data.stats);
-      if (doctorsRes.data.success) setTopDoctors(doctorsRes.data.doctors || []);
+      const { data } = await axios.get(`${backendURL}/api/analytics/hospital`, {
+        params: { hospitalId },
+        headers: { aToken },
+      });
+      const h = data.success ? data.hospitals?.[0] : null;
+      if (data.success && h) {
+        const s = h.stats || {};
+        setStats({
+          ...s,
+          revenueGrowth: s.revenueGrowth ?? 0,
+          totalPatients: s.totalPatients ?? 0,
+          inPersonCount: s.inPersonCount ?? 0,
+          videoCount: s.videoCount ?? 0,
+          onlinePayments: s.onlinePayments ?? 0,
+          cashPayments: s.cashPayments ?? 0,
+        });
+        setTopDoctors((h.topDoctors || []).map((d) => ({
+          ...d,
+          appointmentCount: d.appointments ?? 0,
+          ratingAverage: d.ratingAverage ?? 0,
+        })));
+      } else {
+        setStats(null);
+        setTopDoctors([]);
+      }
     } catch (error) { console.log('Error:', error); setStats(null); setTopDoctors([]); }
     setLoading(false);
   };

@@ -11,11 +11,12 @@ const AppContextProvider = ({ children }) => {
   const currencySymbol = "₹";
 
   const [doctors, setDoctors] = useState([]);
-  const [token, setToken] = useState(
-    typeof window !== "undefined" && localStorage.getItem("token")
-      ? localStorage.getItem("token")
-      : false
-  );
+  const [token, setToken] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("token");
+    if (stored) setToken(stored);
+  }, []);
   const [userData, setUserData] = useState(false);
 
   const getDoctorsData = async () => {

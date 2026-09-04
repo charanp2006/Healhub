@@ -1,7 +1,7 @@
 {
   "extends": "@healhub/config/typescript/nextjs.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    // "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     }

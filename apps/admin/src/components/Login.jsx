@@ -4,62 +4,36 @@ import { assets } from "@/src/assets/assets";
 import { AdminContext } from "@/src/context/AdminContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { DoctorContext } from "@/src/context/DoctorContext";
-import { HospitalContext } from "@/src/context/HospitalContext";
-import {
-  Eye,
-  EyeOff,
-  Shield,
-  Building2,
-  Stethoscope,
-  Loader2,
-} from "lucide-react";
+import { Eye, EyeOff, Shield, Loader2 } from "lucide-react";
 
 const Login = () => {
-  const [state, setState] = useState("Admin");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
 
   useEffect(() => {
-    document.title = "Healhub Panel";
+    document.title = "Healhub Admin Panel";
   }, []);
 
   const { setAToken, backendURL } = useContext(AdminContext);
-  const { setDToken, backendURL: doctorBackendURL } = useContext(DoctorContext);
-  const { setHToken } = useContext(HospitalContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const demoAdminEmail = process.env.NEXT_PUBLIC_DEMO_ADMIN_EMAIL;
   const demoAdminPassword = process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD;
-  const demoHospitalEmail = process.env.NEXT_PUBLIC_DEMO_HOSPITAL_EMAIL;
-  const demoHospitalPassword = process.env.NEXT_PUBLIC_DEMO_HOSPITAL_PASSWORD;
-  const demoDoctorEmail = process.env.NEXT_PUBLIC_DEMO_DOCTOR_EMAIL;
-  const demoDoctorPassword = process.env.NEXT_PUBLIC_DEMO_DOCTOR_PASSWORD;
 
   const formatDemoValue = (value, label) =>
     value ? value : `Set ${label} in .env`;
 
   useEffect(() => {
     const rememberedEmail = localStorage.getItem("rememberedEmail");
-    const rememberedRole = localStorage.getItem("rememberedRole");
     if (rememberedEmail) {
       setEmail(rememberedEmail);
       setRememberMe(true);
     }
-    if (rememberedRole) {
-      setState(rememberedRole);
-    }
   }, []);
-
-  const handleRoleChange = (role) => {
-    setState(role);
-    setPassword("");
-    setShowPassword(false);
-  };
 
   const handleDemoToggle = () => {
     setShowDemo((prev) => !prev);
@@ -72,48 +46,20 @@ const Login = () => {
     try {
       if (rememberMe) {
         localStorage.setItem("rememberedEmail", email);
-        localStorage.setItem("rememberedRole", state);
       } else {
         localStorage.removeItem("rememberedEmail");
-        localStorage.removeItem("rememberedRole");
       }
 
-      if (state === "Admin") {
-        const { data } = await axios.post(`${backendURL}/api/admin/login`, {
-          email,
-          password,
-        });
-        if (data.success) {
-          localStorage.setItem("aToken", data.token);
-          setAToken(data.token);
-          toast.success("Welcome back, Admin!");
-        } else {
-          toast.error(data.message);
-        }
-      } else if (state === "Hospital") {
-        const { data } = await axios.post(`${doctorBackendURL}/api/hospital/login`, {
-          email,
-          password,
-        });
-        if (data.success) {
-          localStorage.setItem("hToken", data.token);
-          setHToken(data.token);
-          toast.success("Welcome back!");
-        } else {
-          toast.error(data.message);
-        }
+      const { data } = await axios.post(`${backendURL}/api/admin/login`, {
+        email,
+        password,
+      });
+      if (data.success) {
+        localStorage.setItem("aToken", data.token);
+        setAToken(data.token);
+        toast.success("Welcome back, Admin!");
       } else {
-        const { data } = await axios.post(`${doctorBackendURL}/api/doctor/login`, {
-          email,
-          password,
-        });
-        if (data.success) {
-          localStorage.setItem("dToken", data.token);
-          setDToken(data.token);
-          toast.success("Welcome back, Doctor!");
-        } else {
-          toast.error(data.message);
-        }
+        toast.error(data.message);
       }
     } catch (error) {
       console.log("Login error:", error);
@@ -129,71 +75,33 @@ const Login = () => {
     }
   };
 
-  const roleConfig = {
-    Admin: {
-      icon: Shield,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-      border: "border-blue-500",
-    },
-    Hospital: {
-      icon: Building2,
-      color: "text-green-600",
-      bg: "bg-green-50",
-      border: "border-green-500",
-    },
-    Doctor: {
-      icon: Stethoscope,
-      color: "text-purple-600",
-      bg: "bg-purple-50",
-      border: "border-purple-500",
-    },
-  };
-
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <form onSubmit={onSubmitHandler} className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-6">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <img src={assets.logo_icon} alt="Logo" className="h-10" />
+              <img
+                src={assets.logo_icon}
+                alt="Logo"
+                className="h-10 w-10 object-contain"
+              />
               <span className="text-2xl font-bold">
                 <span className="text-primary">Heal</span>
                 <span className="text-primary">hub</span>
               </span>
             </div>
-            <p className="text-gray-500 text-sm">Management Portal</p>
-          </div>
-
-          <div className="flex gap-2 mb-6 p-1 bg-gray-100 rounded-xl">
-            {["Admin", "Hospital", "Doctor"].map((role) => {
-              const RoleIcon = roleConfig[role].icon;
-              const isActive = state === role;
-              return (
-                <button
-                  key={role}
-                  type="button"
-                  onClick={() => handleRoleChange(role)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${
-                    isActive
-                      ? `bg-white shadow-sm ${roleConfig[role].color}`
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  <RoleIcon size={16} />
-                  <span className="hidden sm:inline">{role}</span>
-                </button>
-              );
-            })}
+            <p className="text-gray-500 text-sm">Admin Control Panel</p>
           </div>
 
           <div className="mb-6">
-            <h2 className="text-xl font-semibold text-gray-800">
-              {state} Login
-            </h2>
+            <div className="w-fit flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-sm font-medium">
+              <Shield size={16} />
+              Admin
+            </div>
+            <h2 className="text-xl font-semibold text-gray-800 mt-3">Admin Login</h2>
             <p className="text-gray-500 text-sm mt-1">
-              Enter your credentials to access the {state.toLowerCase()}{" "}
-              dashboard
+              Enter your credentials to access the admin dashboard
             </p>
           </div>
 
@@ -302,7 +210,10 @@ const Login = () => {
                 <p>
                   <span className="text-gray-500">Email:</span>{" "}
                   <span className="font-mono text-gray-800">
-                    {formatDemoValue(demoAdminEmail, "NEXT_PUBLIC_DEMO_ADMIN_EMAIL")}
+                    {formatDemoValue(
+                      demoAdminEmail,
+                      "NEXT_PUBLIC_DEMO_ADMIN_EMAIL"
+                    )}
                   </span>
                 </p>
                 <p>
@@ -310,46 +221,7 @@ const Login = () => {
                   <span className="font-mono text-gray-800">
                     {formatDemoValue(
                       demoAdminPassword,
-                      "NEXT_PUBLIC_DEMO_ADMIN_PASSWORD",
-                    )}
-                  </span>
-                </p>
-              </div>
-              <div>
-                <p className="font-medium text-gray-800">Hospital</p>
-                <p>
-                  <span className="text-gray-500">Email:</span>{" "}
-                  <span className="font-mono text-gray-800">
-                    {formatDemoValue(
-                      demoHospitalEmail,
-                      "NEXT_PUBLIC_DEMO_HOSPITAL_EMAIL",
-                    )}
-                  </span>
-                </p>
-                <p>
-                  <span className="text-gray-500">Password:</span>{" "}
-                  <span className="font-mono text-gray-800">
-                    {formatDemoValue(
-                      demoHospitalPassword,
-                      "NEXT_PUBLIC_DEMO_HOSPITAL_PASSWORD",
-                    )}
-                  </span>
-                </p>
-              </div>
-              <div>
-                <p className="font-medium text-gray-800">Doctor</p>
-                <p>
-                  <span className="text-gray-500">Email:</span>{" "}
-                  <span className="font-mono text-gray-800">
-                    {formatDemoValue(demoDoctorEmail, "NEXT_PUBLIC_DEMO_DOCTOR_EMAIL")}
-                  </span>
-                </p>
-                <p>
-                  <span className="text-gray-500">Password:</span>{" "}
-                  <span className="font-mono text-gray-800">
-                    {formatDemoValue(
-                      demoDoctorPassword,
-                      "NEXT_PUBLIC_DEMO_DOCTOR_PASSWORD",
+                      "NEXT_PUBLIC_DEMO_ADMIN_PASSWORD"
                     )}
                   </span>
                 </p>

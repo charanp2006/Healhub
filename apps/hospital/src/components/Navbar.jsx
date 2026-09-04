@@ -39,7 +39,7 @@ const Navbar = () => {
           <span className="text-3xl font-bold text-[#179E8D]">hub</span>
         </div>
         <p className="border px-2.5 py-0.5 rounded-full border-border-light text-text-secondaryLight">
-          {aToken ? "Admin" : hToken ? "Hospital" : "Doctor"}
+          {hToken ? "Clinic" : dToken ? "Doctor" : "Clinic"}
         </p>
       </div>
 

@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import doctorModel from "../models/doctorModel";
+import hospitalModel from "../models/hospitalModel";
 import appointmentModel from "../models/appointmentModel";
 import { connectDB } from "../db";
 import { json, bad } from "../http";
-import { verifyDoctor } from "../auth";
+import { verifyDoctor, signAuthToken } from "../auth";
 
 export async function changeAvailability(request: Request): Promise<Response> {
   try {
@@ -14,7 +14,7 @@ export async function changeAvailability(request: Request): Promise<Response> {
 
     const doctorData = await doctorModel.findById(docId);
     if (!doctorData) {
-      return json({ success: false, message: "Doctor not found" });
+      return json({ success: false, message: "Doctor not found" }, undefined, request);
     }
     await doctorModel.findByIdAndUpdate(docId, {
       available: !doctorData.available,
@@ -22,10 +22,10 @@ export async function changeAvailability(request: Request): Promise<Response> {
     return json({
       success: true,
       message: "Doctor availability updated successfully",
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in changeAvailability:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -36,10 +36,10 @@ export async function doctorList(request: Request): Promise<Response> {
       .find({})
       .select(["-password", "-email"])
       .populate("hospitalId", "name city image");
-    return json({ success: true, doctors });
+    return json({ success: true, doctors }, undefined, request);
   } catch (error) {
     console.log("Error in doctorList:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -50,37 +50,43 @@ export async function doctorLogin(request: Request): Promise<Response> {
     const doctor = await doctorModel.findOne({ email });
 
     if (!doctor) {
-      return json({ success: false, message: "Invalid email or password" });
+      return json({ success: false, message: "Invalid email or password" }, undefined, request);
     }
 
     const isMatch = await bcrypt.compare(password, doctor.password);
     if (isMatch) {
-      const token = jwt.sign({ id: doctor._id }, process.env.JWT_SECRET || "");
+      const token = await signAuthToken({
+        id: String(doctor._id),
+        role: "doctor",
+        email: doctor.email || "",
+        name: doctor.name || "",
+      });
+      if (!token) return json({ success: false, message: "Could not create session" }, undefined, request);
       return json({
         success: true,
         message: "Doctor login successful",
         token,
-      });
+      }, undefined, request);
     } else {
-      return json({ success: false, message: "Invalid email or password" });
+      return json({ success: false, message: "Invalid email or password" }, undefined, request);
     }
   } catch (error) {
     console.log("Error in doctorLogin:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function getDoctorAppointments(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
     const appointments = await appointmentModel.find({ docId });
-    return json({ success: true, appointments });
+    return json({ success: true, appointments }, undefined, request);
   } catch (error) {
     console.log("Error in getDoctorAppointments:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -89,8 +95,8 @@ export async function cancelDoctorAppointment(
 ): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const { appointmentId } = await request.json();
@@ -103,16 +109,16 @@ export async function cancelDoctorAppointment(
       return json({
         success: true,
         message: "Appointment Cancelled Successfully",
-      });
+      }, undefined, request);
     } else {
       return json({
         success: false,
         message: "Appointment not found or unauthorized",
-      });
+      }, undefined, request);
     }
   } catch (error) {
     console.log("Error in cancelling doctor appointment:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -121,8 +127,8 @@ export async function completeDoctorAppointment(
 ): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const { appointmentId, prescription, followUpDate } = await request.json();
@@ -136,24 +142,24 @@ export async function completeDoctorAppointment(
       return json({
         success: true,
         message: "Appointment marked as completed",
-      });
+      }, undefined, request);
     } else {
       return json({
         success: false,
         message: "Appointment not found or unauthorized",
-      });
+      }, undefined, request);
     }
   } catch (error) {
     console.log("Error in completing doctor appointment:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function addPrescription(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const { appointmentId, prescription, followUpDate } = await request.json();
@@ -162,23 +168,23 @@ export async function addPrescription(request: Request): Promise<Response> {
       return json({
         success: false,
         message: "Appointment ID and prescription are required",
-      });
+      }, undefined, request);
     }
 
     const appointmentData = await appointmentModel.findById(appointmentId);
     if (!appointmentData) {
-      return json({ success: false, message: "Appointment not found" });
+      return json({ success: false, message: "Appointment not found" }, undefined, request);
     }
 
     if (appointmentData.docId != docId) {
-      return json({ success: false, message: "Unauthorized action" });
+      return json({ success: false, message: "Unauthorized action" }, undefined, request);
     }
 
     if (appointmentData.cancelled) {
       return json({
         success: false,
         message: "Cannot add prescription to cancelled appointment",
-      });
+      }, undefined, request);
     }
 
     const updateData: Record<string, unknown> = { prescription };
@@ -186,18 +192,18 @@ export async function addPrescription(request: Request): Promise<Response> {
 
     await appointmentModel.findByIdAndUpdate(appointmentId, updateData);
 
-    return json({ success: true, message: "Prescription added successfully" });
+    return json({ success: true, message: "Prescription added successfully" }, undefined, request);
   } catch (error) {
     console.log("Error in addPrescription:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function doctorDashboard(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const appointments = await appointmentModel.find({ docId });
@@ -223,52 +229,52 @@ export async function doctorDashboard(request: Request): Promise<Response> {
       latestAppointments: appointments.reverse().slice(0, 5),
     };
 
-    return json({ success: true, dashboardData });
+    return json({ success: true, dashboardData }, undefined, request);
   } catch (error) {
     console.log("Error in doctorDashboard:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function doctorProfile(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const profileData = await doctorModel.findById(docId).select("-password");
 
-    return json({ success: true, profileData });
+    return json({ success: true, profileData }, undefined, request);
   } catch (error) {
     console.log("Error in getting user data:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function updateDoctorProfile(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const { fees, address, available } = await request.json();
 
     await doctorModel.findByIdAndUpdate(docId, { fees, address, available });
 
-    return json({ success: true, message: "Profile updated successfully" });
+    return json({ success: true, message: "Profile updated successfully" }, undefined, request);
   } catch (error) {
     console.log("Error in updating user profile:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function updateDoctorSchedule(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const { schedule, slotDuration } = await request.json();
@@ -279,18 +285,18 @@ export async function updateDoctorSchedule(request: Request): Promise<Response> 
 
     await doctorModel.findByIdAndUpdate(docId, updateData);
 
-    return json({ success: true, message: "Schedule updated successfully" });
+    return json({ success: true, message: "Schedule updated successfully" }, undefined, request);
   } catch (error) {
     console.log("Error updating schedule:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function getDoctorBlockedDates(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const doctor = await doctorModel
@@ -302,10 +308,10 @@ export async function getDoctorBlockedDates(request: Request): Promise<Response>
       blockedDates: (doctor.blockedDates as unknown[]) || [],
       schedule: doctor.schedule,
       slotDuration: doctor.slotDuration,
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error getting blocked dates:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
@@ -320,7 +326,7 @@ export async function getDoctorScheduleForBooking(
       .select("schedule slotDuration blockedDates");
 
     if (!doctor) {
-      return json({ success: false, message: "Doctor not found" });
+      return json({ success: false, message: "Doctor not found" }, undefined, request);
     }
 
     return json({
@@ -328,24 +334,24 @@ export async function getDoctorScheduleForBooking(
       schedule: doctor.schedule || {},
       slotDuration: doctor.slotDuration || 30,
       blockedDates: doctor.blockedDates || [],
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error getting doctor schedule for booking:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function addBlockedDates(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const { dates, reason } = await request.json();
 
     if (!dates || !Array.isArray(dates)) {
-      return json({ success: false, message: "Please provide dates array" });
+      return json({ success: false, message: "Please provide dates array" }, undefined, request);
     }
 
     const doctor = await doctorModel.findById(docId);
@@ -358,24 +364,24 @@ export async function addBlockedDates(request: Request): Promise<Response> {
       success: true,
       message: "Dates blocked successfully",
       blockedDates: newDates,
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error adding blocked dates:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function removeBlockedDates(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const { dates } = await request.json();
 
     if (!dates || !Array.isArray(dates)) {
-      return json({ success: false, message: "Please provide dates array" });
+      return json({ success: false, message: "Please provide dates array" }, undefined, request);
     }
 
     const doctor = await doctorModel.findById(docId);
@@ -388,18 +394,18 @@ export async function removeBlockedDates(request: Request): Promise<Response> {
       success: true,
       message: "Dates unblocked successfully",
       blockedDates: newDates,
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error removing blocked dates:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }
 
 export async function doctorAnalytics(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyDoctor(request.headers.get("dtoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyDoctor(request.headers.get("dtoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
     const appointments = await appointmentModel.find({ docId }).lean();
@@ -558,9 +564,9 @@ export async function doctorAnalytics(request: Request): Promise<Response> {
         weeklyTrend,
         avgRating,
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in doctorAnalytics:", error);
-    return bad((error as Error).message);
+    return bad((error as Error).message, request);
   }
 }

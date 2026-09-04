@@ -1,6 +1,5 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import doctorModel from "../models/doctorModel";
 import appointmentModel from "../models/appointmentModel";
 import userModel from "../models/userModel";
@@ -9,27 +8,38 @@ import { connectDB } from "../db";
 import { getCloudinary } from "../cloudinary";
 import { uploadImageToCloudinary } from "../upload";
 import { json, bad } from "../http";
-import { verifyAdmin } from "../auth";
+import { verifyAdmin, signAuthToken } from "../auth";
 
 export async function loginAdmin(request: Request): Promise<Response> {
   try {
     const { email, password } = await request.json();
-    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PW) {
-      const token = jwt.sign(email + password, process.env.JWT_SECRET || "");
-      return json({ success: true, token });
+    if (
+      email === process.env.ADMIN_EMAIL &&
+      password === process.env.ADMIN_PW
+    ) {
+      const token = await signAuthToken({
+        id: "admin",
+        role: "admin",
+        email: String(email),
+        name: "Admin",
+      });
+      if (!token) {
+        return json({ success: false, message: "Could not create session" }, undefined, request);
+      }
+      return json({ success: true, token }, undefined, request);
     }
-    return json({ success: false, message: "Invalid admin credentials" });
+    return json({ success: false, message: "Invalid admin credentials" }, undefined, request);
   } catch (error) {
     console.log("Error in login admin:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function addDoctor(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyAdmin(request.headers.get("atoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyAdmin(request.headers.get("atoken"));
+    if (!auth.ok) return bad(auth.message, request);
 
     const formData = await request.formData();
     const get = (k: string) => formData.get(k);
@@ -49,29 +59,29 @@ export async function addDoctor(request: Request): Promise<Response> {
       !name || !email || !password || !speciality || !experience ||
       !degree || !about || !fees || !address || !hospitalId
     ) {
-      return json({ success: false, message: "All fields are required" });
+      return json({ success: false, message: "All fields are required" }, undefined, request);
     }
 
     const hospital = await hospitalModel.findById(String(hospitalId));
     if (!hospital) {
-      return json({ success: false, message: "Hospital not found" });
+      return json({ success: false, message: "Hospital not found" }, undefined, request);
     }
     if (!hospital.isRegistered) {
       return json({
         success: false,
         message: "Doctor can only be assigned to a registered hospital",
-      });
+      }, undefined, request);
     }
 
     if (!validator.isEmail(String(email))) {
-      return json({ success: false, message: "Invalid email address" });
+      return json({ success: false, message: "Invalid email address" }, undefined, request);
     }
     if (!validator.isStrongPassword(String(password))) {
       return json({
         success: false,
         message:
           "Password is not strong enough. It should be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and symbols.",
-      });
+      }, undefined, request);
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -100,23 +110,23 @@ export async function addDoctor(request: Request): Promise<Response> {
     const newDoctor = new doctorModel(doctorData);
     await newDoctor.save();
 
-    return json({ success: true, message: "Doctor added successfully" });
+    return json({ success: true, message: "Doctor added successfully" }, undefined, request);
   } catch (error) {
     console.log("Error in addDoctor:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function allDoctors(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyAdmin(request.headers.get("atoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyAdmin(request.headers.get("atoken"));
+    if (!auth.ok) return bad(auth.message, request);
     const doctors = await doctorModel.find({}).select("-password");
-    return json({ success: true, doctors });
+    return json({ success: true, doctors }, undefined, request);
   } catch (error) {
     console.log("Error in fetching all doctors:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
@@ -125,8 +135,8 @@ export async function appointmentsAdmin(
 ): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyAdmin(request.headers.get("atoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyAdmin(request.headers.get("atoken"));
+    if (!auth.ok) return bad(auth.message, request);
 
     const url = new URL(request.url);
     const status = url.searchParams.get("status");
@@ -168,18 +178,18 @@ export async function appointmentsAdmin(
       total,
       page,
       totalPages: Math.ceil(total / limit),
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in admin appointments:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
 export async function appointmentCancel(request: Request): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyAdmin(request.headers.get("atoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyAdmin(request.headers.get("atoken"));
+    if (!auth.ok) return bad(auth.message, request);
 
     const { appointmentId } = await request.json();
     const appointmentData = await appointmentModel.findById(appointmentId);
@@ -197,10 +207,10 @@ export async function appointmentCancel(request: Request): Promise<Response> {
     return json({
       success: true,
       message: "Appointment cancled successfully",
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in cancelling user appointment:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
@@ -209,8 +219,8 @@ export async function adminDashboard(
 ): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyAdmin(request.headers.get("atoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyAdmin(request.headers.get("atoken"));
+    if (!auth.ok) return bad(auth.message, request);
 
     const doctors = await doctorModel.find({});
     const users = await userModel.find({});
@@ -223,10 +233,10 @@ export async function adminDashboard(
       latestAppointments: appointments.slice(-5),
     };
 
-    return json({ success: true, dashboardData });
+    return json({ success: true, dashboardData }, undefined, request);
   } catch (error) {
     console.log("Error in admin Dashboard:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
 
@@ -235,8 +245,8 @@ export async function hospitalManagement(
 ): Promise<Response> {
   try {
     await connectDB();
-    const auth = verifyAdmin(request.headers.get("atoken"));
-    if (!auth.ok) return bad(auth.message);
+    const auth = await verifyAdmin(request.headers.get("atoken"));
+    if (!auth.ok) return bad(auth.message, request);
 
     const url = new URL(request.url);
     const page = Math.max(Number(url.searchParams.get("page") || 1), 1);
@@ -338,9 +348,9 @@ export async function hospitalManagement(
         total,
         totalPages: Math.ceil(total / limit),
       },
-    });
+    }, undefined, request);
   } catch (error) {
     console.log("Error in hospitalManagement:", error);
-    return json({ success: false, message: (error as Error).message });
+    return json({ success: false, message: (error as Error).message }, undefined, request);
   }
 }
