@@ -4,10 +4,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AdminContext } from '@/src/context/AdminContext';
 import { AppContext } from '@/src/context/AppContext';
 import axios from 'axios';
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { TrendingUp, TrendingDown, Building2, Users, CalendarCheck, DollarSign, Star, Award } from 'lucide-react';
-
-const COLORS = ['#20C3AE', '#6366F1', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6', '#EC4899', '#10B981', '#F97316', '#06B6D4'];
+import { SkeletonDashboard } from "@healhub/ui";
 
 const HospitalAnalytics = () => {
   const { aToken, backendURL, hospitals, getAllHospitals } = useContext(AdminContext);
@@ -18,6 +17,7 @@ const HospitalAnalytics = () => {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (aToken) getAllHospitals(); }, [aToken]);
 
   const fetchHospitalStats = async (hospitalId) => {
@@ -53,6 +53,7 @@ const HospitalAnalytics = () => {
     setLoading(false);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (selectedHospital && aToken) fetchHospitalStats(selectedHospital); }, [selectedHospital, aToken]);
 
   const GrowthBadge = ({ value }) => {
@@ -80,7 +81,7 @@ const HospitalAnalytics = () => {
           <Building2 size={48} className="mb-4 opacity-30" /><p className="text-lg">Select a hospital to view analytics</p><p className="text-sm mt-1">Choose a hospital from the dropdown above</p>
         </div>
       ) : loading ? (
-        <div className="flex items-center justify-center min-h-[50vh] text-gray-400">Loading analytics...</div>
+        <SkeletonDashboard />
       ) : stats ? (
         <div className="space-y-6">
           <div className="flex gap-1 bg-gray-100 p-1 rounded-lg w-fit">{tabs.map(tab => (<button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`px-4 py-2 text-sm rounded-md cursor-pointer transition-all ${activeTab === tab.key ? 'bg-white shadow-sm font-medium text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}>{tab.label}</button>))}</div>

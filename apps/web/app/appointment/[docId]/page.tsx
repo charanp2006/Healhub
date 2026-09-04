@@ -204,12 +204,14 @@ const Appointment = () => {
 
   useEffect(() => {
     fetchDocInfo();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doctors, docId]);
 
   useEffect(() => {
     if (docInfo && docId) {
       getAvailableSlots();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docInfo, doctorSchedule, docId]);
 
   // reset slot index when slots array changes

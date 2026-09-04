@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { AdminContext } from "@/src/context/AdminContext";
 import { AppContext } from "@/src/context/AppContext";
 import { Search, ChevronLeft, ChevronRight, Building2 } from "lucide-react";
+import { SkeletonList } from "@healhub/ui";
 
 const HospitalsMgmt = () => {
   const { backendURL, aToken } = useContext(AdminContext);
@@ -39,8 +40,10 @@ const HospitalsMgmt = () => {
     } finally {
       setLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, search, statusFilter, aToken]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (aToken) fetchHospitals(); }, [aToken, page, statusFilter]);
 
   useEffect(() => {
@@ -48,6 +51,7 @@ const HospitalsMgmt = () => {
       if (aToken) { setPage(1); fetchHospitals(); }
     }, 400);
     return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return (
@@ -69,7 +73,7 @@ const HospitalsMgmt = () => {
           <p>#</p><p>Hospital</p><p>City</p><p>Doctors</p><p>Appointments</p><p>Status</p><p>Billing Summary</p>
         </div>
         {loading ? (
-          <p className="p-6 text-gray-500 text-center">Loading...</p>
+          <SkeletonList rows={6} className="p-6" />
         ) : hospitals.length === 0 ? (
           <p className="p-6 text-gray-500 text-center">No hospitals found</p>
         ) : (

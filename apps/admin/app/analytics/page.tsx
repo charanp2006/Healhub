@@ -6,6 +6,7 @@ import { AppContext } from '@/src/context/AppContext';
 import axios from 'axios';
 import { BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { TrendingUp, TrendingDown, Users, CalendarCheck, DollarSign, Building2, Award, CreditCard, Banknote } from 'lucide-react';
+import { SkeletonDashboard } from "@healhub/ui";
 
 const COLORS = ['#20C3AE', '#6366F1', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6', '#EC4899', '#10B981', '#F97316', '#06B6D4'];
 
@@ -48,6 +49,7 @@ const Analytics = () => {
     setLoading(false);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (aToken) fetchAll(); }, [aToken]);
 
   const GrowthBadge = ({ value }) => {
@@ -60,7 +62,7 @@ const Analytics = () => {
   const tabs = [{ key: 'overview', label: 'Overview' }, { key: 'revenue', label: 'Revenue' }, { key: 'doctors', label: 'Doctors' }, { key: 'specialities', label: 'Specialities' }];
 
   if (loading) {
-    return (<div className="m-5 w-full max-w-6xl flex items-center justify-center min-h-[60vh]"><div className="text-gray-400 text-lg">Loading analytics...</div></div>);
+    return (<div className="m-5 w-full max-w-6xl"><SkeletonDashboard /></div>);
   }
 
   return (

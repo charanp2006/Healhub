@@ -11,6 +11,7 @@ const HospitalDoctorsList = () => {
     if (hToken) {
       getHospitalDoctors();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hToken]);
 
   return (

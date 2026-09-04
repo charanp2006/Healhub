@@ -30,6 +30,11 @@ export function corsHeaders(request?: Request): Record<string, string> {
     "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization, token, atoken, dtoken, htoken",
     "Access-Control-Allow-Credentials": "true",
+    // Baseline security headers applied to every API response.
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     "Vary": "Origin",
   };
 }
@@ -61,6 +66,21 @@ export function ok(data: Record<string, unknown>, request?: Request): Response {
 
 export function bad(message: string, request?: Request): Response {
   return json({ success: false, message }, 401, request);
+}
+
+export function tooMany(
+  message: string,
+  retryAfterSeconds: number,
+  request?: Request
+): Response {
+  return new Response(JSON.stringify({ success: false, message }), {
+    status: 429,
+    headers: {
+      "Content-Type": "application/json",
+      "Retry-After": String(retryAfterSeconds),
+      ...corsHeaders(request),
+    },
+  });
 }
 
 export async function parseJson<T = Record<string, unknown>>(

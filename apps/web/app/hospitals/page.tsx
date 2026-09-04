@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { MapPin, LocateFixed, Search, SlidersHorizontal, X } from "lucide-react";
 import { AppContext } from "@/src/context/AppContext";
 import { assets, specialityData } from "@/src/assets/assets";
+import { Skeleton } from "@healhub/ui";
 
 const Hospitals = () => {
   const router = useRouter();
@@ -68,6 +69,7 @@ const Hospitals = () => {
 
   useEffect(() => {
     fetchHospitals(1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFilterChange = (field, value) => {
@@ -255,10 +257,21 @@ const Hospitals = () => {
 
         <div className="lg:w-3/4">
           {loading ? (
-            <div className="bg-background-cardLight border border-border-light rounded-lg p-10 text-center">
-              <p className="text-text-secondaryLight">
-                Loading hospitals/clinics...
-              </p>
+            <div className="space-y-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white lg:bg-background-cardLight border border-[#edeff2] lg:border-border-light rounded-2xl lg:rounded-lg p-4 lg:p-5 flex flex-col md:flex-row gap-4"
+                >
+                  <Skeleton className="w-full md:w-40 h-44 md:h-40 rounded-xl lg:rounded-lg" />
+                  <div className="flex-1 space-y-3 pt-1">
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-3 w-1/4" />
+                    <Skeleton className="h-3 w-2/3" />
+                    <Skeleton className="h-3 w-1/3" />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : hospitals.length === 0 ? (
             <div className="bg-background-cardLight border border-border-light rounded-lg p-10 text-center">

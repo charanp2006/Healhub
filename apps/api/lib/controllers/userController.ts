@@ -7,8 +7,13 @@ import appointmentModel from "../models/appointmentModel";
 import razorpay from "razorpay";
 import { connectDB } from "../db";
 import { uploadImageToCloudinary } from "../upload";
-import { json, bad } from "../http";
+import { json, bad, tooMany } from "../http";
 import { verifyUser, signAuthToken } from "../auth";
+import {
+  clientIp,
+  checkLoginRateGate,
+  recordLoginAttempt,
+} from "../ratelimit";
 
 function getRazorpay() {
   return new razorpay({
@@ -57,9 +62,21 @@ export async function loginUser(request: Request): Promise<Response> {
   try {
     await connectDB();
     const { email, password } = await request.json();
+
+    const ip = clientIp(request);
+    const gate = checkLoginRateGate({ role: "user", email, ip });
+    if (gate.blocked) {
+      return tooMany(
+        "Too many failed attempts. Try again in a few minutes.",
+        gate.retryAfterSeconds,
+        request
+      );
+    }
+
     const user = await userModel.findOne({ email });
     if (!user) {
-      return json({ success: false, message: "User not found" }, undefined, request);
+      recordLoginAttempt({ role: "user", email, ip, ok: false });
+      return json({ success: false, message: "Invalid credentials" }, undefined, request);
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
@@ -70,12 +87,14 @@ export async function loginUser(request: Request): Promise<Response> {
         name: user.name || "",
       });
       if (!token) return json({ success: false, message: "Could not create session" }, undefined, request);
+      recordLoginAttempt({ role: "user", email, ip, ok: true });
       return json({ success: true, token }, undefined, request);
     }
+    recordLoginAttempt({ role: "user", email, ip, ok: false });
     return json({ success: false, message: "Invalid credentials" }, undefined, request);
   } catch (error) {
     console.log("Error in user login:", error);
-    return json({ success: false, message: (error as Error).message }, undefined, request);
+    return json({ success: false, message: "Something went wrong. Please try again." }, undefined, request);
   }
 }
 

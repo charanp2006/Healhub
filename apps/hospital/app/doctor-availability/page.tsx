@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { Clock, Copy, Check, RotateCcw, Save, AlertCircle } from "lucide-react";
 
 const DoctorAvailability = () => {
-  const { backendURL, dToken, profileData, getProfileData, setProfileData } = useContext(DoctorContext);
+  const { backendURL, dToken, profileData, getProfileData } = useContext(DoctorContext);
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const dayKeyMap = { Mon: "monday", Tue: "tuesday", Wed: "wednesday", Thu: "thursday", Fri: "friday", Sat: "saturday", Sun: "sunday" };
 
@@ -43,6 +43,7 @@ const DoctorAvailability = () => {
 
   useEffect(() => {
     if (dToken) getProfileData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dToken]);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ const DoctorAvailability = () => {
       });
       setSchedule(normalizedSchedule);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileData]);
 
   const toggleSlot = (day, time) => {

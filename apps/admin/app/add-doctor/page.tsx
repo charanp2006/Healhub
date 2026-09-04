@@ -42,6 +42,7 @@ const AddDoctor = () => {
         if(aToken){
             fetchRegisteredHospitals();
         }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [aToken]);
 
     const onSubmitHandler = async (event) => {

@@ -5,7 +5,8 @@ import { AdminContext } from '@/src/context/AdminContext';
 import { AppContext } from '@/src/context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Search, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight, Receipt, Filter } from 'lucide-react';
+import { Search, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight, Receipt } from 'lucide-react';
+import { SkeletonCount } from "@healhub/ui";
 
 const BillingList = () => {
   const { aToken, backendURL } = useContext(AdminContext);
@@ -39,6 +40,7 @@ const BillingList = () => {
     } catch (error) { toast.error(error.message); } finally { setLoading(false); }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (aToken) fetchBills(1); }, [aToken]);
 
   const handleSearch = (e) => { e?.preventDefault(); fetchBills(1); };
@@ -53,15 +55,6 @@ const BillingList = () => {
       case 'pending': return <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-600"><span className="w-1.5 h-1.5 rounded-full bg-yellow-500" /> Pending</span>;
       case 'overdue': return <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-500"><span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Overdue</span>;
       default: return <span className="text-xs text-gray-400">{status}</span>;
-    }
-  };
-
-  const getPaymentMethodBadge = (method) => {
-    switch (method) {
-      case 'online': return <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">Online</span>;
-      case 'cash': return <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Cash</span>;
-      case 'insurance': return <span className="text-xs px-2 py-0.5 rounded-full bg-violet-50 text-violet-600">Insurance</span>;
-      default: return <span className="text-xs text-gray-400">{method || '—'}</span>;
     }
   };
 
@@ -129,7 +122,7 @@ const BillingList = () => {
           </div>
         </form>
       )}
-      <p className="text-sm text-text-secondaryLight mb-4">{loading ? "Loading..." : `${totalCount} bill${totalCount !== 1 ? "s" : ""} total`}</p>
+      <p className="text-sm text-text-secondaryLight mb-4">{loading ? <SkeletonCount /> : `${totalCount} bill${totalCount !== 1 ? "s" : ""} total`}</p>
       <div className="bg-background-cardLight border border-border-light rounded-lg overflow-hidden">
         <div className="hidden sm:grid grid-cols-[1.5fr_2fr_1.5fr_1fr_1fr_1fr_auto] gap-2 py-3 px-6 border-b border-border-light text-sm font-medium text-text-secondaryLight">
           <p>Bill ID</p><p>Hospital</p><p>Amount</p><p>Status</p><p>Appointments</p><p>Date</p><p>Actions</p>

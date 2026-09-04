@@ -46,6 +46,7 @@ const Doctors = () => {
 
   useEffect(() => {
     applyFilter();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doctors, speciality, pathname]);
 
   const pickSpeciality = (specialityKey, route) => {

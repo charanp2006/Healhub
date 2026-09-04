@@ -34,7 +34,7 @@ const MyProfile = () => {
       formData.append("gender", userData.gender);
       formData.append("dob", userData.dob);
 
-      image && formData.append("image", image);
+      if (image) formData.append("image", image);
 
       const { data } = await axios.post(
         `${backendURL}/api/user/update-profile`,

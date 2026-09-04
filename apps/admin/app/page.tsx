@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { TrendingUp, TrendingDown, Users, CalendarCheck, DollarSign, Building2, Activity, Video, MapPin, ArrowRight } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 import axios from "axios";
+import { SkeletonDashboard } from "@healhub/ui";
 
 const Dashboard = () => {
   const { aToken, cancelAppointment, dashboardData, getDashboardData, backendURL } =
@@ -18,6 +19,7 @@ const Dashboard = () => {
   const [overview, setOverview] = useState(null);
   const [trends, setTrends] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
+  const [dashboardReady, setDashboardReady] = useState(false);
 
   const fetchAnalytics = async () => {
     try {
@@ -31,6 +33,8 @@ const Dashboard = () => {
       if (activityRes.data.success) setRecentActivity(activityRes.data.activities);
     } catch (error) {
       console.log('Error fetching analytics:', error);
+    } finally {
+      setDashboardReady(true);
     }
   };
 
@@ -39,6 +43,7 @@ const Dashboard = () => {
       getDashboardData();
       fetchAnalytics();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aToken]);
 
   const GrowthBadge = ({ value }) => {
@@ -56,6 +61,14 @@ const Dashboard = () => {
       default: return 'bg-blue-50 text-blue-600';
     }
   };
+
+  if (!dashboardReady) {
+    return (
+      <div className="m-5 w-full max-w-6xl">
+        <SkeletonDashboard />
+      </div>
+    );
+  }
 
   return (
     <div className="m-5 w-full max-w-6xl">

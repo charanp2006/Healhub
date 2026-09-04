@@ -89,6 +89,7 @@ const Login = () => {
     if (token) {
       router.push("/");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   return (

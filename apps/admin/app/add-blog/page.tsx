@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { AdminContext } from "@/src/context/AdminContext";
-import { assets } from "@/src/assets/assets";
 import { ImagePlus, X } from "lucide-react";
 
 const categories = ["Health Tips","Nutrition","Mental Health","Fitness","Disease Awareness","Medical News","Hospital Updates","Other"];
@@ -31,6 +30,7 @@ function AddBlogContent() {
 
   useEffect(() => {
     if (aToken) { getAllHospitals(); getAllDoctors(); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aToken]);
 
   useEffect(() => {
@@ -47,6 +47,7 @@ function AddBlogContent() {
         } catch (error) { toast.error(error.message); }
       })();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editId, aToken]);
 
   const onSubmitHandler = async (e) => {

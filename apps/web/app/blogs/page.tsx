@@ -15,6 +15,7 @@ import {
   BookOpen,
   Search,
 } from "lucide-react";
+import { SkeletonCards } from "@healhub/ui";
 
 const categories = [
   "Health Tips",
@@ -71,6 +72,7 @@ const Blogs = () => {
 
   useEffect(() => {
     fetchBlogs(1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCategory]);
 
   const handleSearch = (e) => {
@@ -137,9 +139,10 @@ const Blogs = () => {
 
       {/* ─── Results ─────────────────────────────────── */}
       {loading ? (
-        <p className="text-center text-text-secondaryLight py-20">
-          Loading...
-        </p>
+        <SkeletonCards
+          count={6}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        />
       ) : blogs.length === 0 ? (
         <div className="flex flex-col items-center py-20 text-text-secondaryLight">
           <BookOpen size={48} className="mb-3 opacity-40" />

@@ -15,6 +15,7 @@ const HospitalDashboard = () => {
     if (hToken) {
       getHospitalDashboard();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hToken]);
 
   return (

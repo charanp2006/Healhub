@@ -13,8 +13,8 @@ import {
   Trash2,
   Eye,
   EyeOff,
-  Loader2,
 } from "lucide-react";
+import { SkeletonCards } from "@healhub/ui";
 
 const categories = [
   "All",
@@ -73,6 +73,7 @@ const HospitalBlogs = () => {
 
   useEffect(() => {
     if (hToken) fetchBlogs();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hToken, page, category, authorType]);
 
   const handleSearch = (e) => {
@@ -164,9 +165,10 @@ const HospitalBlogs = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
+        <SkeletonCards
+          count={6}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        />
       ) : blogs.length === 0 ? (
         <div className="text-center py-20 text-gray-500">
           <p>No blog posts yet</p>

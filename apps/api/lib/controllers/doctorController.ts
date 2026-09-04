@@ -1,10 +1,14 @@
 import bcrypt from "bcrypt";
 import doctorModel from "../models/doctorModel";
-import hospitalModel from "../models/hospitalModel";
 import appointmentModel from "../models/appointmentModel";
 import { connectDB } from "../db";
-import { json, bad } from "../http";
+import { json, bad, tooMany } from "../http";
 import { verifyDoctor, signAuthToken } from "../auth";
+import {
+  clientIp,
+  checkLoginRateGate,
+  recordLoginAttempt,
+} from "../ratelimit";
 
 export async function changeAvailability(request: Request): Promise<Response> {
   try {
@@ -47,9 +51,21 @@ export async function doctorLogin(request: Request): Promise<Response> {
   try {
     await connectDB();
     const { email, password } = await request.json();
+
+    const ip = clientIp(request);
+    const gate = checkLoginRateGate({ role: "doctor", email, ip });
+    if (gate.blocked) {
+      return tooMany(
+        "Too many failed attempts. Try again in a few minutes.",
+        gate.retryAfterSeconds,
+        request
+      );
+    }
+
     const doctor = await doctorModel.findOne({ email });
 
     if (!doctor) {
+      recordLoginAttempt({ role: "doctor", email, ip, ok: false });
       return json({ success: false, message: "Invalid email or password" }, undefined, request);
     }
 
@@ -62,17 +78,19 @@ export async function doctorLogin(request: Request): Promise<Response> {
         name: doctor.name || "",
       });
       if (!token) return json({ success: false, message: "Could not create session" }, undefined, request);
+      recordLoginAttempt({ role: "doctor", email, ip, ok: true });
       return json({
         success: true,
         message: "Doctor login successful",
         token,
       }, undefined, request);
     } else {
+      recordLoginAttempt({ role: "doctor", email, ip, ok: false });
       return json({ success: false, message: "Invalid email or password" }, undefined, request);
     }
   } catch (error) {
     console.log("Error in doctorLogin:", error);
-    return bad((error as Error).message, request);
+    return bad("Something went wrong. Please try again.", request);
   }
 }
 
@@ -348,7 +366,7 @@ export async function addBlockedDates(request: Request): Promise<Response> {
     if (!auth.ok) return bad(auth.message, request);
     const docId = auth.docId!;
 
-    const { dates, reason } = await request.json();
+    const { dates } = await request.json();
 
     if (!dates || !Array.isArray(dates)) {
       return json({ success: false, message: "Please provide dates array" }, undefined, request);

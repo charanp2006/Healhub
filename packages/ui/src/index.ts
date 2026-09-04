@@ -1,3 +1,5 @@
+export { Skeleton, SkeletonText, SkeletonCount, SkeletonList, SkeletonCards, SkeletonDashboard, SkeletonSingle, SkeletonArticle, SkeletonBox } from "./skeletons";
+
 export const currencySymbol = "₹";
 
 export function calculateAge(dob: string): number {

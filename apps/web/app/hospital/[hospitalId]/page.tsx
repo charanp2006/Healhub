@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AppContext } from "@/src/context/AppContext";
 import { assets } from "@/src/assets/assets";
+import { SkeletonSingle } from "@healhub/ui";
 
 const HospitalProfile = () => {
   const { hospitalId } = useParams();
@@ -41,7 +42,7 @@ const HospitalProfile = () => {
       if (data.success) {
         setRoomCategories(data.categories);
       }
-    } catch (error) {
+    } catch {
       // silently fail – room data is supplementary
     }
   };
@@ -49,6 +50,7 @@ const HospitalProfile = () => {
   useEffect(() => {
     fetchHospital();
     fetchRoomAvailability();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hospitalId]);
 
   const handleBooking = async () => {
@@ -79,9 +81,7 @@ const HospitalProfile = () => {
   };
 
   if (!hospital) {
-    return (
-      <p className="text-text-secondaryLight">Loading hospital/clinic...</p>
-    );
+    return <SkeletonSingle />;
   }
 
   return (
