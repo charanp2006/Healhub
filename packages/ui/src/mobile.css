@@ -1,0 +1,83 @@
+/* ============================================================
+   HealHub mobile app design foundation (shared across apps)
+   ============================================================ */
+
+@theme inline {
+  --color-app-bg: #f6f8fa;
+  --color-app-surface: #ffffff;
+  --color-app-muted: #8a94a3;
+  --radius-app: 1.15rem;
+}
+
+/* Fixed bottom tab bar */
+.mobile-tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid #edeff2;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: 0 -6px 24px rgba(15, 23, 42, 0.06);
+}
+
+/* Sticky app header */
+.mobile-app-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid #edeff2;
+}
+
+/* Push page content above the fixed bottom bar */
+.mb-tab-safe {
+  padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+}
+
+/* App-style card */
+.app-card {
+  background: #ffffff;
+  border-radius: 1.15rem;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+  border: 1px solid #edeff2;
+}
+
+/* Compact mobile screen container */
+.app-screen {
+  background: #f6f8fa;
+  min-height: 100vh;
+}
+
+/* Mobile-only scrollable horizontal snap rows */
+.snap-row {
+  display: flex;
+  gap: 0.85rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.snap-row > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+.snap-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* No visible focus ring on touch taps */
+.touch-none-outline {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+/* Full-bleed mobile page edges */
+.app-screen-inner {
+  padding: 1rem 1.1rem 6rem;
+}
