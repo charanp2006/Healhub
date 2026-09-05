@@ -25,10 +25,10 @@ const FloatingDemoButton = () => {
         <div
           className={`flex items-center justify-center min-h-screen p-4 transition-transform duration-300 ${showDemo ? "translate-y-0" : "translate-y-4"}`}
         >
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+          <div className="bg-background-card rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
             <button
               onClick={() => setShowDemo(false)}
-              className="sticky top-4 right-4 float-right z-10 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full p-2 transition-colors"
+              className="sticky top-4 right-4 float-right z-10 bg-background-muted hover:bg-background-muted-hover text-text-primary rounded-full p-2 transition-colors"
             >
               <X size={24} />
             </button>

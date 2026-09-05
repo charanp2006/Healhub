@@ -93,10 +93,10 @@ const Blogs = () => {
     <div>
       {/* ─── Header ──────────────────────────────────── */}
       <div className="text-center my-10">
-        <p className="text-3xl font-medium text-text-primaryLight">
+        <p className="text-3xl font-medium text-text-primary">
           Health & Wellness Blog
         </p>
-        <p className="text-text-secondaryLight mt-2 max-w-lg mx-auto">
+        <p className="text-text-secondary mt-2 max-w-lg mx-auto">
           Expert articles, tips, and insights to help you live a healthier life.
         </p>
       </div>
@@ -106,20 +106,20 @@ const Blogs = () => {
         <form onSubmit={handleSearch} className="relative w-full sm:max-w-sm">
           <Search
             size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondaryLight"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary"
           />
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search articles..."
-            className="w-full border border-border-light rounded-full px-4 py-2 pl-10 text-sm focus:outline-none focus:border-primary transition-colors"
+            className="w-full border border-border rounded-full px-4 py-2 pl-10 text-sm focus:outline-none focus:border-primary transition-colors"
           />
         </form>
 
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveCategory("")}
-            className={`px-3 py-1 text-sm rounded-full cursor-pointer transition-colors ${!activeCategory ? "bg-primary text-white" : "border border-border-light text-text-secondaryLight hover:bg-primary-soft"}`}
+            className={`px-3 py-1 text-sm rounded-full cursor-pointer transition-colors ${!activeCategory ? "bg-primary text-white" : "border border-border text-text-secondary hover:bg-primary-soft"}`}
           >
             All
           </button>
@@ -129,7 +129,7 @@ const Blogs = () => {
               onClick={() =>
                 setActiveCategory((prev) => (prev === cat ? "" : cat))
               }
-              className={`px-3 py-1 text-sm rounded-full cursor-pointer transition-colors ${activeCategory === cat ? "bg-primary text-white" : "border border-border-light text-text-secondaryLight hover:bg-primary-soft"}`}
+              className={`px-3 py-1 text-sm rounded-full cursor-pointer transition-colors ${activeCategory === cat ? "bg-primary text-white" : "border border-border text-text-secondary hover:bg-primary-soft"}`}
             >
               {cat}
             </button>
@@ -144,7 +144,7 @@ const Blogs = () => {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         />
       ) : blogs.length === 0 ? (
-        <div className="flex flex-col items-center py-20 text-text-secondaryLight">
+        <div className="flex flex-col items-center py-20 text-text-secondary">
           <BookOpen size={48} className="mb-3 opacity-40" />
           <p className="text-lg">No articles found</p>
         </div>
@@ -154,7 +154,7 @@ const Blogs = () => {
             <div
               key={blog._id}
               onClick={() => router.push(`/blog/${blog.slug}`)}
-              className="border border-border-light rounded-xl overflow-hidden bg-background-cardLight cursor-pointer hover:-translate-y-1 transition-all duration-300 group"
+              className="border border-border rounded-xl overflow-hidden bg-background-card cursor-pointer hover:-translate-y-1 transition-all duration-300 group"
             >
               {/* Image */}
               <div className="h-48 bg-primary-soft overflow-hidden">
@@ -178,16 +178,16 @@ const Blogs = () => {
                   {blog.category}
                 </span>
 
-                <h3 className="text-text-primaryLight font-medium text-lg leading-snug line-clamp-2 mb-2">
+                <h3 className="text-text-primary font-medium text-lg leading-snug line-clamp-2 mb-2">
                   {blog.title}
                 </h3>
 
-                <p className="text-text-secondaryLight text-sm line-clamp-2 mb-4">
+                <p className="text-text-secondary text-sm line-clamp-2 mb-4">
                   {blog.excerpt}
                 </p>
 
                 {/* Meta row */}
-                <div className="flex items-center justify-between text-xs text-text-secondaryLight">
+                <div className="flex items-center justify-between text-xs text-text-secondary">
                   <span className="flex items-center gap-1">
                     <Calendar size={12} /> {formatDate(blog.publishedAt)}
                   </span>
@@ -202,7 +202,7 @@ const Blogs = () => {
                     {blog.tags.slice(0, 3).map((t) => (
                       <span
                         key={t}
-                        className="inline-flex items-center gap-0.5 text-[11px] text-text-secondaryLight"
+                        className="inline-flex items-center gap-0.5 text-[11px] text-text-secondary"
                       >
                         <Tag size={10} /> {t}
                       </span>
@@ -221,17 +221,17 @@ const Blogs = () => {
           <button
             disabled={page <= 1}
             onClick={() => fetchBlogs(page - 1)}
-            className="flex items-center gap-1 px-4 py-2 text-sm border border-border-light rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors"
+            className="flex items-center gap-1 px-4 py-2 text-sm border border-border rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors"
           >
             <ChevronLeft size={14} /> Previous
           </button>
-          <span className="text-sm text-text-secondaryLight">
+          <span className="text-sm text-text-secondary">
             Page {page} of {totalPages}
           </span>
           <button
             disabled={page >= totalPages}
             onClick={() => fetchBlogs(page + 1)}
-            className="flex items-center gap-1 px-4 py-2 text-sm border border-border-light rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors"
+            className="flex items-center gap-1 px-4 py-2 text-sm border border-border rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors"
           >
             Next <ChevronRight size={14} />
           </button>

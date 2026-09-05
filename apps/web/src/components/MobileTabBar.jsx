@@ -45,7 +45,7 @@ const MobileTabBar = () => {
             >
               <span
                 className={`relative flex items-center justify-center transition-all duration-200 ${
-                  active ? "text-[#179E8D] -translate-y-0.5" : "text-[#8a94a3]"
+                  active ? "text-[#179E8D] -translate-y-0.5" : "text-text-dim"
                 }`}
               >
                 <Icon size={22} strokeWidth={active ? 2.4 : 1.9} />
@@ -55,7 +55,7 @@ const MobileTabBar = () => {
               </span>
               <span
                 className={`text-[10px] font-medium ${
-                  active ? "text-[#179E8D]" : "text-[#8a94a3]"
+                  active ? "text-[#179E8D]" : "text-text-dim"
                 }`}
               >
                 {label}

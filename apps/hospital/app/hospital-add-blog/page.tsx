@@ -114,9 +114,9 @@ const HospitalAddBlogContent = () => {
         {editId ? "Edit Blog Post" : "Create Blog Post"}
       </p>
 
-      <div className="bg-white px-8 py-8 rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll">
+      <div className="bg-background-card px-8 py-8 rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll">
         <div className="mb-6">
-          <p className="text-gray-500 mb-2">Cover Image</p>
+          <p className="text-text-secondary mb-2">Cover Image</p>
           <label
             htmlFor="hosp-blog-img"
             className="cursor-pointer inline-block"
@@ -134,7 +134,7 @@ const HospitalAddBlogContent = () => {
                     e.preventDefault();
                     setBlogImg(null);
                   }}
-                  className="absolute top-2 right-2 bg-white rounded-full p-1 shadow cursor-pointer"
+                  className="absolute top-2 right-2 bg-background-card rounded-full p-1 shadow cursor-pointer"
                 >
                   <X size={14} />
                 </button>
@@ -146,7 +146,7 @@ const HospitalAddBlogContent = () => {
                 alt=""
               />
             ) : (
-              <div className="w-full max-w-md h-48 border-2 border-dashed rounded-lg flex flex-col items-center justify-center text-gray-400 hover:border-primary transition-colors">
+              <div className="w-full max-w-md h-48 border-2 border-dashed rounded-lg flex flex-col items-center justify-center text-text-dim hover:border-primary transition-colors">
                 <ImagePlus size={32} className="mb-2" />
                 <p className="text-sm">Click to upload cover image</p>
               </div>
@@ -161,7 +161,7 @@ const HospitalAddBlogContent = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-4 text-gray-500">
+        <div className="flex flex-col gap-4 text-text-secondary">
           <div>
             <p>Title</p>
             <input

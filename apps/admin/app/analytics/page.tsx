@@ -11,14 +11,14 @@ import { SkeletonDashboard } from "@healhub/ui";
 const COLORS = ['#20C3AE', '#6366F1', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6', '#EC4899', '#10B981', '#F97316', '#06B6D4'];
 
 const StatCard = ({ icon, bg, value, label, badge, extra }) => (
-  <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+  <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
     <div className="flex items-center justify-between mb-3">
       <div className={`w-10 h-10 rounded-lg ${bg} flex items-center justify-center`}>{icon}</div>
       {badge}
     </div>
-    <p className="text-2xl font-bold text-gray-800">{value}</p>
-    <p className="text-sm text-gray-500 mt-0.5">{label}</p>
-    {extra && <p className="text-xs text-gray-400 mt-0.5">{extra}</p>}
+    <p className="text-2xl font-bold text-text-primary">{value}</p>
+    <p className="text-sm text-text-secondary mt-0.5">{label}</p>
+    {extra && <p className="text-xs text-text-dim mt-0.5">{extra}</p>}
   </div>
 );
 
@@ -53,7 +53,7 @@ const Analytics = () => {
   useEffect(() => { if (aToken) fetchAll(); }, [aToken]);
 
   const GrowthBadge = ({ value }) => {
-    if (value === 0) return <span className="text-xs text-gray-400">0%</span>;
+    if (value === 0) return <span className="text-xs text-text-dim">0%</span>;
     return value > 0
       ? <span className="flex items-center gap-0.5 text-xs text-green-600 font-medium"><TrendingUp size={12} /> +{value}%</span>
       : <span className="flex items-center gap-0.5 text-xs text-red-500 font-medium"><TrendingDown size={12} /> {value}%</span>;
@@ -69,14 +69,14 @@ const Analytics = () => {
     <div className="m-5 w-full max-w-6xl">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-bold text-gray-800">Analytics Dashboard</h1>
-          <p className="text-sm text-gray-400 mt-0.5">Comprehensive insights into your healthcare platform</p>
+          <h1 className="text-xl font-bold text-text-primary">Analytics Dashboard</h1>
+          <p className="text-sm text-text-dim mt-0.5">Comprehensive insights into your healthcare platform</p>
         </div>
-        <button onClick={fetchAll} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">Refresh</button>
+        <button onClick={fetchAll} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-background-muted cursor-pointer transition-colors">Refresh</button>
       </div>
-      <div className="flex gap-1 bg-gray-100 p-1 rounded-lg mb-6 w-fit">
+      <div className="flex gap-1 bg-background-muted p-1 rounded-lg mb-6 w-fit">
         {tabs.map(tab => (
-          <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`px-4 py-2 text-sm rounded-md cursor-pointer transition-all ${activeTab === tab.key ? 'bg-white shadow-sm font-medium text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}>{tab.label}</button>
+          <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`px-4 py-2 text-sm rounded-md cursor-pointer transition-all ${activeTab === tab.key ? 'bg-background-card shadow-sm font-medium text-text-primary' : 'text-text-secondary hover:text-text-primary'}`}>{tab.label}</button>
         ))}
       </div>
 
@@ -88,9 +88,9 @@ const Analytics = () => {
             <StatCard icon={<DollarSign size={20} className="text-violet-600" />} bg="bg-violet-50" value={`${currencySymbol}${overview.totalRevenue.toLocaleString()}`} label="Total Revenue" badge={<GrowthBadge value={overview.revenueGrowth} />} />
             <StatCard icon={<Building2 size={20} className="text-primary" />} bg="bg-primary-soft" value={overview.totalDoctors} label="Doctors" extra={`${overview.totalHospitals} hospitals`} />
           </div>
-          <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-            <p className="font-semibold text-gray-800 mb-1">Appointment Trends</p>
-            <p className="text-xs text-gray-400 mb-4">Bookings, completions, and cancellations over the last 12 months</p>
+          <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+            <p className="font-semibold text-text-primary mb-1">Appointment Trends</p>
+            <p className="text-xs text-text-dim mb-4">Bookings, completions, and cancellations over the last 12 months</p>
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={trends} barGap={2}>
@@ -107,8 +107,8 @@ const Analytics = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <p className="font-semibold text-gray-800 mb-4">Appointment Type</p>
+            <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+              <p className="font-semibold text-text-primary mb-4">Appointment Type</p>
               <div className="flex items-center justify-center h-48">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -121,8 +121,8 @@ const Analytics = () => {
                 </ResponsiveContainer>
               </div>
             </div>
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <p className="font-semibold text-gray-800 mb-4">Payment Method</p>
+            <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+              <p className="font-semibold text-text-primary mb-4">Payment Method</p>
               <div className="flex items-center justify-center h-48">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -142,23 +142,23 @@ const Analytics = () => {
       {activeTab === 'revenue' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <div className="flex items-center gap-2 mb-2"><DollarSign size={18} className="text-violet-600" /><span className="text-sm text-gray-500">Total Revenue</span></div>
-              <p className="text-2xl font-bold text-gray-800">{currencySymbol}{overview?.totalRevenue?.toLocaleString() ?? 0}</p>
+            <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+              <div className="flex items-center gap-2 mb-2"><DollarSign size={18} className="text-violet-600" /><span className="text-sm text-text-secondary">Total Revenue</span></div>
+              <p className="text-2xl font-bold text-text-primary">{currencySymbol}{overview?.totalRevenue?.toLocaleString() ?? 0}</p>
             </div>
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <div className="flex items-center gap-2 mb-2"><CreditCard size={18} className="text-blue-600" /><span className="text-sm text-gray-500">This Month</span></div>
-              <p className="text-2xl font-bold text-gray-800">{currencySymbol}{overview?.thisMonthRevenue?.toLocaleString() ?? 0}</p>
+            <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+              <div className="flex items-center gap-2 mb-2"><CreditCard size={18} className="text-blue-600" /><span className="text-sm text-text-secondary">This Month</span></div>
+              <p className="text-2xl font-bold text-text-primary">{currencySymbol}{overview?.thisMonthRevenue?.toLocaleString() ?? 0}</p>
               {overview && <GrowthBadge value={overview.revenueGrowth} />}
             </div>
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <div className="flex items-center gap-2 mb-2"><Banknote size={18} className="text-emerald-600" /><span className="text-sm text-gray-500">Avg per Appointment</span></div>
-              <p className="text-2xl font-bold text-gray-800">{currencySymbol}{overview && overview.totalAppointments > 0 ? Math.round(overview.totalRevenue / overview.totalAppointments).toLocaleString() : 0}</p>
+            <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+              <div className="flex items-center gap-2 mb-2"><Banknote size={18} className="text-emerald-600" /><span className="text-sm text-text-secondary">Avg per Appointment</span></div>
+              <p className="text-2xl font-bold text-text-primary">{currencySymbol}{overview && overview.totalAppointments > 0 ? Math.round(overview.totalRevenue / overview.totalAppointments).toLocaleString() : 0}</p>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-            <p className="font-semibold text-gray-800 mb-1">Monthly Revenue</p>
-            <p className="text-xs text-gray-400 mb-4">Revenue trend over last 12 months</p>
+          <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+            <p className="font-semibold text-text-primary mb-1">Monthly Revenue</p>
+            <p className="text-xs text-text-dim mb-4">Revenue trend over last 12 months</p>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={trends}>
@@ -172,8 +172,8 @@ const Analytics = () => {
               </ResponsiveContainer>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-            <p className="font-semibold text-gray-800 mb-4">Revenue by Speciality</p>
+          <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+            <p className="font-semibold text-text-primary mb-4">Revenue by Speciality</p>
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={specialityStats.slice(0, 8)} layout="vertical">
@@ -194,43 +194,43 @@ const Analytics = () => {
           {doctorPerformance.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {doctorPerformance.slice(0, 3).map((doc, idx) => (
-                <div key={doc._id} className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm relative overflow-hidden">
+                <div key={doc._id} className="bg-background-card rounded-xl border border-border p-5 shadow-sm relative overflow-hidden">
                   {idx === 0 && <div className="absolute top-3 right-3"><Award size={20} className="text-amber-400" /></div>}
                   <div className="flex items-center gap-3 mb-3">
-                    <img src={doc.image} className="w-12 h-12 rounded-full bg-gray-100 object-cover" alt="" />
-                    <div><p className="font-semibold text-gray-800">{doc.name}</p><p className="text-xs text-gray-400">{doc.speciality}</p></div>
+                    <img src={doc.image} className="w-12 h-12 rounded-full bg-background-muted object-cover" alt="" />
+                    <div><p className="font-semibold text-text-primary">{doc.name}</p><p className="text-xs text-text-dim">{doc.speciality}</p></div>
                   </div>
                   <div className="grid grid-cols-2 gap-3 mt-2">
-                    <div><p className="text-xs text-gray-400">Revenue</p><p className="font-bold text-gray-700">{currencySymbol}{doc.revenue.toLocaleString()}</p></div>
-                    <div><p className="text-xs text-gray-400">Patients</p><p className="font-bold text-gray-700">{doc.patients}</p></div>
-                    <div><p className="text-xs text-gray-400">Appointments</p><p className="font-bold text-gray-700">{doc.total}</p></div>
-                    <div><p className="text-xs text-gray-400">Completion</p><p className="font-bold text-gray-700">{doc.completionRate}%</p></div>
+                    <div><p className="text-xs text-text-dim">Revenue</p><p className="font-bold text-text-primary">{currencySymbol}{doc.revenue.toLocaleString()}</p></div>
+                    <div><p className="text-xs text-text-dim">Patients</p><p className="font-bold text-text-primary">{doc.patients}</p></div>
+                    <div><p className="text-xs text-text-dim">Appointments</p><p className="font-bold text-text-primary">{doc.total}</p></div>
+                    <div><p className="text-xs text-text-dim">Completion</p><p className="font-bold text-text-primary">{doc.completionRate}%</p></div>
                   </div>
                 </div>
               ))}
             </div>
           )}
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-            <div className="p-5 pb-3"><p className="font-semibold text-gray-800">Doctor Performance Leaderboard</p><p className="text-xs text-gray-400 mt-0.5">Ranked by total revenue</p></div>
+          <div className="bg-background-card rounded-xl border border-border shadow-sm">
+            <div className="p-5 pb-3"><p className="font-semibold text-text-primary">Doctor Performance Leaderboard</p><p className="text-xs text-text-dim mt-0.5">Ranked by total revenue</p></div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="border-t border-b border-gray-100 bg-gray-50">
-                  <th className="text-left px-5 py-3 font-medium text-gray-500">#</th><th className="text-left px-5 py-3 font-medium text-gray-500">Doctor</th><th className="text-left px-5 py-3 font-medium text-gray-500">Speciality</th><th className="text-right px-5 py-3 font-medium text-gray-500">Appointments</th><th className="text-right px-5 py-3 font-medium text-gray-500">Completed</th><th className="text-right px-5 py-3 font-medium text-gray-500">Rate</th><th className="text-right px-5 py-3 font-medium text-gray-500">Patients</th><th className="text-right px-5 py-3 font-medium text-gray-500">Revenue</th>
+                <thead><tr className="border-t border-b border-border bg-background-muted">
+                  <th className="text-left px-5 py-3 font-medium text-text-secondary">#</th><th className="text-left px-5 py-3 font-medium text-text-secondary">Doctor</th><th className="text-left px-5 py-3 font-medium text-text-secondary">Speciality</th><th className="text-right px-5 py-3 font-medium text-text-secondary">Appointments</th><th className="text-right px-5 py-3 font-medium text-text-secondary">Completed</th><th className="text-right px-5 py-3 font-medium text-text-secondary">Rate</th><th className="text-right px-5 py-3 font-medium text-text-secondary">Patients</th><th className="text-right px-5 py-3 font-medium text-text-secondary">Revenue</th>
                 </tr></thead>
                 <tbody>
                   {doctorPerformance.map((doc, idx) => (
-                    <tr key={doc._id} className="border-b border-gray-50 hover:bg-gray-50">
-                      <td className="px-5 py-3 text-gray-400">{idx + 1}</td>
-                      <td className="px-5 py-3"><div className="flex items-center gap-2"><img src={doc.image} className="w-7 h-7 rounded-full bg-gray-100 object-cover" alt="" /><span className="font-medium text-gray-700">{doc.name}</span></div></td>
-                      <td className="px-5 py-3 text-gray-500">{doc.speciality}</td>
+                    <tr key={doc._id} className="border-b border-border hover:bg-background-muted">
+                      <td className="px-5 py-3 text-text-dim">{idx + 1}</td>
+                      <td className="px-5 py-3"><div className="flex items-center gap-2"><img src={doc.image} className="w-7 h-7 rounded-full bg-background-muted object-cover" alt="" /><span className="font-medium text-text-primary">{doc.name}</span></div></td>
+                      <td className="px-5 py-3 text-text-secondary">{doc.speciality}</td>
                       <td className="px-5 py-3 text-right">{doc.total}</td>
                       <td className="px-5 py-3 text-right text-green-600">{doc.completed}</td>
                       <td className="px-5 py-3 text-right"><span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${doc.completionRate >= 80 ? 'bg-green-50 text-green-600' : doc.completionRate >= 50 ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-500'}`}>{doc.completionRate}%</span></td>
                       <td className="px-5 py-3 text-right">{doc.patients}</td>
-                      <td className="px-5 py-3 text-right font-semibold text-gray-700">{currencySymbol}{doc.revenue.toLocaleString()}</td>
+                      <td className="px-5 py-3 text-right font-semibold text-text-primary">{currencySymbol}{doc.revenue.toLocaleString()}</td>
                     </tr>
                   ))}
-                  {doctorPerformance.length === 0 && (<tr><td colSpan={8} className="py-12 text-center text-gray-400">No doctor data available</td></tr>)}
+                  {doctorPerformance.length === 0 && (<tr><td colSpan={8} className="py-12 text-center text-text-dim">No doctor data available</td></tr>)}
                 </tbody>
               </table>
             </div>
@@ -241,8 +241,8 @@ const Analytics = () => {
       {activeTab === 'specialities' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <p className="font-semibold text-gray-800 mb-4">Appointment Distribution</p>
+            <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+              <p className="font-semibold text-text-primary mb-4">Appointment Distribution</p>
               <div className="h-72">
                 {specialityStats.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
@@ -253,11 +253,11 @@ const Analytics = () => {
                       <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E5E7EB', fontSize: '12px' }} />
                     </PieChart>
                   </ResponsiveContainer>
-                ) : (<div className="h-full flex items-center justify-center text-gray-400">No data</div>)}
+                ) : (<div className="h-full flex items-center justify-center text-text-dim">No data</div>)}
               </div>
             </div>
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <p className="font-semibold text-gray-800 mb-4">Revenue by Speciality</p>
+            <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+              <p className="font-semibold text-text-primary mb-4">Revenue by Speciality</p>
               <div className="h-72">
                 {specialityStats.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
@@ -271,32 +271,32 @@ const Analytics = () => {
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
-                ) : (<div className="h-full flex items-center justify-center text-gray-400">No data</div>)}
+                ) : (<div className="h-full flex items-center justify-center text-text-dim">No data</div>)}
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-            <div className="p-5 pb-3"><p className="font-semibold text-gray-800">Speciality Breakdown</p></div>
+          <div className="bg-background-card rounded-xl border border-border shadow-sm">
+            <div className="p-5 pb-3"><p className="font-semibold text-text-primary">Speciality Breakdown</p></div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="border-t border-b border-gray-100 bg-gray-50">
-                  <th className="text-left px-5 py-3 font-medium text-gray-500">#</th><th className="text-left px-5 py-3 font-medium text-gray-500">Speciality</th><th className="text-right px-5 py-3 font-medium text-gray-500">Appointments</th><th className="text-right px-5 py-3 font-medium text-gray-500">Revenue</th><th className="text-right px-5 py-3 font-medium text-gray-500">Share</th>
+                <thead><tr className="border-t border-b border-border bg-background-muted">
+                  <th className="text-left px-5 py-3 font-medium text-text-secondary">#</th><th className="text-left px-5 py-3 font-medium text-text-secondary">Speciality</th><th className="text-right px-5 py-3 font-medium text-text-secondary">Appointments</th><th className="text-right px-5 py-3 font-medium text-text-secondary">Revenue</th><th className="text-right px-5 py-3 font-medium text-text-secondary">Share</th>
                 </tr></thead>
                 <tbody>
                   {specialityStats.map((spec, idx) => {
                     const totalAll = specialityStats.reduce((s, v) => s + v.total, 0);
                     const share = totalAll > 0 ? ((spec.total / totalAll) * 100).toFixed(1) : 0;
                     return (
-                      <tr key={idx} className="border-b border-gray-50 hover:bg-gray-50">
-                        <td className="px-5 py-3 text-gray-400">{idx + 1}</td>
-                        <td className="px-5 py-3"><div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} /><span className="font-medium text-gray-700">{spec.name}</span></div></td>
+                      <tr key={idx} className="border-b border-border hover:bg-background-muted">
+                        <td className="px-5 py-3 text-text-dim">{idx + 1}</td>
+                        <td className="px-5 py-3"><div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} /><span className="font-medium text-text-primary">{spec.name}</span></div></td>
                         <td className="px-5 py-3 text-right">{spec.total}</td>
-                        <td className="px-5 py-3 text-right font-semibold text-gray-700">{currencySymbol}{spec.revenue.toLocaleString()}</td>
-                        <td className="px-5 py-3 text-right text-gray-500">{share}%</td>
+                        <td className="px-5 py-3 text-right font-semibold text-text-primary">{currencySymbol}{spec.revenue.toLocaleString()}</td>
+                        <td className="px-5 py-3 text-right text-text-secondary">{share}%</td>
                       </tr>
                     );
                   })}
-                  {specialityStats.length === 0 && (<tr><td colSpan={5} className="py-12 text-center text-gray-400">No speciality data available</td></tr>)}
+                  {specialityStats.length === 0 && (<tr><td colSpan={5} className="py-12 text-center text-text-dim">No speciality data available</td></tr>)}
                 </tbody>
               </table>
             </div>

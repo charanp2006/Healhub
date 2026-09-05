@@ -93,10 +93,10 @@ const AddDoctor = () => {
   return (
     <form onSubmit={onSubmitHandler} className="m-5 w-full">
       <p className="m-b text-lg font-medium">Add Doctor</p>
-      <div className="bg-white px-8 py-8 rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll">
-        <div className="flex items-center gap-4 mb-8 text-gray-500">
+      <div className="bg-background-card px-8 py-8 rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll">
+        <div className="flex items-center gap-4 mb-8 text-text-secondary">
           <label htmlFor="doc-img">
-            <img className="w-16 border-gray-100 rounded-full cursor-pointer" src={docImg ? URL.createObjectURL(docImg) : assets.upload_area} alt="" />
+            <img className="w-16 border-border rounded-full cursor-pointer" src={docImg ? URL.createObjectURL(docImg) : assets.upload_area} alt="" />
           </label>
           <input onChange={(e)=> setDocImg(e.target.files[0]) } type="file" id="doc-img" hidden />
           <p>
@@ -104,7 +104,7 @@ const AddDoctor = () => {
             picture
           </p>
         </div>
-        <div className="flex flex-col lg:flex-row items-start text-gray-500 gap-10">
+        <div className="flex flex-col lg:flex-row items-start text-text-secondary gap-10">
           <div className="w-full lg:flex-1 flex flex-col gap-4">
             <div className="flex-1 flex flex-col gap-1">
               <p>Doctor name</p>
@@ -117,7 +117,7 @@ const AddDoctor = () => {
             <div className="flex-1 flex flex-col gap-1 relative">
               <p>Doctor password</p>
               <input onChange={(e)=> setPassword(e.target.value) } value={password} className="border rounded px-3 py-2 pr-10" type={showPassword ? "text" : "password"} placeholder="Password" required />
-              <div onClick={()=> setShowPassword(prev=>!prev)} className="absolute right-3 top-9.5 cursor-pointer text-gray-600">
+              <div onClick={()=> setShowPassword(prev=>!prev)} className="absolute right-3 top-9.5 cursor-pointer text-text-secondary">
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </div>
             </div>
@@ -175,7 +175,7 @@ const AddDoctor = () => {
             </div>
           </div>
         </div>
-        <div className="text-gray-500">
+        <div className="text-text-secondary">
           <p className="mt-4 mb-2">Adout Doctor</p>
           <textarea onChange={(e)=> setAbout(e.target.value) } value={about} className="w-full px-4 pt-2 border rounded" placeholder="Write about doctor" rows={5} required />
         </div>

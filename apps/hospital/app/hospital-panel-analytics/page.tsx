@@ -66,8 +66,8 @@ const HospitalAnalyticsPage = () => {
 
   if (!analytics) {
     return (
-      <div className="m-5 text-center text-gray-500 py-20">
-        <BarChart3 className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+      <div className="m-5 text-center text-text-secondary py-20">
+        <BarChart3 className="w-12 h-12 mx-auto mb-3 text-text-dim" />
         <p>No analytics data available</p>
       </div>
     );
@@ -79,20 +79,20 @@ const HospitalAnalyticsPage = () => {
   return (
     <div className="m-5 max-h-[90vh] overflow-y-scroll">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">
+        <h1 className="text-2xl font-semibold text-text-primary">
           Hospital Analytics
         </h1>
-        <p className="text-gray-500 text-sm mt-1">
+        <p className="text-text-secondary text-sm mt-1">
           Overview of your hospital performance
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Total Doctors</p>
-              <p className="text-2xl font-bold text-gray-800">
+              <p className="text-sm text-text-secondary">Total Doctors</p>
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.totalDoctors}
               </p>
               <p className="text-xs text-green-600 mt-1">
@@ -105,11 +105,11 @@ const HospitalAnalyticsPage = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Total Appointments</p>
-              <p className="text-2xl font-bold text-gray-800">
+              <p className="text-sm text-text-secondary">Total Appointments</p>
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.totalAppointments}
               </p>
               <div className="flex items-center gap-1 mt-1">
@@ -136,11 +136,11 @@ const HospitalAnalyticsPage = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Total Revenue</p>
-              <p className="text-2xl font-bold text-gray-800">
+              <p className="text-sm text-text-secondary">Total Revenue</p>
+              <p className="text-2xl font-bold text-text-primary">
                 {formatCurrency(stats.totalRevenue)}
               </p>
               <div className="flex items-center gap-1 mt-1">
@@ -167,14 +167,14 @@ const HospitalAnalyticsPage = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Completion Rate</p>
-              <p className="text-2xl font-bold text-gray-800">
+              <p className="text-sm text-text-secondary">Completion Rate</p>
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.completionRate}%
               </p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-text-dim mt-1">
                 {stats.completedAppointments} completed
               </p>
             </div>
@@ -186,53 +186,53 @@ const HospitalAnalyticsPage = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-5 flex items-center gap-4">
           <div className="p-3 bg-green-100 rounded-xl">
             <CheckCircle2 className="w-5 h-5 text-green-600" />
           </div>
           <div>
-            <p className="text-xl font-bold text-gray-800">
+            <p className="text-xl font-bold text-text-primary">
               {stats.completedAppointments}
             </p>
-            <p className="text-sm text-gray-500">Completed</p>
+            <p className="text-sm text-text-secondary">Completed</p>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-5 flex items-center gap-4">
           <div className="p-3 bg-yellow-100 rounded-xl">
             <Clock className="w-5 h-5 text-yellow-600" />
           </div>
           <div>
-            <p className="text-xl font-bold text-gray-800">
+            <p className="text-xl font-bold text-text-primary">
               {stats.activeAppointments}
             </p>
-            <p className="text-sm text-gray-500">Active / Pending</p>
+            <p className="text-sm text-text-secondary">Active / Pending</p>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-5 flex items-center gap-4">
           <div className="p-3 bg-red-100 rounded-xl">
             <XCircle className="w-5 h-5 text-red-600" />
           </div>
           <div>
-            <p className="text-xl font-bold text-gray-800">
+            <p className="text-xl font-bold text-text-primary">
               {stats.cancelledAppointments}
             </p>
-            <p className="text-sm text-gray-500">Cancelled</p>
+            <p className="text-sm text-text-secondary">Cancelled</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-          <h3 className="font-semibold text-gray-800 mb-4">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-5">
+          <h3 className="font-semibold text-text-primary mb-4">
             Monthly Trend (Last 6 Months)
           </h3>
           <div className="space-y-3">
             {monthlyTrend.map((month, i) => (
               <div key={i} className="flex items-center gap-3">
-                <span className="text-sm text-gray-500 w-10">
+                <span className="text-sm text-text-secondary w-10">
                   {month.month}
                 </span>
-                <div className="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden relative">
+                <div className="flex-1 bg-background-muted rounded-full h-6 overflow-hidden relative">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
                     style={{
@@ -243,7 +243,7 @@ const HospitalAnalyticsPage = () => {
                     {month.appointments} appts
                   </span>
                 </div>
-                <span className="text-sm font-medium text-gray-700 w-20 text-right">
+                <span className="text-sm font-medium text-text-primary w-20 text-right">
                   {formatCurrency(month.revenue)}
                 </span>
               </div>
@@ -251,8 +251,8 @@ const HospitalAnalyticsPage = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-          <h3 className="font-semibold text-gray-800 mb-4">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-5">
+          <h3 className="font-semibold text-text-primary mb-4">
             Top Performing Doctors
           </h3>
           {topDoctors.length > 0 ? (
@@ -260,24 +260,24 @@ const HospitalAnalyticsPage = () => {
               {topDoctors.map((doc, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
+                  className="flex items-center gap-3 p-2 hover:bg-background-muted rounded-lg"
                 >
-                  <span className="text-sm font-bold text-gray-400 w-5">
+                  <span className="text-sm font-bold text-text-dim w-5">
                     #{i + 1}
                   </span>
                   <img
                     src={doc.image}
                     alt=""
-                    className="w-10 h-10 rounded-full object-cover bg-gray-200"
+                    className="w-10 h-10 rounded-full object-cover bg-background-muted-hover"
                   />
                   <div className="flex-1">
-                    <p className="font-medium text-gray-800 text-sm">
+                    <p className="font-medium text-text-primary text-sm">
                       {doc.name}
                     </p>
-                    <p className="text-xs text-gray-500">{doc.speciality}</p>
+                    <p className="text-xs text-text-secondary">{doc.speciality}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-medium text-gray-800">
+                    <p className="text-sm font-medium text-text-primary">
                       {doc.appointments} appts
                     </p>
                     <p className="text-xs text-green-600">
@@ -288,7 +288,7 @@ const HospitalAnalyticsPage = () => {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-sm text-center py-8">
+            <p className="text-text-secondary text-sm text-center py-8">
               No doctor data yet
             </p>
           )}
@@ -296,22 +296,22 @@ const HospitalAnalyticsPage = () => {
       </div>
 
       {specialityBreakdown.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-          <h3 className="font-semibold text-gray-800 mb-4">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-5">
+          <h3 className="font-semibold text-text-primary mb-4">
             Speciality Breakdown
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {specialityBreakdown.map((spec, i) => (
               <div
                 key={i}
-                className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                className="flex items-center gap-3 p-3 bg-background-muted rounded-lg"
               >
                 <div className="p-2 bg-primary/10 rounded-lg">
                   <Stethoscope className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-800 text-sm">{spec.name}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="font-medium text-text-primary text-sm">{spec.name}</p>
+                  <p className="text-xs text-text-secondary">
                     {spec.doctors} doctor{spec.doctors !== 1 ? "s" : ""} ·{" "}
                     {spec.appointments} appts
                   </p>

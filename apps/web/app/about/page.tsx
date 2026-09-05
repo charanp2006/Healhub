@@ -6,10 +6,10 @@ import { assets } from "@/src/assets/assets";
 const About = () => {
   return (
     <div>
-      <div className="text-center text-2xl pt-10 text-text-secondaryLight">
+      <div className="text-center text-2xl pt-10 text-text-secondary">
         <p>
           ABOUT{" "}
-          <span className="text-text-primaryLight font-semibold">US</span>
+          <span className="text-text-primary font-semibold">US</span>
         </p>
       </div>
 
@@ -19,7 +19,7 @@ const About = () => {
           src={assets.about_image.src}
           alt=""
         />
-        <div className="flex flex-col justify-center gap-6 md:w-2/4 text-sm text-text-secondaryLight">
+        <div className="flex flex-col justify-center gap-6 md:w-2/4 text-sm text-text-secondary">
           <p>
             Welcome to Healhub, your comprehensive hospital and clinic
             management and healthcare booking platform. At Healhub, we simplify
@@ -34,7 +34,7 @@ const About = () => {
             managing your practice, or a hospital/clinic optimizing operations
             — Healhub is built for you.
           </p>
-          <b className="text-text-primaryLight">Our Vision</b>
+          <b className="text-text-primary">Our Vision</b>
           <p>
             Our vision at Healhub is to create a unified healthcare ecosystem
             where patients, doctors, and hospitals collaborate effortlessly. We
@@ -47,27 +47,27 @@ const About = () => {
       <div className="text-xl my-4">
         <p>
           WHY{" "}
-          <span className="text-text-primaryLight font-semibold">
+          <span className="text-text-primary font-semibold">
             CHOOSE US
           </span>
         </p>
       </div>
       <div className="flex flex-col md:flex-row mb-20">
-        <div className="border border-border-light px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-text-secondaryLight cursor-pointer">
+        <div className="border border-border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-text-secondary cursor-pointer">
           <b>HOSPITALS & CLINICS NETWORK:</b>
           <p>
             Access a network of registered hospitals and clinics with verified
             doctors, real-time bed availability, and specialized departments.
           </p>
         </div>
-        <div className="border border-border-light px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-text-secondaryLight cursor-pointer">
+        <div className="border border-border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-text-secondary cursor-pointer">
           <b>SMART SCHEDULING:</b>
           <p>
             Book appointments based on doctor availability, weekly schedules,
             and real-time slot management — no more waiting.
           </p>
         </div>
-        <div className="border border-border-light px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-text-secondaryLight cursor-pointer">
+        <div className="border border-border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-text-secondary cursor-pointer">
           <b>HEALTH INSIGHTS:</b>
           <p>
             Stay informed with curated health blogs from verified doctors and

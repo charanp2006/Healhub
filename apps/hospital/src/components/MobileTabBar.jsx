@@ -80,7 +80,7 @@ const MobileTabBar = () => {
     >
       <span
         className={`relative flex items-center justify-center transition-all duration-200 ${
-          active ? "text-[#179E8D] -translate-y-0.5" : "text-[#8a94a3]"
+          active ? "text-[#179E8D] -translate-y-0.5" : "text-text-dim"
         }`}
       >
         <Icon size={21} strokeWidth={active ? 2.4 : 1.9} />
@@ -90,7 +90,7 @@ const MobileTabBar = () => {
       </span>
       <span
         className={`text-[10px] font-medium ${
-          active ? "text-[#179E8D]" : "text-[#8a94a3]"
+          active ? "text-[#179E8D]" : "text-text-dim"
         }`}
       >
         {label}
@@ -115,10 +115,10 @@ const MobileTabBar = () => {
             onClick={() => setShowMore(true)}
             className="flex-1 flex flex-col items-center gap-1 pt-2 pb-1.5 touch-none-outline"
           >
-            <span className="relative flex items-center justify-center text-[#8a94a3]">
+            <span className="relative flex items-center justify-center text-text-dim">
               <LayoutGrid size={21} strokeWidth={1.9} />
             </span>
-            <span className="text-[10px] font-medium text-[#8a94a3]">More</span>
+            <span className="text-[10px] font-medium text-text-dim">More</span>
           </button>
         </div>
       </nav>
@@ -131,14 +131,14 @@ const MobileTabBar = () => {
           className="absolute inset-0 bg-black/40"
           onClick={() => setShowMore(false)}
         />
-        <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-3xl p-5 pb-10">
+        <div className="absolute inset-x-0 bottom-0 bg-background-card rounded-t-3xl p-5 pb-10">
           <div className="flex items-center justify-between mb-4">
-            <p className="text-lg font-semibold text-text-primaryLight">
+            <p className="text-lg font-semibold text-text-primary">
               Quick Actions
             </p>
             <button
               onClick={() => setShowMore(false)}
-              className="p-2 rounded-full bg-[#f6f8fa] touch-none-outline"
+              className="p-2 rounded-full bg-background-base touch-none-outline"
             >
               <X size={20} />
             </button>
@@ -151,8 +151,8 @@ const MobileTabBar = () => {
                 onClick={() => setShowMore(false)}
                 className={`flex flex-col items-center gap-2 rounded-2xl border px-2 py-4 touch-none-outline ${
                   isActive(href)
-                    ? "bg-[#eefaf8] border-[#179E8D]/30 text-[#179E8D]"
-                    : "bg-white border-[#edeff2] text-text-secondaryLight"
+                    ? "bg-primary-soft border-[#179E8D]/30 text-[#179E8D]"
+                    : "bg-background-card border-border text-text-secondary"
                 }`}
               >
                 <Icon size={20} className={isActive(href) ? "text-[#179E8D]" : ""} />

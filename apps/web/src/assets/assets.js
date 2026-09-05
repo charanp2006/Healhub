@@ -4,7 +4,6 @@ import group_profiles from "./group_profiles.png";
 import profile_pic from "./profile_pic.png";
 import contact_image from "./contact_image.png";
 import about_image from "./about_image.png";
-import logo from "./logo.svg";
 import dropdown_icon from "./dropdown_icon.svg";
 import menu_icon from "./menu_icon.svg";
 import cross_icon from "./cross_icon.png";
@@ -21,14 +20,11 @@ import General_physician from "./General_physician.svg";
 import Gynecologist from "./Gynecologist.svg";
 import Neurologist from "./Neurologist.svg";
 import Pediatricians from "./Pediatricians.svg";
-import logo_icon from "./logo_icon.svg";
-import new_logo from "./logo_icon.png";
 
 export const assets = {
   appointment_img,
   header_img,
   group_profiles,
-  logo,
   chats_icon,
   verified_icon,
   info_icon,
@@ -42,8 +38,6 @@ export const assets = {
   upload_icon,
   stripe_logo,
   razorpay_logo,
-  new_logo,
-  logo_icon,
 };
 
 export const specialityData = [

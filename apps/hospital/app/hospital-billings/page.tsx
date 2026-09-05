@@ -137,8 +137,8 @@ const HospitalBillings = () => {
     <div className="m-5 max-h-[90vh] overflow-y-scroll">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-800">Billings</h1>
-          <p className="text-gray-500 text-sm mt-1">
+          <h1 className="text-2xl font-semibold text-text-primary">Billings</h1>
+          <p className="text-text-secondary text-sm mt-1">
             Generate and view your billing history
           </p>
         </div>
@@ -153,39 +153,39 @@ const HospitalBillings = () => {
 
       {showGenerateForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+          <div className="bg-background-card rounded-xl p-6 w-full max-w-md mx-4">
             <h2 className="text-xl font-semibold mb-4">
               Generate New Billing
             </h2>
             <form onSubmit={handleGenerateBilling} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">
+                  <label className="block text-sm text-text-secondary mb-1">
                     Period Start
                   </label>
                   <input
                     type="date"
                     value={genStartDate}
                     onChange={(e) => setGenStartDate(e.target.value)}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2"
+                    className="w-full border border-border rounded-lg px-3 py-2"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">
+                  <label className="block text-sm text-text-secondary mb-1">
                     Period End
                   </label>
                   <input
                     type="date"
                     value={genEndDate}
                     onChange={(e) => setGenEndDate(e.target.value)}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2"
+                    className="w-full border border-border rounded-lg px-3 py-2"
                     required
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm text-gray-600 mb-1">
+                <label className="block text-sm text-text-secondary mb-1">
                   Commission % (default 10%)
                 </label>
                 <input
@@ -194,14 +194,14 @@ const HospitalBillings = () => {
                   max="100"
                   value={genCommission}
                   onChange={(e) => setGenCommission(Number(e.target.value))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2"
+                  className="w-full border border-border rounded-lg px-3 py-2"
                 />
               </div>
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowGenerateForm(false)}
-                  className="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 border border-border rounded-lg hover:bg-background-muted"
                 >
                   Cancel
                 </button>
@@ -219,52 +219,52 @@ const HospitalBillings = () => {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-100 rounded-lg">
               <DollarSign className="text-blue-600" size={20} />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Total Revenue</p>
+              <p className="text-sm text-text-secondary">Total Revenue</p>
               <p className="text-xl font-semibold">
                 {formatCurrency(totalRevenue)}
               </p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-red-100 rounded-lg">
               <DollarSign className="text-red-600" size={20} />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Total Commission</p>
+              <p className="text-sm text-text-secondary">Total Commission</p>
               <p className="text-xl font-semibold">
                 {formatCurrency(totalCommission)}
               </p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-green-100 rounded-lg">
               <DollarSign className="text-green-600" size={20} />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Net Payable</p>
+              <p className="text-sm text-text-secondary">Net Payable</p>
               <p className="text-xl font-semibold text-green-600">
                 {formatCurrency(totalNetPayable)}
               </p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="bg-background-card rounded-xl shadow-sm border border-border p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-yellow-100 rounded-lg">
               <Clock className="text-yellow-600" size={20} />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Pending / Paid</p>
+              <p className="text-sm text-text-secondary">Pending / Paid</p>
               <p className="text-xl font-semibold">
                 {pendingCount} / {paidCount}
               </p>
@@ -273,11 +273,11 @@ const HospitalBillings = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+      <div className="bg-background-card rounded-xl shadow-sm border border-border p-4 mb-6">
         <div className="flex flex-wrap items-center gap-4">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 text-gray-600 hover:text-primary"
+            className="flex items-center gap-2 text-text-secondary hover:text-primary"
           >
             <SlidersHorizontal size={18} />
             Filters
@@ -290,13 +290,13 @@ const HospitalBillings = () => {
             className="mt-4 flex flex-wrap items-end gap-4"
           >
             <div>
-              <label className="block text-sm text-gray-600 mb-1">
+              <label className="block text-sm text-text-secondary mb-1">
                 Status
               </label>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="border border-gray-200 rounded-lg px-3 py-2 min-w-37.5"
+                className="border border-border rounded-lg px-3 py-2 min-w-37.5"
               >
                 <option value="">All Status</option>
                 <option value="Pending">Pending</option>
@@ -313,42 +313,42 @@ const HospitalBillings = () => {
         )}
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-background-card rounded-xl shadow-sm border border-border overflow-hidden">
         {loading ? (
           <SkeletonList rows={6} className="p-8" />
         ) : billings.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">No billings found</div>
+          <div className="p-8 text-center text-text-secondary">No billings found</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-background-muted">
                 <tr>
-                  <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                  <th className="text-left px-4 py-3 text-sm font-medium text-text-secondary">
                     Billing Period
                   </th>
-                  <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">
+                  <th className="text-right px-4 py-3 text-sm font-medium text-text-secondary">
                     Appointments
                   </th>
-                  <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">
+                  <th className="text-right px-4 py-3 text-sm font-medium text-text-secondary">
                     Revenue
                   </th>
-                  <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">
+                  <th className="text-right px-4 py-3 text-sm font-medium text-text-secondary">
                     Commission
                   </th>
-                  <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">
+                  <th className="text-right px-4 py-3 text-sm font-medium text-text-secondary">
                     Net Payable
                   </th>
-                  <th className="text-center px-4 py-3 text-sm font-medium text-gray-600">
+                  <th className="text-center px-4 py-3 text-sm font-medium text-text-secondary">
                     Status
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-border">
                 {billings.map((billing) => (
-                  <tr key={billing._id} className="hover:bg-gray-50">
+                  <tr key={billing._id} className="hover:bg-background-muted">
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-2 text-sm text-gray-700">
-                        <Calendar size={14} className="text-gray-400" />
+                      <div className="flex items-center gap-2 text-sm text-text-primary">
+                        <Calendar size={14} className="text-text-dim" />
                         {formatDate(billing.billingPeriodStart)} -{" "}
                         {formatDate(billing.billingPeriodEnd)}
                       </div>
@@ -360,7 +360,7 @@ const HospitalBillings = () => {
                       {formatCurrency(billing.totalRevenue)}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-text-secondary">
                         {formatCurrency(billing.commissionAmount)} (
                         {billing.commissionPercentage}%)
                       </span>
@@ -392,22 +392,22 @@ const HospitalBillings = () => {
         )}
 
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-            <p className="text-sm text-gray-500">
+          <div className="flex items-center justify-between px-4 py-3 border-t border-border">
+            <p className="text-sm text-text-secondary">
               Page {page} of {totalPages} ({totalCount} total)
             </p>
             <div className="flex gap-2">
               <button
                 onClick={() => fetchBillings(page - 1)}
                 disabled={page <= 1}
-                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50"
+                className="p-2 rounded-lg border border-border hover:bg-background-muted disabled:opacity-50"
               >
                 <ChevronLeft size={18} />
               </button>
               <button
                 onClick={() => fetchBillings(page + 1)}
                 disabled={page >= totalPages}
-                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50"
+                className="p-2 rounded-lg border border-border hover:bg-background-muted disabled:opacity-50"
               >
                 <ChevronRight size={18} />
               </button>

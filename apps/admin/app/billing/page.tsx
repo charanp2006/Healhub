@@ -54,7 +54,7 @@ const BillingList = () => {
       case 'paid': return <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-600"><span className="w-1.5 h-1.5 rounded-full bg-green-500" /> Paid</span>;
       case 'pending': return <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-600"><span className="w-1.5 h-1.5 rounded-full bg-yellow-500" /> Pending</span>;
       case 'overdue': return <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-500"><span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Overdue</span>;
-      default: return <span className="text-xs text-gray-400">{status}</span>;
+      default: return <span className="text-xs text-text-dim">{status}</span>;
     }
   };
 
@@ -74,70 +74,70 @@ const BillingList = () => {
       <div className="flex items-center justify-between mb-5">
         <h1 className="text-lg font-medium">Billing & Invoices</h1>
         <div className="flex items-center gap-3">
-          <button onClick={() => setShowFilters((v) => !v)} className={`flex items-center gap-2 text-sm border px-3 py-1.5 rounded-full cursor-pointer transition-colors ${hasActiveFilters ? "bg-primary text-white border-primary" : "text-text-secondaryLight border-border-light hover:bg-primary-soft"}`}>
-            <SlidersHorizontal size={14} />{showFilters ? "Hide Filters" : "Filters"}{hasActiveFilters && <span className="w-4 h-4 rounded-full bg-white text-primary text-[10px] flex items-center justify-center font-bold">!</span>}
+          <button onClick={() => setShowFilters((v) => !v)} className={`flex items-center gap-2 text-sm border px-3 py-1.5 rounded-full cursor-pointer transition-colors ${hasActiveFilters ? "bg-primary text-white border-primary" : "text-text-secondary border-border hover:bg-primary-soft"}`}>
+            <SlidersHorizontal size={14} />{showFilters ? "Hide Filters" : "Filters"}{hasActiveFilters && <span className="w-4 h-4 rounded-full bg-background-card text-primary text-[10px] flex items-center justify-center font-bold">!</span>}
           </button>
-          <button onClick={() => fetchBills(page)} className="flex items-center gap-2 text-sm border border-border-light px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary-soft transition-colors">Refresh</button>
+          <button onClick={() => fetchBills(page)} className="flex items-center gap-2 text-sm border border-border px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary-soft transition-colors">Refresh</button>
         </div>
       </div>
       {showFilters && (
-        <form onSubmit={handleSearch} className="bg-background-cardLight border border-border-light rounded-lg p-5 mb-6 flex flex-col gap-4">
+        <form onSubmit={handleSearch} className="bg-background-card border border-border rounded-lg p-5 mb-6 flex flex-col gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-text-secondaryLight">Search</label>
-              <div className="relative"><Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondaryLight" />
-                <input value={filterSearch} onChange={(e) => setFilterSearch(e.target.value)} placeholder="Patient, doctor, or bill ID" className="w-full border border-border-light rounded px-3 py-2 pl-8 text-sm" />
+              <label className="text-xs text-text-secondary">Search</label>
+              <div className="relative"><Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+                <input value={filterSearch} onChange={(e) => setFilterSearch(e.target.value)} placeholder="Patient, doctor, or bill ID" className="w-full border border-border rounded px-3 py-2 pl-8 text-sm" />
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-text-secondaryLight">Status</label>
+              <label className="text-xs text-text-secondary">Status</label>
               <div className="relative">
-                <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="w-full border border-border-light rounded px-3 py-2 pr-8 appearance-none text-sm bg-white">
+                <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="w-full border border-border rounded px-3 py-2 pr-8 appearance-none text-sm bg-background-card">
                   <option value="">All statuses</option><option value="paid">Paid</option><option value="pending">Pending</option><option value="overdue">Overdue</option>
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondaryLight pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-text-secondaryLight">Payment Method</label>
+              <label className="text-xs text-text-secondary">Payment Method</label>
               <div className="relative">
-                <select value={filterPaymentMethod} onChange={(e) => setFilterPaymentMethod(e.target.value)} className="w-full border border-border-light rounded px-3 py-2 pr-8 appearance-none text-sm bg-white">
+                <select value={filterPaymentMethod} onChange={(e) => setFilterPaymentMethod(e.target.value)} className="w-full border border-border rounded px-3 py-2 pr-8 appearance-none text-sm bg-background-card">
                   <option value="">All methods</option><option value="online">Online</option><option value="cash">Cash</option><option value="insurance">Insurance</option>
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondaryLight pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-text-secondaryLight">Date From</label>
-              <input type="date" value={filterDateFrom} onChange={(e) => setFilterDateFrom(e.target.value)} className="w-full border border-border-light rounded px-3 py-2 text-sm" />
+              <label className="text-xs text-text-secondary">Date From</label>
+              <input type="date" value={filterDateFrom} onChange={(e) => setFilterDateFrom(e.target.value)} className="w-full border border-border rounded px-3 py-2 text-sm" />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-text-secondaryLight">Date To</label>
-              <input type="date" value={filterDateTo} onChange={(e) => setFilterDateTo(e.target.value)} className="w-full border border-border-light rounded px-3 py-2 text-sm" />
+              <label className="text-xs text-text-secondary">Date To</label>
+              <input type="date" value={filterDateTo} onChange={(e) => setFilterDateTo(e.target.value)} className="w-full border border-border rounded px-3 py-2 text-sm" />
             </div>
           </div>
           <div className="flex gap-3">
             <button type="submit" className="bg-primary text-white text-sm px-6 py-2 rounded-full cursor-pointer hover:bg-primary-hover transition-colors">Apply</button>
-            <button type="button" onClick={clearFilters} className="text-sm px-6 py-2 border border-border-light rounded-full cursor-pointer hover:bg-primary-soft transition-colors">Clear</button>
+            <button type="button" onClick={clearFilters} className="text-sm px-6 py-2 border border-border rounded-full cursor-pointer hover:bg-primary-soft transition-colors">Clear</button>
           </div>
         </form>
       )}
-      <p className="text-sm text-text-secondaryLight mb-4">{loading ? <SkeletonCount /> : `${totalCount} bill${totalCount !== 1 ? "s" : ""} total`}</p>
-      <div className="bg-background-cardLight border border-border-light rounded-lg overflow-hidden">
-        <div className="hidden sm:grid grid-cols-[1.5fr_2fr_1.5fr_1fr_1fr_1fr_auto] gap-2 py-3 px-6 border-b border-border-light text-sm font-medium text-text-secondaryLight">
+      <p className="text-sm text-text-secondary mb-4">{loading ? <SkeletonCount /> : `${totalCount} bill${totalCount !== 1 ? "s" : ""} total`}</p>
+      <div className="bg-background-card border border-border rounded-lg overflow-hidden">
+        <div className="hidden sm:grid grid-cols-[1.5fr_2fr_1.5fr_1fr_1fr_1fr_auto] gap-2 py-3 px-6 border-b border-border text-sm font-medium text-text-secondary">
           <p>Bill ID</p><p>Hospital</p><p>Amount</p><p>Status</p><p>Appointments</p><p>Date</p><p>Actions</p>
         </div>
         {bills.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-text-secondaryLight"><Receipt size={40} className="mb-3 opacity-40" /><p>No bills found</p></div>
+          <div className="flex flex-col items-center justify-center py-20 text-text-secondary"><Receipt size={40} className="mb-3 opacity-40" /><p>No bills found</p></div>
         ) : (
           bills.map((bill) => (
-            <div key={bill._id} className="flex flex-wrap justify-between items-center gap-2 sm:grid sm:grid-cols-[1.5fr_2fr_1.5fr_1fr_1fr_1fr_auto] py-3 px-6 border-b border-border-light text-sm hover:bg-primary-soft/30">
-              <p className="font-mono text-xs text-text-secondaryLight truncate">{bill._id?.slice(-8) || '—'}</p>
-              <div><p className="font-medium text-text-primaryLight truncate">{bill.hospitalId?.name || '—'}</p><p className="text-xs text-text-secondaryLight">Commission: {currencySymbol}{(bill.commissionAmount || 0).toLocaleString()}</p></div>
-              <p className="font-semibold text-text-primaryLight">{currencySymbol}{bill.grandTotal?.toLocaleString() || 0}</p>
+            <div key={bill._id} className="flex flex-wrap justify-between items-center gap-2 sm:grid sm:grid-cols-[1.5fr_2fr_1.5fr_1fr_1fr_1fr_auto] py-3 px-6 border-b border-border text-sm hover:bg-primary-soft/30">
+              <p className="font-mono text-xs text-text-secondary truncate">{bill._id?.slice(-8) || '—'}</p>
+              <div><p className="font-medium text-text-primary truncate">{bill.hospitalId?.name || '—'}</p><p className="text-xs text-text-secondary">Commission: {currencySymbol}{(bill.commissionAmount || 0).toLocaleString()}</p></div>
+              <p className="font-semibold text-text-primary">{currencySymbol}{bill.grandTotal?.toLocaleString() || 0}</p>
               {getStatusBadge((bill.status || '').toLowerCase())}
-              <p className="text-text-secondaryLight">{bill.totalAppointments || 0}{bill.bedAllocations ? ` + ${bill.bedAllocations} beds` : ''}</p>
-              <p className="text-text-secondaryLight">{formatDate(bill.billingPeriodEnd || bill.createdAt)}</p>
+              <p className="text-text-secondary">{bill.totalAppointments || 0}{bill.bedAllocations ? ` + ${bill.bedAllocations} beds` : ''}</p>
+              <p className="text-text-secondary">{formatDate(bill.billingPeriodEnd || bill.createdAt)}</p>
               <div className="flex items-center gap-3">
                 {(bill.status || '') === 'Pending' && (
                   <button onClick={(e) => markAsPaid(bill._id, e)} className="text-xs bg-primary text-white px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary-hover transition-colors" title="Mark as paid">Mark Paid</button>
@@ -149,9 +149,9 @@ const BillingList = () => {
       </div>
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-4 mt-6">
-          <button disabled={page <= 1} onClick={() => fetchBills(page - 1)} className="flex items-center gap-1 px-3 py-1.5 text-sm border border-border-light rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors"><ChevronLeft size={14} /> Prev</button>
-          <span className="text-sm text-text-secondaryLight">Page {page} of {totalPages}</span>
-          <button disabled={page >= totalPages} onClick={() => fetchBills(page + 1)} className="flex items-center gap-1 px-3 py-1.5 text-sm border border-border-light rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors">Next <ChevronRight size={14} /></button>
+          <button disabled={page <= 1} onClick={() => fetchBills(page - 1)} className="flex items-center gap-1 px-3 py-1.5 text-sm border border-border rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors"><ChevronLeft size={14} /> Prev</button>
+          <span className="text-sm text-text-secondary">Page {page} of {totalPages}</span>
+          <button disabled={page >= totalPages} onClick={() => fetchBills(page + 1)} className="flex items-center gap-1 px-3 py-1.5 text-sm border border-border rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors">Next <ChevronRight size={14} /></button>
         </div>
       )}
     </div>

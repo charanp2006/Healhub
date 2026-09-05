@@ -26,9 +26,9 @@ const Sidebar = () => {
     }`;
 
   return (
-    <div className="min-h-screen bg-background-cardLight border-r border-border-light">
+    <div className="min-h-screen bg-background-card border-r border-border">
       {hToken && (
-        <ul className="text-text-secondaryLight mt-5">
+        <ul className="text-text-secondary mt-5">
           <Link href="/hospital-dashboard" className={active("/hospital-dashboard")}>
             <img src={assets.home_icon} alt="" />
             <p className="hidden md:block">Dashboard</p>
@@ -65,7 +65,7 @@ const Sidebar = () => {
       )}
 
       {dToken && (
-        <ul className="text-text-secondaryLight mt-5">
+        <ul className="text-text-secondary mt-5">
           <Link href="/doctor-dashboard" className={active("/doctor-dashboard")}>
             <img src={assets.home_icon} alt="" />
             <p className="hidden md:block">Dashboard</p>

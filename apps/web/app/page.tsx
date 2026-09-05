@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Header from "@/src/components/Header";
 import MobileHomeHero from "@/src/components/MobileHomeHero";
+import SplashScreen from "@/src/components/SplashScreen";
 import StatsButtons from "@/src/components/StatsButtons";
 import StatsCarousel from "@/src/components/StatsCarousel";
 import SpecialityMenu from "@/src/components/SpecialityMenu";
@@ -44,22 +45,22 @@ const faqs = [
 ];
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => (
-  <div className="bg-white border border-gray-200 rounded-2xl md:rounded-lg overflow-hidden">
+  <div className="bg-background-card border border-border rounded-2xl md:rounded-lg overflow-hidden">
     <button
       onClick={onClick}
-      className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors touch-none-outline"
+      className="w-full flex items-center justify-between p-4 text-left hover:bg-background-muted transition-colors touch-none-outline"
     >
-      <span className="font-medium text-gray-800 text-sm md:text-base">
+      <span className="font-medium text-text-primary text-sm md:text-base">
         {question}
       </span>
       {isOpen ? (
-        <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" />
+        <ChevronUp className="w-5 h-5 text-text-secondary flex-shrink-0" />
       ) : (
-        <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0" />
+        <ChevronDown className="w-5 h-5 text-text-secondary flex-shrink-0" />
       )}
     </button>
     {isOpen && (
-      <div className="px-4 pb-4 text-sm text-gray-600 leading-relaxed">
+      <div className="px-4 pb-4 text-sm text-text-secondary leading-relaxed">
         {answer}
       </div>
     )}
@@ -71,6 +72,7 @@ const Home = () => {
 
   return (
     <div>
+      <SplashScreen />
       <div className="hidden md:block">
         <Header />
       </div>
@@ -83,10 +85,10 @@ const Home = () => {
       {/* FAQs Section */}
       <div className="my-10 md:my-16 md:mx-10">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-medium text-gray-800">
+          <h2 className="text-3xl font-medium text-text-primary">
             Frequently Asked Questions
           </h2>
-          <p className="text-gray-500 mt-2 text-sm">
+          <p className="text-text-secondary mt-2 text-sm">
             Find answers to common questions about Healhub
           </p>
         </div>

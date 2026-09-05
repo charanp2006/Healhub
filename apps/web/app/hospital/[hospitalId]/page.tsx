@@ -95,11 +95,11 @@ const HospitalProfile = () => {
           />
         </div>
 
-        <div className="flex-1 border border-border-light rounded-lg p-8 py-7 bg-background-cardLight mx-2 sm:mx-0 mt-[-80px] sm:mt-0">
-          <p className="flex items-center gap-2 text-3xl font-medium text-text-primaryLight">
+        <div className="flex-1 border border-border rounded-lg p-8 py-7 bg-background-card mx-2 sm:mx-0 mt-[-80px] sm:mt-0">
+          <p className="flex items-center gap-2 text-3xl font-medium text-text-primary">
             {hospital.name}
           </p>
-          <div className="flex items-center gap-2 mt-1 text-text-secondaryLight">
+          <div className="flex items-center gap-2 mt-1 text-text-secondary">
             <p>{hospital.city}</p>
             <button className="py-0.5 px-2 border text-xs rounded-full">
               Rating {hospital.ratingAverage.toFixed(1)}
@@ -107,10 +107,10 @@ const HospitalProfile = () => {
           </div>
 
           <div>
-            <p className="flex items-center gap-1 text-sm font-medium text-text-primaryLight mt-3">
+            <p className="flex items-center gap-1 text-sm font-medium text-text-primary mt-3">
               About
             </p>
-            <p className="text-sm text-text-secondaryLight max-w-[700px] mt-1">
+            <p className="text-sm text-text-secondary max-w-[700px] mt-1">
               {hospital.about || "No description available."}
             </p>
           </div>
@@ -119,32 +119,32 @@ const HospitalProfile = () => {
             {hospital.specialties?.map((item) => (
               <span
                 key={item}
-                className="px-3 py-1 border border-border-light rounded-full text-xs text-text-secondaryLight"
+                className="px-3 py-1 border border-border rounded-full text-xs text-text-secondary"
               >
                 {item}
               </span>
             ))}
           </div>
 
-          <p className="text-text-secondaryLight font-medium mt-4">
+          <p className="text-text-secondary font-medium mt-4">
             Beds available: {hospital.availableBeds} / {hospital.totalBeds}
           </p>
 
           {roomCategories.length > 0 && (
             <div className="mt-3">
-              <p className="text-sm font-medium text-text-primaryLight mb-2">
+              <p className="text-sm font-medium text-text-primary mb-2">
                 Room-wise availability
               </p>
               <div className="flex flex-wrap gap-3">
                 {roomCategories.map((cat) => (
                   <div
                     key={cat._id}
-                    className="border border-border-light rounded-lg px-4 py-2 text-sm"
+                    className="border border-border rounded-lg px-4 py-2 text-sm"
                   >
-                    <p className="font-medium text-text-primaryLight">
+                    <p className="font-medium text-text-primary">
                       {cat.name}
                     </p>
-                    <p className="text-text-secondaryLight">
+                    <p className="text-text-secondary">
                       {cat.availableBeds} / {cat.totalBeds} beds free
                     </p>
                   </div>
@@ -154,10 +154,10 @@ const HospitalProfile = () => {
           )}
 
           <div
-            className={`flex items-center gap-2 text-sm mt-4 ${hospital.isRegistered ? "text-green-600" : "text-gray-500"}`}
+            className={`flex items-center gap-2 text-sm mt-4 ${hospital.isRegistered ? "text-green-600" : "text-text-secondary"}`}
           >
             <span
-              className={`w-2 h-2 ${hospital.isRegistered ? "bg-green-500" : "bg-gray-400"} rounded-full`}
+              className={`w-2 h-2 ${hospital.isRegistered ? "bg-green-500" : "bg-background-muted-hover"} rounded-full`}
             ></span>
             <p>{hospital.isRegistered ? "Registered" : "Not Registered"}</p>
           </div>
@@ -165,7 +165,7 @@ const HospitalProfile = () => {
           <button
             onClick={handleBooking}
             disabled={!hospital.isRegistered}
-            className={`text-sm font-light px-14 py-3 rounded-full my-6 w-full sm:w-auto cursor-pointer touch-none-outline ${hospital.isRegistered ? "bg-primary text-white" : "bg-primary-soft text-text-secondaryLight cursor-not-allowed"}`}
+            className={`text-sm font-light px-14 py-3 rounded-full my-6 w-full sm:w-auto cursor-pointer touch-none-outline ${hospital.isRegistered ? "bg-primary text-white" : "bg-primary-soft text-text-secondary cursor-not-allowed"}`}
           >
             Book an appointment
           </button>
@@ -173,11 +173,11 @@ const HospitalProfile = () => {
       </div>
 
       <div className="mt-8">
-        <h2 className="text-text-primaryLight text-xl font-medium">
+        <h2 className="text-text-primary text-xl font-medium">
           Doctors at this hospital
         </h2>
         {doctors.length === 0 ? (
-          <p className="text-text-secondaryLight mt-4">
+          <p className="text-text-secondary mt-4">
             No doctors are listed for this hospital yet.
           </p>
         ) : (
@@ -186,22 +186,22 @@ const HospitalProfile = () => {
               <div
                 onClick={() => router.push(`/appointment/${item._id}`)}
                 key={item._id}
-                className="border border-primary-soft bg-white rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"
+                className="border border-primary-soft bg-background-card rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"
               >
                 <img className="bg-primary-soft w-full" src={item.image} alt="" />
                 <div className="p-3 md:p-4">
                   <div
-                    className={`flex items-center gap-2 text-xs md:text-sm text-center ${item.available ? "text-green-600" : "text-gray-500"}`}
+                    className={`flex items-center gap-2 text-xs md:text-sm text-center ${item.available ? "text-green-600" : "text-text-secondary"}`}
                   >
                     <span
-                      className={`w-2 h-2 ${item.available ? "bg-green-500" : "bg-gray-400"} rounded-full`}
+                      className={`w-2 h-2 ${item.available ? "bg-green-500" : "bg-background-muted-hover"} rounded-full`}
                     ></span>
                     <p>{item.available ? "Available" : "Not Available"}</p>
                   </div>
-                  <p className="text-text-primaryLight text-sm md:text-lg font-medium">
+                  <p className="text-text-primary text-sm md:text-lg font-medium">
                     {item.name}
                   </p>
-                  <p className="text-text-secondaryLight text-xs md:text-sm truncate">
+                  <p className="text-text-secondary text-xs md:text-sm truncate">
                     {item.speciality}
                   </p>
                 </div>

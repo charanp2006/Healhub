@@ -65,7 +65,7 @@ const BlogPost = () => {
 
   if (!blog) {
     return (
-      <div className="flex flex-col items-center py-20 text-text-secondaryLight">
+      <div className="flex flex-col items-center py-20 text-text-secondary">
         <BookOpen size={48} className="mb-3 opacity-40" />
         <p className="text-lg">Blog post not found</p>
         <button
@@ -83,7 +83,7 @@ const BlogPost = () => {
       {/* Back button */}
       <button
         onClick={() => router.push("/blogs")}
-        className="flex items-center gap-1 text-sm text-text-secondaryLight mb-6 cursor-pointer hover:text-primary transition-colors"
+        className="flex items-center gap-1 text-sm text-text-secondary mb-6 cursor-pointer hover:text-primary transition-colors"
       >
         <ArrowLeft size={14} /> Back to blog
       </button>
@@ -105,12 +105,12 @@ const BlogPost = () => {
       </span>
 
       {/* Title */}
-      <h1 className="text-3xl sm:text-4xl font-bold text-text-primaryLight leading-tight mb-4">
+      <h1 className="text-3xl sm:text-4xl font-bold text-text-primary leading-tight mb-4">
         {blog.title}
       </h1>
 
       {/* Meta row */}
-      <div className="flex flex-wrap items-center gap-4 text-sm text-text-secondaryLight mb-8 pb-6 border-b border-border-light">
+      <div className="flex flex-wrap items-center gap-4 text-sm text-text-secondary mb-8 pb-6 border-b border-border">
         <span className="flex items-center gap-1.5">
           <User size={14} /> {blog.author}
         </span>
@@ -123,17 +123,17 @@ const BlogPost = () => {
       </div>
 
       {/* Content */}
-      <article className="prose prose-lg max-w-none text-text-primaryLight leading-relaxed whitespace-pre-line mb-8">
+      <article className="prose prose-lg max-w-none text-text-primary leading-relaxed whitespace-pre-line mb-8">
         {blog.content}
       </article>
 
       {/* Tags */}
       {blog.tags?.length > 0 && (
-        <div className="flex flex-wrap gap-2 pt-6 border-t border-border-light mb-10">
+        <div className="flex flex-wrap gap-2 pt-6 border-t border-border mb-10">
           {blog.tags.map((t) => (
             <span
               key={t}
-              className="inline-flex items-center gap-1 text-sm px-3 py-1 rounded-full border border-border-light text-text-secondaryLight"
+              className="inline-flex items-center gap-1 text-sm px-3 py-1 rounded-full border border-border text-text-secondary"
             >
               <Tag size={12} /> {t}
             </span>
@@ -144,7 +144,7 @@ const BlogPost = () => {
       {/* ─── Related articles ────────────────────────── */}
       {related.length > 0 && (
         <div className="mt-10">
-          <h2 className="text-xl font-medium text-text-primaryLight mb-5">
+          <h2 className="text-xl font-medium text-text-primary mb-5">
             Related Articles
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -152,7 +152,7 @@ const BlogPost = () => {
               <div
                 key={r._id}
                 onClick={() => router.push(`/blog/${r.slug}`)}
-                className="border border-border-light rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 transition-all duration-300 group"
+                className="border border-border rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 transition-all duration-300 group"
               >
                 <div className="h-36 bg-primary-soft overflow-hidden">
                   {r.image ? (
@@ -171,10 +171,10 @@ const BlogPost = () => {
                   <span className="text-[11px] px-2 py-0.5 rounded-full bg-primary-soft text-primary font-medium">
                     {r.category}
                   </span>
-                  <h3 className="text-text-primaryLight font-medium text-sm mt-2 line-clamp-2">
+                  <h3 className="text-text-primary font-medium text-sm mt-2 line-clamp-2">
                     {r.title}
                   </h3>
-                  <p className="text-xs text-text-secondaryLight mt-1">
+                  <p className="text-xs text-text-secondary mt-1">
                     {formatDate(r.publishedAt)}
                   </p>
                 </div>

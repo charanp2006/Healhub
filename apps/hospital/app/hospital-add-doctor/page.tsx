@@ -91,11 +91,11 @@ const HospitalAddDoctor = () => {
     <form onSubmit={onSubmitHandler} className="m-5 w-full">
       <p className="m-b text-lg font-medium">Add Doctor</p>
 
-      <div className="bg-white px-8 py-8 rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll">
-        <div className="flex items-center gap-4 mb-8 text-gray-500">
+      <div className="bg-background-card px-8 py-8 rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll">
+        <div className="flex items-center gap-4 mb-8 text-text-secondary">
           <label htmlFor="doc-img">
             <img
-              className="w-16 border-gray-100 rounded-full cursor-pointer"
+              className="w-16 border-border rounded-full cursor-pointer"
               src={docImg ? URL.createObjectURL(docImg) : assets.upload_area}
               alt=""
             />
@@ -112,7 +112,7 @@ const HospitalAddDoctor = () => {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-start text-gray-500 gap-10">
+        <div className="flex flex-col lg:flex-row items-start text-text-secondary gap-10">
           <div className="w-full lg:flex-1 flex flex-col gap-4">
             <div className="flex-1 flex flex-col gap-1">
               <p>Doctor name</p>
@@ -150,7 +150,7 @@ const HospitalAddDoctor = () => {
               />
               <div
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-9.5 cursor-pointer text-gray-600"
+                className="absolute right-3 top-9.5 cursor-pointer text-text-secondary"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </div>
@@ -200,7 +200,7 @@ const HospitalAddDoctor = () => {
                     ? `${profileData.name} — ${profileData.city}`
                     : "Loading..."
                 }
-                className="border rounded px-3 py-2 bg-gray-50 text-gray-600"
+                className="border rounded px-3 py-2 bg-background-muted text-text-secondary"
                 type="text"
                 disabled
               />
@@ -258,7 +258,7 @@ const HospitalAddDoctor = () => {
           </div>
         </div>
 
-        <div className="text-gray-500">
+        <div className="text-text-secondary">
           <p className="mt-4 mb-2">About Doctor</p>
           <textarea
             onChange={(e) => setAbout(e.target.value)}

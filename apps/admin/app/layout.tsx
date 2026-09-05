@@ -17,7 +17,8 @@ export const metadata: Metadata = {
   description: "Admin Control Panel",
   manifest: "/manifest.json",
   icons: {
-    apple: "/logo.png",
+    icon: "/favicon.png",
+    apple: "/apple-touch-icon.png",
   },
 };
 
@@ -27,7 +28,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={outfit.variable}>
+    <html lang="en" className={outfit.variable} suppressHydrationWarning>
       <body>
         <Providers>
           <PanelShell>{children}</PanelShell>

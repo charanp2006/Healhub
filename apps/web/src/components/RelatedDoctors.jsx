@@ -23,7 +23,7 @@ const RelatedDoctors = ({ docId, speciality }) => {
   }, [doctors, docId, speciality]);
 
   return (
-    <div className="flex flex-col items-center gap-4 my-16 text-text-primaryLight md:mx-10">
+    <div className="flex flex-col items-center gap-4 my-16 text-text-primary md:mx-10">
       <h1 className="text-3xl font-medium">Related Doctors</h1>
       <p className="sm:w-1/3 text-center text-sm">
         Simply browse through our extensive list of trusted doctors.
@@ -41,25 +41,25 @@ const RelatedDoctors = ({ docId, speciality }) => {
             <img className="bg-primary-soft" src={item.image} alt="" />
             <div className="p-4">
               <div
-                className={`flex items-center gap-2 text-sm text-center ${item.available ? "text-green-600" : "text-gray-500"} `}
+                className={`flex items-center gap-2 text-sm text-center ${item.available ? "text-green-600" : "text-text-secondary"} `}
               >
                 <span
-                  className={`w-2 h-2 ${item.available ? "bg-green-500" : "bg-gray-400"} rounded-full`}
+                  className={`w-2 h-2 ${item.available ? "bg-green-500" : "bg-background-muted-hover"} rounded-full`}
                 ></span>
                 <p>{item.available ? "Available" : "Not Available"}</p>
               </div>
-              <p className="text-text-primaryLight text-lg font-medium">
+              <p className="text-text-primary text-lg font-medium">
                 {item.name}
               </p>
-              <p className="text-text-secondaryLight text-sm">
+              <p className="text-text-secondary text-sm">
                 {item.speciality}
               </p>
               <div className="flex items-center gap-1 mt-2">
                 <Star size={16} className="fill-yellow-400 text-yellow-400" />
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-text-primary">
                   {item.ratingAverage ? item.ratingAverage.toFixed(1) : "0.0"}
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-text-secondary">
                   ({item.ratingCount || 0})
                 </span>
               </div>

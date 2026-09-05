@@ -35,31 +35,31 @@ const DoctorDashboard = () => {
     <div className="m-5 w-full max-w-4xl">
       <div className="flex flex-wrap gap-4 mb-8">
         {stats.map((s, i) => (
-          <div key={i} className="flex items-center gap-4 bg-white p-4 pr-24 rounded-xl border border-gray-100 shadow-sm">
-            <div className="flex items-center justify-center w-12 h-12 bg-gray-50 rounded-xl">{s.icon}</div>
+          <div key={i} className="flex items-center gap-4 bg-background-card p-4 pr-24 rounded-xl border border-border shadow-sm">
+            <div className="flex items-center justify-center w-12 h-12 bg-background-muted rounded-xl">{s.icon}</div>
             <div>
-              <p className="text-xl font-semibold text-gray-800">{s.value}</p>
-              <p className="text-sm text-gray-400">{s.label}</p>
+              <p className="text-xl font-semibold text-text-primary">{s.value}</p>
+              <p className="text-sm text-text-dim">{s.label}</p>
             </div>
           </div>
         ))}
       </div>
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-        <div className="flex items-center gap-3 py-4 px-6 border-b border-gray-100">
+      <div className="bg-background-card rounded-xl border border-border shadow-sm">
+        <div className="flex items-center gap-3 py-4 px-6 border-b border-border">
           <TrendingUp size={20} className="text-primary" />
-          <p className="font-semibold text-gray-800">Latest Bookings</p>
+          <p className="font-semibold text-text-primary">Latest Bookings</p>
         </div>
-        <div className="divide-y divide-gray-50">
+        <div className="divide-y divide-border">
           {dashData.latestAppointments?.map((item, index) => (
-            <div key={index} className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors">
-              <img className="w-10 h-10 rounded-full bg-gray-100 object-cover" src={item.userData?.image} alt="" />
+            <div key={index} className="flex items-center gap-4 px-6 py-4 hover:bg-background-muted transition-colors">
+              <img className="w-10 h-10 rounded-full bg-background-muted object-cover" src={item.userData?.image} alt="" />
               <div className="flex-1">
-                <p className="text-gray-800 font-medium">{item.userData?.name}</p>
-                <p className="text-sm text-gray-400">{slotDateFormat(item.slotDate)} {item.slotTime}</p>
+                <p className="text-text-primary font-medium">{item.userData?.name}</p>
+                <p className="text-sm text-text-dim">{slotDateFormat(item.slotDate)} {item.slotTime}</p>
               </div>
               <div className="flex items-center gap-2">
                 {typeIcon(item.appointmentType)}
-                <span className="text-xs text-gray-500 capitalize">{item.appointmentType || "in-person"}</span>
+                <span className="text-xs text-text-secondary capitalize">{item.appointmentType || "in-person"}</span>
               </div>
               <div className="hidden sm:flex items-center gap-2 text-xs">
                 {item.isCompleted && <span className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-600 rounded-full"><CircleCheck size={12} /> Completed</span>}

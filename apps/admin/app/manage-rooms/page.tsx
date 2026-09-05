@@ -104,13 +104,13 @@ const ManageRooms = () => {
     <div className="m-5 w-full max-w-6xl">
       <h1 className="text-lg font-medium mb-4">Manage Rooms & Beds</h1>
       <div className="mb-6 max-w-sm">
-        <label className="block text-sm text-text-secondaryLight mb-1">Select Hospital</label>
+        <label className="block text-sm text-text-secondary mb-1">Select Hospital</label>
         <div className="relative">
-          <select value={selectedHospitalId} onChange={(e) => setSelectedHospitalId(e.target.value)} className="w-full border border-border-light rounded px-3 py-2 pr-8 appearance-none bg-background-cardLight text-text-primaryLight">
+          <select value={selectedHospitalId} onChange={(e) => setSelectedHospitalId(e.target.value)} className="w-full border border-border rounded px-3 py-2 pr-8 appearance-none bg-background-card text-text-primary">
             <option value="">— Choose hospital —</option>
             {hospitals.map((h) => (<option key={h._id} value={h._id}>{h.name} ({h.city})</option>))}
           </select>
-          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondaryLight pointer-events-none" />
+          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
         </div>
       </div>
       {selectedHospitalId && (
@@ -122,53 +122,53 @@ const ManageRooms = () => {
             <button onClick={() => { setShowAdmit(true); setShowForm(false); setShowHistory(false); }} className="flex items-center gap-2 px-4 py-2 border border-primary text-primary text-sm rounded-full cursor-pointer hover:bg-primary-soft transition-colors">
               <UserPlus size={16} /> Admit Patient
             </button>
-            <button onClick={() => { setShowHistory(true); setShowForm(false); setShowAdmit(false); fetchHistory(1); }} className="flex items-center gap-2 px-4 py-2 border border-border-light text-text-secondaryLight text-sm rounded-full cursor-pointer hover:bg-primary-soft transition-colors">
+            <button onClick={() => { setShowHistory(true); setShowForm(false); setShowAdmit(false); fetchHistory(1); }} className="flex items-center gap-2 px-4 py-2 border border-border text-text-secondary text-sm rounded-full cursor-pointer hover:bg-primary-soft transition-colors">
               <History size={16} /> Allocation History
             </button>
           </div>
           {showForm && (
-            <form onSubmit={handleCategorySubmit} className="bg-background-cardLight border border-border-light rounded-lg p-6 mb-6 max-w-lg">
-              <p className="font-medium text-text-primaryLight mb-4">{editingId ? "Edit Room Category" : "New Room Category"}</p>
+            <form onSubmit={handleCategorySubmit} className="bg-background-card border border-border rounded-lg p-6 mb-6 max-w-lg">
+              <p className="font-medium text-text-primary mb-4">{editingId ? "Edit Room Category" : "New Room Category"}</p>
               <div className="flex flex-col gap-3">
-                <input value={formName} onChange={(e) => setFormName(e.target.value)} placeholder="Category name (e.g. ICU, General Ward)" className="border border-border-light rounded px-3 py-2" required />
-                <input value={formTotal} onChange={(e) => setFormTotal(e.target.value)} placeholder="Total beds" type="number" min="0" className="border border-border-light rounded px-3 py-2" required />
-                <input value={formAvailable} onChange={(e) => setFormAvailable(e.target.value)} placeholder="Available beds" type="number" min="0" className="border border-border-light rounded px-3 py-2" />
+                <input value={formName} onChange={(e) => setFormName(e.target.value)} placeholder="Category name (e.g. ICU, General Ward)" className="border border-border rounded px-3 py-2" required />
+                <input value={formTotal} onChange={(e) => setFormTotal(e.target.value)} placeholder="Total beds" type="number" min="0" className="border border-border rounded px-3 py-2" required />
+                <input value={formAvailable} onChange={(e) => setFormAvailable(e.target.value)} placeholder="Available beds" type="number" min="0" className="border border-border rounded px-3 py-2" />
                 <div className="flex gap-3">
                   <button type="submit" className="bg-primary text-white px-6 py-2 rounded-full text-sm cursor-pointer hover:bg-primary-hover transition-colors">{editingId ? "Update" : "Add"}</button>
-                  <button type="button" onClick={resetForm} className="px-6 py-2 text-sm border border-border-light rounded-full cursor-pointer hover:bg-primary-soft transition-colors">Cancel</button>
+                  <button type="button" onClick={resetForm} className="px-6 py-2 text-sm border border-border rounded-full cursor-pointer hover:bg-primary-soft transition-colors">Cancel</button>
                 </div>
               </div>
             </form>
           )}
           {showAdmit && (
-            <form onSubmit={handleAdmit} className="bg-background-cardLight border border-border-light rounded-lg p-6 mb-6 max-w-lg">
-              <p className="font-medium text-text-primaryLight mb-4">Admit Patient</p>
+            <form onSubmit={handleAdmit} className="bg-background-card border border-border rounded-lg p-6 mb-6 max-w-lg">
+              <p className="font-medium text-text-primary mb-4">Admit Patient</p>
               <div className="flex flex-col gap-3">
                 <div className="relative">
-                  <select value={admitCategoryId} onChange={(e) => setAdmitCategoryId(e.target.value)} className="w-full border border-border-light rounded px-3 py-2 pr-8 appearance-none" required>
+                  <select value={admitCategoryId} onChange={(e) => setAdmitCategoryId(e.target.value)} className="w-full border border-border rounded px-3 py-2 pr-8 appearance-none" required>
                     <option value="">— Select room category —</option>
                     {categories.filter((c) => c.availableBeds > 0).map((c) => (<option key={c._id} value={c._id}>{c.name} ({c.availableBeds} beds free)</option>))}
                   </select>
-                  <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondaryLight pointer-events-none" />
+                  <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
                 </div>
-                <input value={admitPatientId} onChange={(e) => setAdmitPatientId(e.target.value)} placeholder="Patient / User ID" className="border border-border-light rounded px-3 py-2" required />
+                <input value={admitPatientId} onChange={(e) => setAdmitPatientId(e.target.value)} placeholder="Patient / User ID" className="border border-border rounded px-3 py-2" required />
                 <div className="flex gap-3">
                   <button type="submit" className="bg-primary text-white px-6 py-2 rounded-full text-sm cursor-pointer hover:bg-primary-hover transition-colors">Admit</button>
-                  <button type="button" onClick={() => setShowAdmit(false)} className="px-6 py-2 text-sm border border-border-light rounded-full cursor-pointer hover:bg-primary-soft transition-colors">Cancel</button>
+                  <button type="button" onClick={() => setShowAdmit(false)} className="px-6 py-2 text-sm border border-border rounded-full cursor-pointer hover:bg-primary-soft transition-colors">Cancel</button>
                 </div>
               </div>
             </form>
           )}
-          <div className="bg-background-cardLight border border-border-light rounded-lg overflow-hidden mb-6">
-            <div className="hidden sm:grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-2 py-3 px-6 border-b border-border-light text-sm font-medium text-text-secondaryLight">
+          <div className="bg-background-card border border-border rounded-lg overflow-hidden mb-6">
+            <div className="hidden sm:grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-2 py-3 px-6 border-b border-border text-sm font-medium text-text-secondary">
               <p>Category</p><p>Total</p><p>Available</p><p>Occupied</p><p>Actions</p>
             </div>
             {categories.length === 0 ? (
-              <p className="p-12 text-text-secondaryLight text-center">No room categories yet. Add one above.</p>
+              <p className="p-12 text-text-secondary text-center">No room categories yet. Add one above.</p>
             ) : (
               categories.map((cat) => (
-                <div key={cat._id} className="flex flex-wrap justify-between items-center gap-2 sm:grid sm:grid-cols-[2fr_1fr_1fr_1fr_auto] py-3 px-6 border-b border-border-light hover:bg-primary-soft/30 text-sm">
-                  <p className="flex items-center gap-2 font-medium text-text-primaryLight"><BedDouble size={16} className="text-primary" />{cat.name}</p>
+                <div key={cat._id} className="flex flex-wrap justify-between items-center gap-2 sm:grid sm:grid-cols-[2fr_1fr_1fr_1fr_auto] py-3 px-6 border-b border-border hover:bg-primary-soft/30 text-sm">
+                  <p className="flex items-center gap-2 font-medium text-text-primary"><BedDouble size={16} className="text-primary" />{cat.name}</p>
                   <p>{cat.totalBeds}</p>
                   <p className={cat.availableBeds === 0 ? "text-accent-cta font-medium" : "text-accent-cta"}>{cat.availableBeds}</p>
                   <p>{cat.totalBeds - cat.availableBeds}</p>
@@ -178,21 +178,21 @@ const ManageRooms = () => {
             )}
           </div>
           {showHistory && (
-            <div className="bg-background-cardLight border border-border-light rounded-lg overflow-hidden">
-              <p className="px-6 py-3 border-b border-border-light font-medium text-text-primaryLight">Allocation History</p>
-              <div className="hidden sm:grid grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] gap-2 py-3 px-6 border-b border-border-light text-sm text-text-secondaryLight font-medium">
+            <div className="bg-background-card border border-border rounded-lg overflow-hidden">
+              <p className="px-6 py-3 border-b border-border font-medium text-text-primary">Allocation History</p>
+              <div className="hidden sm:grid grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] gap-2 py-3 px-6 border-b border-border text-sm text-text-secondary font-medium">
                 <p>Patient</p><p>Category</p><p>Admitted</p><p>Discharged</p><p>Status</p><p>Actions</p>
               </div>
               {allocations.length === 0 ? (
-                <p className="p-12 text-text-secondaryLight text-center">No allocation records found.</p>
+                <p className="p-12 text-text-secondary text-center">No allocation records found.</p>
               ) : (
                 allocations.map((a) => (
-                  <div key={a._id} className="flex flex-wrap justify-between items-center gap-2 sm:grid sm:grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] py-3 px-6 border-b border-border-light text-sm hover:bg-primary-soft/30">
+                  <div key={a._id} className="flex flex-wrap justify-between items-center gap-2 sm:grid sm:grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] py-3 px-6 border-b border-border text-sm hover:bg-primary-soft/30">
                     <p className="truncate">{a.patientId}</p>
                     <p className="truncate">{a.roomCategoryId}</p>
                     <p>{new Date(a.admissionDate).toLocaleDateString()}</p>
                     <p>{a.dischargeDate ? new Date(a.dischargeDate).toLocaleDateString() : "—"}</p>
-                    <p className={`capitalize ${a.status === "admitted" ? "text-primary font-medium" : a.status === "discharged" ? "text-text-secondaryLight" : "text-accent-cta"}`}>{a.status}</p>
+                    <p className={`capitalize ${a.status === "admitted" ? "text-primary font-medium" : a.status === "discharged" ? "text-text-secondary" : "text-accent-cta"}`}>{a.status}</p>
                     <div>
                       {a.status === "admitted" && (
                         <button onClick={() => handleDischarge(a._id)} className="flex items-center gap-1 text-accent-cta cursor-pointer hover:underline text-sm">
@@ -205,9 +205,9 @@ const ManageRooms = () => {
               )}
               {totalPages > 1 && (
                 <div className="flex items-center justify-center gap-4 py-4">
-                  <button disabled={historyPage <= 1} onClick={() => fetchHistory(historyPage - 1)} className="px-3 py-1 text-sm border border-border-light rounded disabled:opacity-40 cursor-pointer">Prev</button>
-                  <span className="text-sm text-text-secondaryLight">Page {historyPage} of {totalPages}</span>
-                  <button disabled={historyPage >= totalPages} onClick={() => fetchHistory(historyPage + 1)} className="px-3 py-1 text-sm border border-border-light rounded disabled:opacity-40 cursor-pointer">Next</button>
+                  <button disabled={historyPage <= 1} onClick={() => fetchHistory(historyPage - 1)} className="px-3 py-1 text-sm border border-border rounded disabled:opacity-40 cursor-pointer">Prev</button>
+                  <span className="text-sm text-text-secondary">Page {historyPage} of {totalPages}</span>
+                  <button disabled={historyPage >= totalPages} onClick={() => fetchHistory(historyPage + 1)} className="px-3 py-1 text-sm border border-border rounded disabled:opacity-40 cursor-pointer">Next</button>
                 </div>
               )}
             </div>

@@ -9,6 +9,7 @@
 import { useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronLeft, UserRound } from "lucide-react";
+import { LOGO as HealhubLogo, LOGO_ALT } from "@healhub/ui/images";
 import { assets } from "@/src/assets/assets";
 import { AppContext } from "@/src/context/AppContext";
 
@@ -24,15 +25,15 @@ const MobileAppHeader = () => {
       <div className="flex items-center justify-between px-4 h-14">
         {isHome ? (
           <div className="flex items-center gap-2">
-            <img className="w-8 h-8" src={assets.logo_icon.src} alt="Healhub" />
-            <span className="text-xl font-bold text-[#179E8D]">
+            <img className="w-10 h-8.5" src={HealhubLogo} alt={LOGO_ALT} />
+            <span className="text-3xl font-bold text-[#179E8D]">
               Heal<span className="text-[#179E8D]">hub</span>
             </span>
           </div>
         ) : (
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-1 text-[#0F172A] touch-none-outline"
+            className="flex items-center gap-1 text-text-primary touch-none-outline"
             aria-label="Back"
           >
             <ChevronLeft size={22} />
@@ -47,7 +48,7 @@ const MobileAppHeader = () => {
             aria-label="Profile"
           >
             <img
-              className="w-8 h-8 rounded-full object-cover border border-border-light"
+              className="w-8 h-8 rounded-full object-cover border border-border"
               src={userData.image ? userData.image : assets.upload_icon.src}
               alt=""
             />

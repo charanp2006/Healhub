@@ -17,16 +17,16 @@ const StatsCarousel = () => {
           {[...services, ...services].map((item, index) => (
             <div
               key={index}
-              className="flex-shrink-0 min-w-max flex items-center gap-4 bg-white px-6 py-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
+              className="flex-shrink-0 min-w-max flex items-center gap-4 bg-background-card px-6 py-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
             >
               <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
                 <item.icon size={24} className="text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium text-text-primaryLight">
+                <p className="text-sm font-medium text-text-primary">
                   {item.label}
                 </p>
-                <p className="text-xs text-text-secondaryLight">
+                <p className="text-xs text-text-secondary">
                   {item.description}
                 </p>
               </div>

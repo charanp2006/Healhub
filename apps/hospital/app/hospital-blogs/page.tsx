@@ -118,18 +118,18 @@ const HospitalBlogs = () => {
           <div className="relative">
             <Search
               size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-dim"
             />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search blogs..."
-              className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm w-60 outline-primary"
+              className="pl-9 pr-4 py-2 border border-border rounded-lg text-sm w-60 outline-primary"
             />
           </div>
           <button
             type="submit"
-            className="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200 cursor-pointer"
+            className="px-4 py-2 bg-background-muted rounded-lg text-sm hover:bg-background-muted-hover cursor-pointer"
           >
             Search
           </button>
@@ -140,7 +140,7 @@ const HospitalBlogs = () => {
             setCategory(e.target.value === "All" ? "" : e.target.value);
             setPage(1);
           }}
-          className="px-3 py-2 border border-gray-200 rounded-lg text-sm outline-primary"
+          className="px-3 py-2 border border-border rounded-lg text-sm outline-primary"
         >
           {categories.map((c) => (
             <option key={c} value={c === "All" ? "" : c}>
@@ -154,7 +154,7 @@ const HospitalBlogs = () => {
             setAuthorType(e.target.value);
             setPage(1);
           }}
-          className="px-3 py-2 border border-gray-200 rounded-lg text-sm outline-primary"
+          className="px-3 py-2 border border-border rounded-lg text-sm outline-primary"
         >
           {authorTypes.map((a) => (
             <option key={a.value} value={a.value}>
@@ -170,7 +170,7 @@ const HospitalBlogs = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         />
       ) : blogs.length === 0 ? (
-        <div className="text-center py-20 text-gray-500">
+        <div className="text-center py-20 text-text-secondary">
           <p>No blog posts yet</p>
           <button
             onClick={() => router.push("/hospital-add-blog")}
@@ -185,7 +185,7 @@ const HospitalBlogs = () => {
             {blogs.map((blog) => (
               <div
                 key={blog._id}
-                className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm"
+                className="bg-background-card rounded-xl border border-border overflow-hidden shadow-sm"
               >
                 {blog.image && (
                   <img
@@ -214,11 +214,11 @@ const HospitalBlogs = () => {
                       </span>
                     )}
                   </div>
-                  <h3 className="font-medium text-gray-800 mb-1 line-clamp-2">
+                  <h3 className="font-medium text-text-primary mb-1 line-clamp-2">
                     {blog.title}
                   </h3>
-                  <p className="text-xs text-gray-500 mb-1">{blog.author}</p>
-                  <p className="text-xs text-gray-400 mb-3 line-clamp-2">
+                  <p className="text-xs text-text-secondary mb-1">{blog.author}</p>
+                  <p className="text-xs text-text-dim mb-3 line-clamp-2">
                     {blog.excerpt}
                   </p>
                   <div className="flex items-center gap-2">
@@ -257,7 +257,7 @@ const HospitalBlogs = () => {
                   className={`px-3 py-1 rounded text-sm cursor-pointer ${
                     page === i + 1
                       ? "bg-primary text-white"
-                      : "bg-gray-100 hover:bg-gray-200"
+                      : "bg-background-muted hover:bg-background-muted-hover"
                   }`}
                 >
                   {i + 1}
