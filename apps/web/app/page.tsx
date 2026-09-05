@@ -10,6 +10,7 @@ import StatsButtons from "@/src/components/StatsButtons";
 import StatsCarousel from "@/src/components/StatsCarousel";
 import SpecialityMenu from "@/src/components/SpecialityMenu";
 import Banner from "@/src/components/Banner";
+import ApiHealth from "@/src/components/ApiHealth";
 
 const faqs = [
   {
@@ -73,6 +74,7 @@ const Home = () => {
   return (
     <div>
       <SplashScreen />
+      <ApiHealth />
       <div className="hidden md:block">
         <Header />
       </div>
