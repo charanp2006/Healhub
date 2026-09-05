@@ -65,64 +65,64 @@ const HospitalsList = () => {
     <div className="m-5 w-full max-w-6xl">
       <div className="flex items-center justify-between mb-5">
         <h1 className="text-lg font-medium">All Hospitals</h1>
-        <button onClick={() => setShowFilters((v) => !v)} className="flex items-center gap-2 text-sm text-text-secondaryLight border border-border-light px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary-soft transition-colors">
+        <button onClick={() => setShowFilters((v) => !v)} className="flex items-center gap-2 text-sm text-text-secondary border border-border px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary-soft transition-colors">
           <SlidersHorizontal size={14} />
           {showFilters ? "Hide Filters" : "Filters"}
         </button>
       </div>
       {showFilters && (
-        <form onSubmit={handleSearch} className="bg-background-cardLight border border-border-light rounded-lg p-5 mb-6 flex flex-col gap-4">
+        <form onSubmit={handleSearch} className="bg-background-card border border-border rounded-lg p-5 mb-6 flex flex-col gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-text-secondaryLight">Name</label>
+              <label className="text-xs text-text-secondary">Name</label>
               <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondaryLight" />
-                <input value={filterName} onChange={(e) => setFilterName(e.target.value)} placeholder="Hospital name" className="w-full border border-border-light rounded px-3 py-2 pl-8 text-sm" />
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+                <input value={filterName} onChange={(e) => setFilterName(e.target.value)} placeholder="Hospital name" className="w-full border border-border rounded px-3 py-2 pl-8 text-sm" />
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-text-secondaryLight">City</label>
+              <label className="text-xs text-text-secondary">City</label>
               <div className="relative">
-                <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondaryLight" />
-                <input value={filterCity} onChange={(e) => setFilterCity(e.target.value)} placeholder="City" className="w-full border border-border-light rounded px-3 py-2 pl-8 text-sm" />
+                <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+                <input value={filterCity} onChange={(e) => setFilterCity(e.target.value)} placeholder="City" className="w-full border border-border rounded px-3 py-2 pl-8 text-sm" />
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-text-secondaryLight">Speciality</label>
+              <label className="text-xs text-text-secondary">Speciality</label>
               <div className="relative">
-                <select value={filterSpeciality} onChange={(e) => setFilterSpeciality(e.target.value)} className="w-full border border-border-light rounded px-3 py-2 pr-8 appearance-none text-sm bg-white">
+                <select value={filterSpeciality} onChange={(e) => setFilterSpeciality(e.target.value)} className="w-full border border-border rounded px-3 py-2 pr-8 appearance-none text-sm bg-background-card">
                   <option value="">All specialities</option>
                   {specialties.map((s) => (<option key={s} value={s}>{s}</option>))}
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondaryLight pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-text-secondaryLight">Sort by</label>
+              <label className="text-xs text-text-secondary">Sort by</label>
               <div className="relative">
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full border border-border-light rounded px-3 py-2 pr-8 appearance-none text-sm bg-white">
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full border border-border rounded px-3 py-2 pr-8 appearance-none text-sm bg-background-card">
                   <option value="latest">Latest added</option>
                   <option value="rating">Highest rating</option>
                   <option value="availability">Most beds available</option>
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondaryLight pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
               </div>
             </div>
           </div>
           <div className="flex gap-3">
             <button type="submit" className="bg-primary text-white text-sm px-6 py-2 rounded-full cursor-pointer hover:bg-primary-hover transition-colors">Apply</button>
-            <button type="button" onClick={clearFilters} className="text-sm px-6 py-2 border border-border-light rounded-full cursor-pointer hover:bg-primary-soft transition-colors">Clear</button>
+            <button type="button" onClick={clearFilters} className="text-sm px-6 py-2 border border-border rounded-full cursor-pointer hover:bg-primary-soft transition-colors">Clear</button>
           </div>
         </form>
       )}
-      <p className="text-sm text-text-secondaryLight mb-4">
+      <p className="text-sm text-text-secondary mb-4">
         {loading ? <SkeletonCount /> : `${totalCount} hospital${totalCount !== 1 ? "s" : ""} found`}
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {loading ? (
           <SkeletonCards count={6} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" />
         ) : hospitals.map((h) => (
-          <div key={h._id} className="border border-border-light rounded-xl overflow-hidden bg-background-cardLight hover:-translate-y-1 transition-all duration-300 group">
+          <div key={h._id} className="border border-border rounded-xl overflow-hidden bg-background-card hover:-translate-y-1 transition-all duration-300 group">
             <div className="h-40 bg-primary-soft overflow-hidden">
               {h.image ? (
                 <img src={h.image} alt={h.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -136,18 +136,18 @@ const HospitalsList = () => {
                   <span className={`w-1.5 h-1.5 rounded-full ${h.isRegistered ? "bg-green-500" : "bg-red-400"}`} />
                   {h.isRegistered ? "Registered" : "Unregistered"}
                 </span>
-                <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${h.isAvailable ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-600'}`}>
+                <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${h.isAvailable ? 'bg-green-50 text-green-600' : 'bg-background-muted text-text-secondary'}`}>
                   {h.isAvailable ? 'Available' : 'Not Available'}
                 </span>
               </div>
-              <p className="text-text-primaryLight font-medium text-base truncate">{h.name}</p>
-              <p className="flex items-center gap-1 text-sm text-text-secondaryLight mt-0.5"><MapPin size={12} /> {h.city}</p>
+              <p className="text-text-primary font-medium text-base truncate">{h.name}</p>
+              <p className="flex items-center gap-1 text-sm text-text-secondary mt-0.5"><MapPin size={12} /> {h.city}</p>
               <div className="flex items-center justify-between mt-3 text-sm">
-                <span className="flex items-center gap-1 text-text-secondaryLight">
+                <span className="flex items-center gap-1 text-text-secondary">
                   <Star size={13} className="text-yellow-500 fill-yellow-500" />
                   {h.ratingAverage?.toFixed(1) || "0.0"} <span className="text-xs">({h.ratingCount || 0})</span>
                 </span>
-                <span className="flex items-center gap-1 text-text-secondaryLight">
+                <span className="flex items-center gap-1 text-text-secondary">
                   <BedDouble size={13} className="text-primary" />
                   {h.availableBeds ?? 0}/{h.totalBeds ?? 0} beds
                 </span>
@@ -155,10 +155,10 @@ const HospitalsList = () => {
               {h.specialties?.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   {h.specialties.slice(0, 3).map((s) => (
-                    <span key={s} className="text-[11px] px-2 py-0.5 rounded-full border border-border-light text-text-secondaryLight">{s}</span>
+                    <span key={s} className="text-[11px] px-2 py-0.5 rounded-full border border-border text-text-secondary">{s}</span>
                   ))}
                   {h.specialties.length > 3 && (
-                    <span className="text-[11px] px-2 py-0.5 rounded-full border border-border-light text-text-secondaryLight">+{h.specialties.length - 3}</span>
+                    <span className="text-[11px] px-2 py-0.5 rounded-full border border-border text-text-secondary">+{h.specialties.length - 3}</span>
                   )}
                 </div>
               )}
@@ -167,15 +167,15 @@ const HospitalsList = () => {
         ))}
       </div>
       {hospitals.length === 0 && !loading && (
-        <p className="text-text-secondaryLight text-center py-20 text-lg">No hospitals found</p>
+        <p className="text-text-secondary text-center py-20 text-lg">No hospitals found</p>
       )}
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-4 mt-8">
-          <button disabled={page <= 1} onClick={() => fetchHospitals(page - 1)} className="flex items-center gap-1 px-3 py-1.5 text-sm border border-border-light rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors">
+          <button disabled={page <= 1} onClick={() => fetchHospitals(page - 1)} className="flex items-center gap-1 px-3 py-1.5 text-sm border border-border rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors">
             <ChevronLeft size={14} /> Prev
           </button>
-          <span className="text-sm text-text-secondaryLight">Page {page} of {totalPages}</span>
-          <button disabled={page >= totalPages} onClick={() => fetchHospitals(page + 1)} className="flex items-center gap-1 px-3 py-1.5 text-sm border border-border-light rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors">
+          <span className="text-sm text-text-secondary">Page {page} of {totalPages}</span>
+          <button disabled={page >= totalPages} onClick={() => fetchHospitals(page + 1)} className="flex items-center gap-1 px-3 py-1.5 text-sm border border-border rounded-full disabled:opacity-40 cursor-pointer hover:bg-primary-soft transition-colors">
             Next <ChevronRight size={14} />
           </button>
         </div>

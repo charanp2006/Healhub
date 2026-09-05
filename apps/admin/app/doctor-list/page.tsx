@@ -20,15 +20,15 @@ const DoctorsList = () => {
       <h1 className='text-lg font-medium'>All Doctors</h1>
       <div className="w-full flex flex-wrap gap-4 pt-5 gap-y-6 px-3 sm:px-0">
         {doctors.map((item, index) => (
-          <div key={index} className="border border-border-light rounded-xl overflow-hidden max-w-56 group cursor-pointer hover:-translate-y- 5 transition-all duration-500">
+          <div key={index} className="border border-border rounded-xl overflow-hidden max-w-56 group cursor-pointer hover:-translate-y- 5 transition-all duration-500">
             <img className="bg-primary-soft group-hover:bg-primary transition-all duration-500" src={item.image} alt="" />
             <div className="p-4">
-              <p className="text-text-primaryLight text-lg font-medium">{item.name}</p>
-              <p className="text-text-secondaryLight text-sm">{item.speciality}</p>
+              <p className="text-text-primary text-lg font-medium">{item.name}</p>
+              <p className="text-text-secondary text-sm">{item.speciality}</p>
               <div className='flex items-center gap-1 mt-2'>
                 <Star size={16} className='fill-yellow-400 text-yellow-400' />
-                <span className='text-sm font-medium text-gray-700'>{item.ratingAverage ? item.ratingAverage.toFixed(1) : '0.0'}</span>
-                <span className='text-xs text-gray-500'>({item.ratingCount || 0})</span>
+                <span className='text-sm font-medium text-text-primary'>{item.ratingAverage ? item.ratingAverage.toFixed(1) : '0.0'}</span>
+                <span className='text-xs text-text-secondary'>({item.ratingCount || 0})</span>
               </div>
               <div className="flex items-center gap-1 text-sm mt-2">
                 <input onChange={()=>changeAvailability(item._id)} type="checkbox" checked={item.available} name="" id="" />

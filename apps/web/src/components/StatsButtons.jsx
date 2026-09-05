@@ -34,7 +34,7 @@ const StatsButtons = () => {
   ];
 
   return (
-    <div className="bg-white py-6 px-4 md:px-10">
+    <div className="bg-background-card py-6 px-4 md:px-10">
       <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 max-w-6xl mx-auto">
         {stats_data.map((item, index) => (
           <div
@@ -45,7 +45,7 @@ const StatsButtons = () => {
               <item.icon size={20} className="text-primary md:size-8" />
             </div>
             <div className="text-center md:text-left">
-              <p className="text-[11px] md:text-sm text-text-secondaryLight font-medium">
+              <p className="text-[11px] md:text-sm text-text-secondary font-medium">
                 {item.label}
               </p>
               <p className="text-xl md:text-3xl font-bold text-primary">

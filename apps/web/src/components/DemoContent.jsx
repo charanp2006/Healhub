@@ -99,10 +99,10 @@ const DemoContent = () => {
         <p className="text-sm uppercase tracking-wide text-teal-600 font-medium">
           Project Demo
         </p>
-        <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 mt-2">
+        <h1 className="text-3xl md:text-4xl font-semibold text-text-primary mt-2">
           Healhub: Hospital & Clinic Management Platform
         </h1>
-        <p className="text-gray-600 mt-4 max-w-3xl leading-relaxed">
+        <p className="text-text-secondary mt-4 max-w-3xl leading-relaxed">
           This demo page walks through the full scope of Healhub, covering the
           patient-facing website, the admin console, and the backend services
           that manage hospitals, clinics, and healthcare services securely,
@@ -111,22 +111,22 @@ const DemoContent = () => {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-2xl font-semibold text-gray-800">
+        <h2 className="text-2xl font-semibold text-text-primary">
           Platform Overview
         </h2>
         <div className="grid gap-6 md:grid-cols-3 mt-6">
           {projectModules.map((module) => (
             <div
               key={module.title}
-              className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm"
+              className="border border-border rounded-2xl p-6 bg-background-card shadow-sm"
             >
-              <h3 className="text-lg font-semibold text-gray-800">
+              <h3 className="text-lg font-semibold text-text-primary">
                 {module.title}
               </h3>
-              <p className="text-sm text-gray-600 mt-2">
+              <p className="text-sm text-text-secondary mt-2">
                 {module.description}
               </p>
-              <ul className="mt-4 text-sm text-gray-700 space-y-2 list-disc list-inside">
+              <ul className="mt-4 text-sm text-text-primary space-y-2 list-disc list-inside">
                 {module.points.map((point) => (
                   <li key={point}>{point}</li>
                 ))}
@@ -138,8 +138,8 @@ const DemoContent = () => {
 
       <section className="mt-12">
         <div className="flex items-center justify-between flex-wrap gap-3">
-          <h2 className="text-2xl font-semibold text-gray-800">User Roles</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-2xl font-semibold text-text-primary">User Roles</h2>
+          <p className="text-sm text-text-secondary">
             Each role gets a tailored experience and permissions.
           </p>
         </div>
@@ -147,29 +147,29 @@ const DemoContent = () => {
           {roleCards.map((role) => (
             <div
               key={role.title}
-              className="rounded-xl border border-gray-200 p-5 bg-gray-50"
+              className="rounded-xl border border-border p-5 bg-background-muted"
             >
-              <h3 className="text-base font-semibold text-gray-800">
+              <h3 className="text-base font-semibold text-text-primary">
                 {role.title}
               </h3>
-              <p className="text-sm text-gray-600 mt-2">{role.summary}</p>
+              <p className="text-sm text-text-secondary mt-2">{role.summary}</p>
             </div>
           ))}
         </div>
       </section>
 
       <section className="mt-12">
-        <h2 className="text-2xl font-semibold text-gray-800">Key Flows</h2>
+        <h2 className="text-2xl font-semibold text-text-primary">Key Flows</h2>
         <div className="grid gap-6 md:grid-cols-2 mt-6">
           {keyFlows.map((flow) => (
             <div
               key={flow.title}
-              className="border border-gray-200 rounded-2xl p-6 bg-white"
+              className="border border-border rounded-2xl p-6 bg-background-card"
             >
-              <h3 className="text-lg font-semibold text-gray-800">
+              <h3 className="text-lg font-semibold text-text-primary">
                 {flow.title}
               </h3>
-              <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+              <p className="text-sm text-text-secondary mt-2 leading-relaxed">
                 {flow.details}
               </p>
             </div>
@@ -178,9 +178,9 @@ const DemoContent = () => {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-2xl font-semibold text-gray-800">Tech Stack</h2>
-        <div className="mt-4 bg-white border border-gray-200 rounded-2xl p-6">
-          <ul className="grid gap-3 md:grid-cols-2 text-sm text-gray-700 list-disc list-inside">
+        <h2 className="text-2xl font-semibold text-text-primary">Tech Stack</h2>
+        <div className="mt-4 bg-background-card border border-border rounded-2xl p-6">
+          <ul className="grid gap-3 md:grid-cols-2 text-sm text-text-primary list-disc list-inside">
             {techStack.map((item) => (
               <li key={item}>{item}</li>
             ))}
@@ -189,41 +189,41 @@ const DemoContent = () => {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-2xl font-semibold text-gray-800">Demo Access</h2>
+        <h2 className="text-2xl font-semibold text-text-primary">Demo Access</h2>
         <div className="grid gap-6 md:grid-cols-2 mt-6">
-          <div className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-800">
+          <div className="border border-border rounded-2xl p-6 bg-background-card shadow-sm">
+            <h3 className="text-lg font-semibold text-text-primary">
               Patient App Login
             </h3>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-text-secondary mt-2">
               Use these credentials on the patient web app login page.
             </p>
-            <div className="mt-4 text-sm text-gray-700 space-y-1">
+            <div className="mt-4 text-sm text-text-primary space-y-1">
               <p>
-                <span className="font-medium text-gray-800">Email:</span>{" "}
+                <span className="font-medium text-text-primary">Email:</span>{" "}
                 <span className="font-mono">{demoUserEmail}</span>
               </p>
               <p>
-                <span className="font-medium text-gray-800">Password:</span>{" "}
+                <span className="font-medium text-text-primary">Password:</span>{" "}
                 <span className="font-mono">{demoUserPassword}</span>
               </p>
             </div>
           </div>
 
-          <div className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-800">
+          <div className="border border-border rounded-2xl p-6 bg-background-card shadow-sm">
+            <h3 className="text-lg font-semibold text-text-primary">
               Admin Console Login
             </h3>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-text-secondary mt-2">
               Open the admin console and sign in with the demo admin account.
             </p>
-            <div className="mt-4 text-sm text-gray-700 space-y-1">
+            <div className="mt-4 text-sm text-text-primary space-y-1">
               <p>
-                <span className="font-medium text-gray-800">Email:</span>{" "}
+                <span className="font-medium text-text-primary">Email:</span>{" "}
                 <span className="font-mono">{demoAdminEmail}</span>
               </p>
               <p>
-                <span className="font-medium text-gray-800">Password:</span>{" "}
+                <span className="font-medium text-text-primary">Password:</span>{" "}
                 <span className="font-mono">{demoAdminPassword}</span>
               </p>
             </div>
@@ -238,7 +238,7 @@ const DemoContent = () => {
                   Open Admin Console
                 </a>
               ) : (
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-text-secondary">
                   Admin console link not configured.
                 </span>
               )}
@@ -248,7 +248,7 @@ const DemoContent = () => {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-2xl font-semibold text-gray-800">
+        <h2 className="text-2xl font-semibold text-text-primary">
           Getting Around the Demo
         </h2>
         <div className="mt-4 bg-teal-50 border border-teal-100 rounded-2xl p-6">

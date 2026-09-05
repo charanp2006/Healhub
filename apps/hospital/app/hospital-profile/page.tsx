@@ -135,7 +135,7 @@ const HospitalProfilePage = () => {
             <button
               onClick={handleCancel}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 border border-border rounded hover:bg-background-muted transition-colors"
             >
               <X className="w-4 h-4" />
               Cancel
@@ -156,7 +156,7 @@ const HospitalProfilePage = () => {
         )}
       </div>
 
-      <div className="bg-white px-8 py-8 rounded max-w-4xl">
+      <div className="bg-background-card px-8 py-8 rounded max-w-4xl">
         {!isEdit ? (
           <>
             <div className="flex flex-col lg:flex-row gap-8">
@@ -168,12 +168,12 @@ const HospitalProfilePage = () => {
                 />
               )}
               <div className="flex-1">
-                <h2 className="text-2xl font-semibold text-gray-800">
+                <h2 className="text-2xl font-semibold text-text-primary">
                   {profileData.name}
                 </h2>
-                <p className="text-gray-500 mt-1">{profileData.city}</p>
+                <p className="text-text-secondary mt-1">{profileData.city}</p>
                 {profileData.address && (
-                  <p className="text-gray-500 text-sm mt-1">
+                  <p className="text-text-secondary text-sm mt-1">
                     {profileData.address.line1}
                     {profileData.address.line2
                       ? `, ${profileData.address.line2}`
@@ -192,7 +192,7 @@ const HospitalProfilePage = () => {
                   ))}
                 </div>
 
-                <div className="flex gap-6 mt-4 text-sm text-gray-600">
+                <div className="flex gap-6 mt-4 text-sm text-text-secondary">
                   <p>
                     Total Beds:{" "}
                     <span className="font-medium">{profileData.totalBeds}</span>
@@ -219,7 +219,7 @@ const HospitalProfilePage = () => {
                     className={`px-3 py-1 rounded-full text-xs ${
                       profileData.isAvailable
                         ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-600"
+                        : "bg-background-muted text-text-secondary"
                     }`}
                   >
                     {profileData.isAvailable ? "Available" : "Not Available"}
@@ -230,8 +230,8 @@ const HospitalProfilePage = () => {
 
             {profileData.about && (
               <div className="mt-6">
-                <p className="font-medium text-gray-700 mb-2">About</p>
-                <p className="text-gray-500 text-sm whitespace-pre-line">
+                <p className="font-medium text-text-primary mb-2">About</p>
+                <p className="text-text-secondary text-sm whitespace-pre-line">
                   {profileData.about}
                 </p>
               </div>
@@ -242,7 +242,7 @@ const HospitalProfilePage = () => {
             <div className="flex items-start gap-6">
               <div className="relative">
                 <img
-                  className="w-40 h-40 rounded object-cover border-2 border-dashed border-gray-300"
+                  className="w-40 h-40 rounded object-cover border-2 border-dashed border-border"
                   src={
                     imagePreview ||
                     profileData.image ||
@@ -250,8 +250,8 @@ const HospitalProfilePage = () => {
                   }
                   alt="Hospital"
                 />
-                <label className="absolute bottom-2 right-2 p-2 bg-white rounded-full shadow-lg cursor-pointer hover:bg-gray-50">
-                  <Upload className="w-4 h-4 text-gray-600" />
+                <label className="absolute bottom-2 right-2 p-2 bg-background-card rounded-full shadow-lg cursor-pointer hover:bg-background-muted">
+                  <Upload className="w-4 h-4 text-text-secondary" />
                   <input
                     type="file"
                     accept="image/*"
@@ -261,18 +261,18 @@ const HospitalProfilePage = () => {
                 </label>
               </div>
               <div className="flex-1">
-                <h2 className="text-2xl font-semibold text-gray-800">
+                <h2 className="text-2xl font-semibold text-text-primary">
                   {profileData.name}
                 </h2>
-                <p className="text-gray-500 mt-1">{profileData.city}</p>
-                <p className="text-sm text-gray-400 mt-2">
+                <p className="text-text-secondary mt-1">{profileData.city}</p>
+                <p className="text-sm text-text-dim mt-2">
                   Upload a new image to change the hospital photo
                 </p>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-text-primary mb-2">
                 Address
               </label>
               <input
@@ -280,19 +280,19 @@ const HospitalProfilePage = () => {
                 value={addressLine1}
                 onChange={(e) => setAddressLine1(e.target.value)}
                 placeholder="Address Line 1"
-                className="w-full px-4 py-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full px-4 py-2 border border-border rounded mb-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
               <input
                 type="text"
                 value={addressLine2}
                 onChange={(e) => setAddressLine2(e.target.value)}
                 placeholder="Address Line 2 (optional)"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full px-4 py-2 border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-text-primary mb-2">
                 Specialties
               </label>
               <input
@@ -300,16 +300,16 @@ const HospitalProfilePage = () => {
                 value={specialties}
                 onChange={(e) => setSpecialties(e.target.value)}
                 placeholder="Cardiology, Neurology, Orthopedics (comma separated)"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full px-4 py-2 border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-text-dim mt-1">
                 Separate multiple specialties with commas
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-text-primary mb-2">
                   Total Beds
                 </label>
                 <input
@@ -319,11 +319,11 @@ const HospitalProfilePage = () => {
                     setTotalBeds(parseInt(e.target.value) || 0)
                   }
                   min="0"
-                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-2 border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-text-primary mb-2">
                   Available Beds
                 </label>
                 <input
@@ -334,31 +334,31 @@ const HospitalProfilePage = () => {
                   }
                   min="0"
                   max={totalBeds}
-                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-2 border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
             </div>
 
             <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-text-primary">
                 Availability Status:
               </label>
               <button
                 type="button"
                 onClick={() => setIsAvailable(!isAvailable)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  isAvailable ? "bg-green-500" : "bg-gray-300"
+                  isAvailable ? "bg-green-500" : "bg-background-muted-hover"
                 }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  className={`inline-block h-4 w-4 transform rounded-full bg-background-card transition-transform ${
                     isAvailable ? "translate-x-6" : "translate-x-1"
                   }`}
                 />
               </button>
               <span
                 className={`text-sm ${
-                  isAvailable ? "text-green-600" : "text-gray-500"
+                  isAvailable ? "text-green-600" : "text-text-secondary"
                 }`}
               >
                 {isAvailable ? "Available" : "Not Available"}
@@ -366,7 +366,7 @@ const HospitalProfilePage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-text-primary mb-2">
                 About
               </label>
               <textarea
@@ -374,7 +374,7 @@ const HospitalProfilePage = () => {
                 onChange={(e) => setAbout(e.target.value)}
                 rows={4}
                 placeholder="Write about your hospital..."
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                className="w-full px-4 py-2 border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
               />
             </div>
           </div>

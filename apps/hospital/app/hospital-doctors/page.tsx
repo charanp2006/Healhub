@@ -22,7 +22,7 @@ const HospitalDoctorsList = () => {
         {doctors.map((item, index) => (
           <div
             key={index}
-            className="border border-border-light rounded-xl overflow-hidden max-w-56 group cursor-pointer hover:-translate-y-5 transition-all duration-500"
+            className="border border-border rounded-xl overflow-hidden max-w-56 group cursor-pointer hover:-translate-y-5 transition-all duration-500"
           >
             <img
               className="bg-primary-soft group-hover:bg-primary transition-all duration-500"
@@ -30,22 +30,22 @@ const HospitalDoctorsList = () => {
               alt=""
             />
             <div className="p-4">
-              <p className="text-text-primaryLight text-lg font-medium">
+              <p className="text-text-primary text-lg font-medium">
                 {item.name}
               </p>
-              <p className="text-text-secondaryLight text-sm">
+              <p className="text-text-secondary text-sm">
                 {item.speciality}
               </p>
 
               <div className="flex items-center gap-1 text-sm mt-2">
                 <span
                   className={`w-2 h-2 rounded-full ${
-                    item.available ? "bg-green-500" : "bg-gray-400"
+                    item.available ? "bg-green-500" : "bg-background-muted-hover"
                   }`}
                 ></span>
                 <p
                   className={
-                    item.available ? "text-green-600" : "text-gray-500"
+                    item.available ? "text-green-600" : "text-text-secondary"
                   }
                 >
                   {item.available ? "Available" : "Not Available"}

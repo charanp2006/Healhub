@@ -5,7 +5,7 @@ const SpecialityMenu = () => {
   return (
     <div
       id="speciality"
-      className="flex flex-col items-center gap-4 py-16 text-text-primaryLight"
+      className="flex flex-col items-center gap-4 py-16 text-text-primary"
     >
       <h1 className="text-3xl font-medium md:text-3xl text-left md:text-center w-full px-1 md:px-0">
         Find by Speciality
@@ -22,7 +22,7 @@ const SpecialityMenu = () => {
             key={index}
             href={`/doctors/${item.speciality}`}
           >
-            <span className="w-[72px] h-[72px] md:w-auto md:h-auto rounded-2xl md:rounded-none bg-white md:bg-transparent border border-[#edeff2] md:border-0 shadow-sm md:shadow-none flex items-center justify-center">
+            <span className="w-[72px] h-[72px] md:w-auto md:h-auto rounded-2xl md:rounded-none bg-background-card md:bg-transparent border border-border md:border-0 shadow-sm md:shadow-none flex items-center justify-center">
               <img
                 className="w-12 md:w-24 mb-0 md:mb-2"
                 src={item.image.src}

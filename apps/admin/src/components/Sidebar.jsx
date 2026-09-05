@@ -13,9 +13,9 @@ const Sidebar = () => {
   const isActive = (path) => pathname === path;
 
   return (
-    <div className="min-h-screen bg-background-cardLight border-r border-border-light">
+    <div className="min-h-screen bg-background-card border-r border-border">
       {aToken && (
-        <ul className="text-text-secondaryLight mt-5">
+        <ul className="text-text-secondary mt-5">
           <Link
             className={`flex items-center gap-3 py-3.5 px-3 md:px-9 md:win-w-72 cursor-pointer ${isActive("/admin-dashboard") ? "bg-primary-soft border-r-4 border-primary" : ""}`}
             href="/admin-dashboard"

@@ -15,7 +15,7 @@ const PanelShell = ({ children }) => {
   }
 
   return (
-    <div className="bg-[#f6f8fa] md:bg-background-light min-h-screen">
+    <div className="bg-background-base min-h-screen">
       <div className="hidden md:block">
         <Navbar />
       </div>

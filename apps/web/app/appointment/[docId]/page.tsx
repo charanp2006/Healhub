@@ -235,13 +235,13 @@ const Appointment = () => {
             />
           </div>
 
-          <div className="flex-1 border border-border-light rounded-lg p-8 py-7 bg-background-cardLight mx-2 sm:mx-0 mt-[-80px] sm:mt-0">
+          <div className="flex-1 border border-border rounded-lg p-8 py-7 bg-background-card mx-2 sm:mx-0 mt-[-80px] sm:mt-0">
             {/* ---------- Doctor Info ---------- */}
-            <p className="flex items-center gap-2 text-3xl font-medium text-text-primaryLight">
+            <p className="flex items-center gap-2 text-3xl font-medium text-text-primary">
               {docInfo.name}
               <img className="w-5" src={assets.verified_icon.src} alt="" />
             </p>
-            <div className="flex items-center gap-2 mt-1 text-text-secondaryLight">
+            <div className="flex items-center gap-2 mt-1 text-text-secondary">
               <p>
                 {docInfo.degree} - {docInfo.speciality}
               </p>
@@ -257,7 +257,7 @@ const Appointment = () => {
                 <p className="text-sm text-primary font-medium">
                   {docInfo.hospitalId.name || "Hospital/Clinic"}
                   {docInfo.hospitalId.city && (
-                    <span className="text-text-secondaryLight font-normal">
+                    <span className="text-text-secondary font-normal">
                       {" "}
                       · {docInfo.hospitalId.city}
                     </span>
@@ -268,17 +268,17 @@ const Appointment = () => {
 
             {/* dr about */}
             <div>
-              <p className="flex items-center gap-1 text-sm font-medium text-text-primaryLight mt-3">
+              <p className="flex items-center gap-1 text-sm font-medium text-text-primary mt-3">
                 About{" "}
                 <img className="w-3" src={assets.info_icon.src} alt="" />
               </p>
-              <p className="text-sm text-text-secondaryLight max-w-[700px] mt-1">
+              <p className="text-sm text-text-secondary max-w-[700px] mt-1">
                 {docInfo.about}
               </p>
             </div>
-            <p className="text-text-secondaryLight font-medium mt-4">
+            <p className="text-text-secondary font-medium mt-4">
               Appoointment fee:{" "}
-              <span className="text-text-primaryLight">
+              <span className="text-text-primary">
                 {currencySymbol}
                 {docInfo.fees}
               </span>
@@ -286,7 +286,7 @@ const Appointment = () => {
           </div>
         </div>
         {/* ---------- Doctor available slots for booking ---------- */}
-        <div className="sm:ml-72 sm:pl-4 mt-8 font-medium text-text-secondaryLight">
+        <div className="sm:ml-72 sm:pl-4 mt-8 font-medium text-text-secondary">
           <p>Booking slots</p>
 
           <div className="flex gap-3 items-center w-full overflow-x-scroll mt-4">
@@ -297,7 +297,7 @@ const Appointment = () => {
                   <div
                     onClick={() => setSlotIndex(index)}
                     key={index}
-                    className={`text-center py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index ? "bg-primary text-white" : " border border-border-light "}`}
+                    className={`text-center py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index ? "bg-primary text-white" : " border border-border "}`}
                   >
                     <p>{daysOfWeek[item[0].datetime.getDay()]}</p>
                     <p>{item[0].datetime.getDate()}</p>
@@ -311,14 +311,14 @@ const Appointment = () => {
               docSlots[slotIndex].map((item, index) => (
                 <p
                   onClick={() => setSlotTime(item.time)}
-                  className={`text-sm font-light flex-shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time === slotTime ? "bg-primary text-white" : "text-text-secondaryLight border border-border-light"} `}
+                  className={`text-sm font-light flex-shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time === slotTime ? "bg-primary text-white" : "text-text-secondary border border-border"} `}
                   key={index}
                 >
                   {item.time.toLowerCase()}
                 </p>
               ))
             ) : (
-              <p className="text-text-secondaryLight text-sm">
+              <p className="text-text-secondary text-sm">
                 No available slots
               </p>
             )}
@@ -330,13 +330,13 @@ const Appointment = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setAppointmentType("in-person")}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm border transition-all cursor-pointer ${appointmentType === "in-person" ? "bg-primary text-white border-primary" : "border-border-light text-text-secondaryLight hover:border-primary"}`}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm border transition-all cursor-pointer ${appointmentType === "in-person" ? "bg-primary text-white border-primary" : "border-border text-text-secondary hover:border-primary"}`}
               >
                 <MapPin size={16} /> In-Person
               </button>
               <button
                 onClick={() => setAppointmentType("video")}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm border transition-all cursor-pointer ${appointmentType === "video" ? "bg-primary text-white border-primary" : "border-border-light text-text-secondaryLight hover:border-primary"}`}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm border transition-all cursor-pointer ${appointmentType === "video" ? "bg-primary text-white border-primary" : "border-border text-text-secondary hover:border-primary"}`}
               >
                 <Video size={16} /> Video Call
               </button>
@@ -348,7 +348,7 @@ const Appointment = () => {
             <div>
               <label className="block mb-1 text-sm">
                 Symptoms{" "}
-                <span className="text-text-secondaryLight text-xs">
+                <span className="text-text-secondary text-xs">
                   (optional)
                 </span>
               </label>
@@ -357,13 +357,13 @@ const Appointment = () => {
                 onChange={(e) => setSymptoms(e.target.value)}
                 rows={3}
                 placeholder="Describe your symptoms..."
-                className="w-full border border-border-light rounded-lg p-3 text-sm outline-primary resize-none"
+                className="w-full border border-border rounded-lg p-3 text-sm outline-primary resize-none"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">
                 Notes{" "}
-                <span className="text-text-secondaryLight text-xs">
+                <span className="text-text-secondary text-xs">
                   (optional)
                 </span>
               </label>
@@ -372,7 +372,7 @@ const Appointment = () => {
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
                 placeholder="Any additional notes for the doctor..."
-                className="w-full border border-border-light rounded-lg p-3 text-sm outline-primary resize-none"
+                className="w-full border border-border rounded-lg p-3 text-sm outline-primary resize-none"
               />
             </div>
           </div>

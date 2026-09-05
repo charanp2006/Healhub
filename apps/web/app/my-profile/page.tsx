@@ -63,7 +63,7 @@ const MyProfile = () => {
           <label htmlFor="image">
             <div className="inline-block relative cursor-pointer mx-auto md:mx-0">
               <img
-                className="w-36 rounded-full border-1 border-border-light"
+                className="w-36 rounded-full border-1 border-border"
                 src={
                   image ? URL.createObjectURL(image) : userData.image
                 }
@@ -84,7 +84,7 @@ const MyProfile = () => {
           </label>
         ) : (
           <img
-            className="w-36 rounded-full border-1 border-border-light mx-auto md:mx-0"
+            className="w-36 rounded-full border-1 border-border mx-auto md:mx-0"
             src={userData.image}
             alt=""
           />
@@ -92,7 +92,7 @@ const MyProfile = () => {
 
         {isEdit ? (
           <input
-            className="bg-background-light border-2 border-border-light rounded-sm px-2 text-3xl font-medium max-w-60 mt-4"
+            className="bg-background-base border-2 border-border rounded-sm px-2 text-3xl font-medium max-w-60 mt-4"
             type="text"
             value={userData.name}
             onChange={(e) =>
@@ -101,22 +101,22 @@ const MyProfile = () => {
             required={isEdit}
           />
         ) : (
-          <p className="font-medium text-3xl text-text-primaryLight mt-4 text-center md:text-left">
+          <p className="font-medium text-3xl text-text-primary mt-4 text-center md:text-left">
             {userData.name}
           </p>
         )}
         <hr className="bg-border-light h-[1px] border-none" />
         <div>
-          <p className="text-text-secondaryLight underline mt-3">
+          <p className="text-text-secondary underline mt-3">
             CONTACT INFORMATION
           </p>
-          <div className="grid grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-text-primaryLight">
+          <div className="grid grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-text-primary">
             <p className="font-medium">Email id:</p>
-            <p className="text-text-secondaryLight">{userData.email}</p>
+            <p className="text-text-secondary">{userData.email}</p>
             <p className="font-medium">Phone:</p>
             {isEdit ? (
               <input
-                className="bg-background-light border-2 border-border-light rounded-sm px-2"
+                className="bg-background-base border-2 border-border rounded-sm px-2"
                 type="text"
                 value={userData.phone}
                 onChange={(e) =>
@@ -125,13 +125,13 @@ const MyProfile = () => {
                 required={isEdit}
               />
             ) : (
-              <p className="text-text-secondaryLight">{userData.phone}</p>
+              <p className="text-text-secondary">{userData.phone}</p>
             )}
             <p className="font-medium">Address:</p>
             {isEdit ? (
               <p>
                 <input
-                  className="bg-background-light border-2 border-border-light rounded-sm px-2"
+                  className="bg-background-base border-2 border-border rounded-sm px-2"
                   value={userData.address.line1}
                   onChange={(e) =>
                     setUserData((prev) => ({
@@ -144,7 +144,7 @@ const MyProfile = () => {
                 />
                 <br />
                 <input
-                  className="bg-background-light border-2 border-border-light rounded-sm px-2"
+                  className="bg-background-base border-2 border-border rounded-sm px-2"
                   value={userData.address.line2}
                   onChange={(e) =>
                     setUserData((prev) => ({
@@ -157,21 +157,21 @@ const MyProfile = () => {
                 />
               </p>
             ) : (
-              <p className="text-text-secondaryLight">
+              <p className="text-text-secondary">
                 {userData.address.line1} <br /> {userData.address.line2}
               </p>
             )}
           </div>
         </div>
         <div>
-          <p className="text-text-secondaryLight underline mt-3">
+          <p className="text-text-secondary underline mt-3">
             BASIC INFORMATION
           </p>
-          <div className="grid grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-text-secondaryLight">
+          <div className="grid grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-text-secondary">
             <p className="font-medium">Gender:</p>
             {isEdit ? (
               <select
-                className="max-w-20 bg-background-light border-2 border-border-light rounded-sm "
+                className="max-w-20 bg-background-base border-2 border-border rounded-sm "
                 onChange={(e) =>
                   setUserData((prev) => ({
                     ...prev,
@@ -186,12 +186,12 @@ const MyProfile = () => {
                 <option value="Female">Female</option>
               </select>
             ) : (
-              <p className="text-text-secondaryLight">{userData.gender}</p>
+              <p className="text-text-secondary">{userData.gender}</p>
             )}
             <p className="font-medium">DOB:</p>
             {isEdit ? (
               <input
-                className="max-w-30 bg-background-light border-2 border-border-light rounded-sm"
+                className="max-w-30 bg-background-base border-2 border-border rounded-sm"
                 type="date"
                 onChange={(e) =>
                   setUserData((prev) => ({ ...prev, dob: e.target.value }))
@@ -200,7 +200,7 @@ const MyProfile = () => {
                 required={isEdit}
               />
             ) : (
-              <p className="text-text-secondaryLight">{userData.dob}</p>
+              <p className="text-text-secondary">{userData.dob}</p>
             )}
           </div>
         </div>

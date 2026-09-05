@@ -47,7 +47,7 @@ const Dashboard = () => {
   }, [aToken]);
 
   const GrowthBadge = ({ value }) => {
-    if (value === 0) return <span className="text-xs text-gray-400">0%</span>;
+    if (value === 0) return <span className="text-xs text-text-dim">0%</span>;
     return value > 0
       ? <span className="flex items-center gap-0.5 text-xs text-green-600 font-medium"><TrendingUp size={12} /> +{value}%</span>
       : <span className="flex items-center gap-0.5 text-xs text-red-500 font-medium"><TrendingDown size={12} /> {value}%</span>;
@@ -73,56 +73,56 @@ const Dashboard = () => {
   return (
     <div className="m-5 w-full max-w-6xl">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+        <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
               <Users size={20} className="text-blue-600" />
             </div>
             {overview && <GrowthBadge value={overview.appointmentGrowth} />}
           </div>
-          <p className="text-2xl font-bold text-gray-800">{overview?.totalPatients ?? '—'}</p>
-          <p className="text-sm text-gray-500 mt-0.5">Total Patients</p>
+          <p className="text-2xl font-bold text-text-primary">{overview?.totalPatients ?? '—'}</p>
+          <p className="text-sm text-text-secondary mt-0.5">Total Patients</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+        <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
               <CalendarCheck size={20} className="text-emerald-600" />
             </div>
             <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-medium">{overview?.activeAppointments ?? 0} active</span>
           </div>
-          <p className="text-2xl font-bold text-gray-800">{overview?.totalAppointments ?? '—'}</p>
-          <p className="text-sm text-gray-500 mt-0.5">Total Appointments</p>
+          <p className="text-2xl font-bold text-text-primary">{overview?.totalAppointments ?? '—'}</p>
+          <p className="text-sm text-text-secondary mt-0.5">Total Appointments</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+        <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center">
               <DollarSign size={20} className="text-violet-600" />
             </div>
             {overview && <GrowthBadge value={overview.revenueGrowth} />}
           </div>
-          <p className="text-2xl font-bold text-gray-800">{currencySymbol}{overview?.totalRevenue?.toLocaleString() ?? '—'}</p>
-          <p className="text-sm text-gray-500 mt-0.5">Total Revenue</p>
+          <p className="text-2xl font-bold text-text-primary">{currencySymbol}{overview?.totalRevenue?.toLocaleString() ?? '—'}</p>
+          <p className="text-sm text-text-secondary mt-0.5">Total Revenue</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+        <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-lg bg-primary-soft flex items-center justify-center">
               <Building2 size={20} className="text-primary" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-gray-800">{overview?.totalDoctors ?? '—'} <span className="text-sm font-normal text-gray-400">doctors</span></p>
-          <p className="text-sm text-gray-500 mt-0.5">{overview?.totalHospitals ?? 0} hospitals</p>
+          <p className="text-2xl font-bold text-text-primary">{overview?.totalDoctors ?? '—'} <span className="text-sm font-normal text-text-dim">doctors</span></p>
+          <p className="text-sm text-text-secondary mt-0.5">{overview?.totalHospitals ?? 0} hospitals</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm lg:col-span-2">
+        <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm lg:col-span-2">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <p className="font-semibold text-gray-800">Revenue Trend</p>
-              <p className="text-xs text-gray-400">Last 12 months</p>
+              <p className="font-semibold text-text-primary">Revenue Trend</p>
+              <p className="text-xs text-text-dim">Last 12 months</p>
             </div>
             <button onClick={() => router.push('/analytics')} className="text-xs text-primary font-medium flex items-center gap-1 hover:underline cursor-pointer">
               View Details <ArrowRight size={12} />
@@ -147,50 +147,50 @@ const Dashboard = () => {
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full flex items-center justify-center text-gray-400 text-sm">No data</div>
+              <div className="h-full flex items-center justify-center text-text-dim text-sm">No data</div>
             )}
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-          <p className="font-semibold text-gray-800 mb-4">Appointment Summary</p>
+        <div className="bg-background-card rounded-xl border border-border p-5 shadow-sm">
+          <p className="font-semibold text-text-primary mb-4">Appointment Summary</p>
           {overview && (
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-500">Completed</span>
+                  <span className="text-text-secondary">Completed</span>
                   <span className="font-medium text-green-600">{overview.completedAppointments}</span>
                 </div>
-                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-background-muted rounded-full overflow-hidden">
                   <div className="h-full bg-green-500 rounded-full" style={{ width: `${overview.totalAppointments ? (overview.completedAppointments / overview.totalAppointments * 100) : 0}%` }} />
                 </div>
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-500">Active</span>
+                  <span className="text-text-secondary">Active</span>
                   <span className="font-medium text-blue-600">{overview.activeAppointments}</span>
                 </div>
-                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-background-muted rounded-full overflow-hidden">
                   <div className="h-full bg-blue-500 rounded-full" style={{ width: `${overview.totalAppointments ? (overview.activeAppointments / overview.totalAppointments * 100) : 0}%` }} />
                 </div>
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-500">Cancelled</span>
+                  <span className="text-text-secondary">Cancelled</span>
                   <span className="font-medium text-red-500">{overview.cancelledAppointments}</span>
                 </div>
-                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-background-muted rounded-full overflow-hidden">
                   <div className="h-full bg-red-400 rounded-full" style={{ width: `${overview.totalAppointments ? (overview.cancelledAppointments / overview.totalAppointments * 100) : 0}%` }} />
                 </div>
               </div>
 
               <div className="border-t pt-3 mt-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center gap-1.5 text-gray-500"><MapPin size={14} /> In-Person</span>
+                  <span className="flex items-center gap-1.5 text-text-secondary"><MapPin size={14} /> In-Person</span>
                   <span className="font-medium">{overview.inPersonCount}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm mt-2">
-                  <span className="flex items-center gap-1.5 text-gray-500"><Video size={14} /> Video Call</span>
+                  <span className="flex items-center gap-1.5 text-text-secondary"><Video size={14} /> Video Call</span>
                   <span className="font-medium">{overview.videoCount}</span>
                 </div>
               </div>
@@ -200,58 +200,58 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+        <div className="bg-background-card rounded-xl border border-border shadow-sm">
           <div className="flex items-center justify-between p-5 pb-3">
             <div className="flex items-center gap-2">
               <Activity size={18} className="text-primary" />
-              <p className="font-semibold text-gray-800">Recent Activity</p>
+              <p className="font-semibold text-text-primary">Recent Activity</p>
             </div>
           </div>
           <div className="max-h-80 overflow-y-auto">
             {recentActivity.length === 0 ? (
-              <p className="p-6 text-gray-400 text-center text-sm">No recent activity</p>
+              <p className="p-6 text-text-dim text-center text-sm">No recent activity</p>
             ) : (
               recentActivity.slice(0, 8).map((item, index) => (
-                <div key={index} className="flex items-center gap-3 px-5 py-2.5 hover:bg-gray-50 border-t border-gray-50">
+                <div key={index} className="flex items-center gap-3 px-5 py-2.5 hover:bg-background-muted border-t border-border">
                   <img className="w-8 h-8 rounded-full object-cover" src={item.patientImage} alt="" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-text-primary">
                       <span className="font-medium">{item.patientName}</span>
                       {' '}<span className={`text-xs px-1.5 py-0.5 rounded ${getActionColor(item.action)}`}>{item.action}</span>{' '}
                       with <span className="font-medium">{item.doctorName}</span>
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">{item.slotDate} | {item.slotTime}</p>
+                    <p className="text-xs text-text-dim mt-0.5">{item.slotDate} | {item.slotTime}</p>
                   </div>
-                  <p className="text-sm font-medium text-gray-600">{currencySymbol}{item.amount}</p>
+                  <p className="text-sm font-medium text-text-secondary">{currencySymbol}{item.amount}</p>
                 </div>
               ))
             )}
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+        <div className="bg-background-card rounded-xl border border-border shadow-sm">
           <div className="flex items-center gap-2 p-5 pb-3">
             <img src={assets.list_icon} alt="" className="w-5" />
-            <p className="font-semibold text-gray-800">Latest Bookings</p>
+            <p className="font-semibold text-text-primary">Latest Bookings</p>
           </div>
 
           <div className="max-h-80 overflow-y-auto">
             {dashboardData && dashboardData.latestAppointments.length === 0 ? (
-              <p className="p-6 text-gray-400 text-center text-sm">No appointments found</p>
+              <p className="p-6 text-text-dim text-center text-sm">No appointments found</p>
             ) : (
               dashboardData && dashboardData.latestAppointments.map((appointment, index) => (
                 <div
                   key={index}
-                  className="flex items-center px-5 py-2.5 gap-3 hover:bg-gray-50 border-t border-gray-50"
+                  className="flex items-center px-5 py-2.5 gap-3 hover:bg-background-muted border-t border-border"
                 >
                   <img
-                    className="rounded-full bg-gray-100 w-8 h-8 object-cover"
+                    className="rounded-full bg-background-muted w-8 h-8 object-cover"
                     src={appointment.docData.image}
                     alt=""
                   />
                   <div className="flex-1 text-sm">
-                    <p className="font-medium text-gray-700">{appointment.docData.name}</p>
-                    <p className="text-xs text-gray-400">{slotDateFormat(appointment.slotDate)}</p>
+                    <p className="font-medium text-text-primary">{appointment.docData.name}</p>
+                    <p className="text-xs text-text-dim">{slotDateFormat(appointment.slotDate)}</p>
                   </div>
                   {appointment.cancelled ? (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-500 font-medium">Cancelled</span>

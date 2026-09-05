@@ -19,7 +19,7 @@ const Banner = () => {
             router.push("/login");
             scrollTo(0, 0);
           }}
-          className="px-8 py-3 rounded-full mt-10 hover:scale-105 transition-all flex items-center gap-2 bg-white text-[#595959] text-sm m-auto md:m-0 hover:scale-105 transition-all duration-300"
+          className="px-8 py-3 rounded-full mt-10 hover:scale-105 transition-all flex items-center gap-2 bg-background-card text-text-secondary text-sm m-auto md:m-0 hover:scale-105 transition-all duration-300"
         >
           Get Started
         </button>

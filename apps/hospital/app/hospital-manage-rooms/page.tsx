@@ -238,63 +238,63 @@ const HospitalManageRooms = () => {
         {categories.map((cat) => (
           <div
             key={cat._id}
-            className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm"
+            className="bg-background-card rounded-xl border border-border p-5 shadow-sm"
           >
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <BedDouble size={20} className="text-primary" />
-                <h3 className="font-medium text-gray-800">{cat.name}</h3>
+                <h3 className="font-medium text-text-primary">{cat.name}</h3>
               </div>
               <button
                 onClick={() => openEditForm(cat)}
-                className="text-gray-400 hover:text-blue-600 cursor-pointer"
+                className="text-text-dim hover:text-blue-600 cursor-pointer"
               >
                 <Pencil size={16} />
               </button>
             </div>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
-                <p className="text-xl font-bold text-gray-800">
+                <p className="text-xl font-bold text-text-primary">
                   {cat.totalBeds}
                 </p>
-                <p className="text-xs text-gray-500">Total</p>
+                <p className="text-xs text-text-secondary">Total</p>
               </div>
               <div>
                 <p className="text-xl font-bold text-green-600">
                   {cat.availableBeds}
                 </p>
-                <p className="text-xs text-gray-500">Available</p>
+                <p className="text-xs text-text-secondary">Available</p>
               </div>
               <div>
                 <p className="text-xl font-bold text-red-500">
                   {cat.totalBeds - cat.availableBeds}
                 </p>
-                <p className="text-xs text-gray-500">Occupied</p>
+                <p className="text-xs text-text-secondary">Occupied</p>
               </div>
             </div>
             {cat.dailyRate > 0 && (
-              <p className="text-xs text-gray-400 mt-2 text-right">
+              <p className="text-xs text-text-dim mt-2 text-right">
                 Rate: ₹{cat.dailyRate}/day
               </p>
             )}
           </div>
         ))}
         {categories.length === 0 && (
-          <p className="text-gray-500 col-span-3 text-center py-10">
+          <p className="text-text-secondary col-span-3 text-center py-10">
             No room categories yet. Click "Add Room" to create one.
           </p>
         )}
       </div>
 
       {showForm && (
-        <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6 shadow-sm">
+        <div className="bg-background-card rounded-xl border border-border p-6 mb-6 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium">
               {editingId ? "Edit Room Category" : "Add Room Category"}
             </h3>
             <button
               onClick={resetForm}
-              className="text-gray-400 hover:text-gray-600 cursor-pointer"
+              className="text-text-dim hover:text-text-secondary cursor-pointer"
             >
               <X size={20} />
             </button>
@@ -304,7 +304,7 @@ const HospitalManageRooms = () => {
             className="grid grid-cols-1 md:grid-cols-4 gap-4"
           >
             <div>
-              <label className="text-sm text-gray-500 block mb-1">Name</label>
+              <label className="text-sm text-text-secondary block mb-1">Name</label>
               <input
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
@@ -314,7 +314,7 @@ const HospitalManageRooms = () => {
               />
             </div>
             <div>
-              <label className="text-sm text-gray-500 block mb-1">
+              <label className="text-sm text-text-secondary block mb-1">
                 Total Beds
               </label>
               <input
@@ -327,7 +327,7 @@ const HospitalManageRooms = () => {
               />
             </div>
             <div>
-              <label className="text-sm text-gray-500 block mb-1">
+              <label className="text-sm text-text-secondary block mb-1">
                 Available Beds
               </label>
               <input
@@ -339,7 +339,7 @@ const HospitalManageRooms = () => {
               />
             </div>
             <div>
-              <label className="text-sm text-gray-500 block mb-1">
+              <label className="text-sm text-text-secondary block mb-1">
                 Daily Rate (₹)
               </label>
               <input
@@ -363,12 +363,12 @@ const HospitalManageRooms = () => {
       )}
 
       {showAdmit && (
-        <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6 shadow-sm">
+        <div className="bg-background-card rounded-xl border border-border p-6 mb-6 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium">Admit Patient</h3>
             <button
               onClick={() => setShowAdmit(false)}
-              className="text-gray-400 hover:text-gray-600 cursor-pointer"
+              className="text-text-dim hover:text-text-secondary cursor-pointer"
             >
               <X size={20} />
             </button>
@@ -378,7 +378,7 @@ const HospitalManageRooms = () => {
             className="grid grid-cols-1 md:grid-cols-3 gap-4"
           >
             <div>
-              <label className="text-sm text-gray-500 block mb-1">
+              <label className="text-sm text-text-secondary block mb-1">
                 Room Category
               </label>
               <select
@@ -398,7 +398,7 @@ const HospitalManageRooms = () => {
               </select>
             </div>
             <div>
-              <label className="text-sm text-gray-500 block mb-1">
+              <label className="text-sm text-text-secondary block mb-1">
                 Patient ID
               </label>
               <input
@@ -422,7 +422,7 @@ const HospitalManageRooms = () => {
       )}
 
       {showHistory && (
-        <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
+        <div className="bg-background-card rounded-xl border border-border p-6 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium">Allocation History</h3>
             <div className="flex gap-2 items-center">
@@ -440,7 +440,7 @@ const HospitalManageRooms = () => {
               </select>
               <button
                 onClick={() => setShowHistory(false)}
-                className="text-gray-400 hover:text-gray-600 cursor-pointer"
+                className="text-text-dim hover:text-text-secondary cursor-pointer"
               >
                 <X size={20} />
               </button>
@@ -448,14 +448,14 @@ const HospitalManageRooms = () => {
           </div>
 
           {allocations.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
+            <p className="text-text-secondary text-center py-8">
               No allocation records
             </p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b text-gray-500">
+                  <tr className="border-b text-text-secondary">
                     <th className="text-left py-2 px-2">Patient</th>
                     <th className="text-left py-2 px-2">Room</th>
                     <th className="text-left py-2 px-2">Admitted</th>
@@ -466,7 +466,7 @@ const HospitalManageRooms = () => {
                 </thead>
                 <tbody>
                   {allocations.map((a) => (
-                    <tr key={a._id} className="border-b hover:bg-gray-50">
+                    <tr key={a._id} className="border-b hover:bg-background-muted">
                       <td className="py-2 px-2">
                         {a.patientId?.name || a.patientId?._id || a.patientId}
                       </td>
@@ -486,7 +486,7 @@ const HospitalManageRooms = () => {
                           className={`px-2 py-0.5 rounded-full text-xs ${
                             a.status === "admitted"
                               ? "bg-green-100 text-green-700"
-                              : "bg-gray-100 text-gray-700"
+                              : "bg-background-muted text-text-primary"
                           }`}
                         >
                           {a.status}
@@ -520,7 +520,7 @@ const HospitalManageRooms = () => {
                     className={`px-3 py-1 rounded text-sm cursor-pointer ${
                       historyPage === i + 1
                         ? "bg-primary text-white"
-                        : "bg-gray-100 hover:bg-gray-200"
+                        : "bg-background-muted hover:bg-background-muted-hover"
                     }`}
                   >
                     {i + 1}

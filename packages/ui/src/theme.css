@@ -1,3 +1,5 @@
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   /* =====================
      BRAND / PRIMARY
@@ -8,36 +10,66 @@
   --primary-soft-dark: #134e4a;
 
   /* =====================
-     BACKGROUNDS
+     SEMANTIC TOKENS (mode-aware)
+     Light values; overridden in .dark. Utility classes
+     (text-text-primary, bg-background-card, ...) resolve to
+     these via @theme inline and switch with the theme.
   ====================== */
-  --bg-light: #f3f4f6;
-  --bg-dark: #0f172a;
-  --bg-card-light: #ffffff;
-  --bg-card-dark: #111827;
-
-  /* =====================
-     TEXT
-  ====================== */
-  --text-primary-light: #1f2933;
-  --text-primary-dark: #ffffff;
-  --text-secondary-light: #6b7280;
-  --text-secondary-dark: #9ca3af;
+  --s-text-primary: #1f2933;
+  --s-text-secondary: #6b7280;
+  --s-text-dim: #9ca3af;
+  --s-bg-base: #f6f8fa;
+  --s-bg-card: #ffffff;
+  --s-bg-muted: #f3f4f6;
+  --s-bg-muted-hover: #e5e7eb;
+  --s-border: #e5e7eb;
 
   /* =====================
      ACCENTS
   ====================== */
   --accent-cta: #ff6b6b;
   --accent-warning: #f4d35e;
-  --accent-link-light: #3a4f7a;
-  --accent-link-dark: #a6b4e0;
+  --accent-link: #3a4f7a;
 
   /* =====================
-     BORDERS
+     LEGACY mode-specific tokens (kept for backward compat)
   ====================== */
+  --bg-light: #f3f4f6;
+  --bg-dark: #0f172a;
+  --bg-card-light: #ffffff;
+  --bg-card-dark: #111827;
+  --text-primary-light: #1f2933;
+  --text-primary-dark: #ffffff;
+  --text-secondary-light: #6b7280;
+  --text-secondary-dark: #9ca3af;
+  --accent-link-light: #3a4f7a;
+  --accent-link-dark: #a6b4e0;
   --border-light: #e5e7eb;
   --border-dark: #374151;
 
   color-scheme: light;
+}
+
+.dark {
+  /* =====================
+     LAGOON MIDNIGHT (MongoDB-inspired dark palette)
+  ====================== */
+  --s-text-primary: #e8edeb;
+  --s-text-secondary: #c1c7c6;
+  --s-text-dim: #889397;
+  --s-bg-base: #001e2b;
+  --s-bg-card: #1c2d38;
+  --s-bg-muted: #0f2a35;
+  --s-bg-muted-hover: #3d4f58;
+  --s-border: #3d4f58;
+
+  --primary-soft: #134e4a;
+  --primary-soft-dark: #a6e9e1;
+  --accent-cta: #ff6960;
+  --accent-warning: #ffc010;
+  --accent-link: #0498ec;
+
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -46,21 +78,29 @@
   --color-primary-soft: var(--primary-soft);
   --color-primary-soft-dark: var(--primary-soft-dark);
 
+  --color-text-primary: var(--s-text-primary);
+  --color-text-secondary: var(--s-text-secondary);
+  --color-text-dim: var(--s-text-dim);
+  --color-background-base: var(--s-bg-base);
+  --color-background-card: var(--s-bg-card);
+  --color-background-muted: var(--s-bg-muted);
+  --color-background-muted-hover: var(--s-bg-muted-hover);
+  --color-border: var(--s-border);
+
+  --color-accent-cta: var(--accent-cta);
+  --color-accent-warning: var(--accent-warning);
+  --color-accent-link: var(--accent-link);
+
   --color-background-light: var(--bg-light);
   --color-background-dark: var(--bg-dark);
   --color-background-card-light: var(--bg-card-light);
   --color-background-card-dark: var(--bg-card-dark);
-
   --color-text-primary-light: var(--text-primary-light);
   --color-text-primary-dark: var(--text-primary-dark);
   --color-text-secondary-light: var(--text-secondary-light);
   --color-text-secondary-dark: var(--text-secondary-dark);
-
-  --color-accent-cta: var(--accent-cta);
-  --color-accent-warning: var(--accent-warning);
   --color-accent-link-light: var(--accent-link-light);
   --color-accent-link-dark: var(--accent-link-dark);
-
   --color-border-light: var(--border-light);
   --color-border-dark: var(--border-dark);
 
@@ -71,6 +111,47 @@
 
 * {
   font-family: var(--font-sans);
+}
+
+/* =====================
+   THEME TOGGLE (sun/moon morph)
+   Styled here so it always ships, independent of Tailwind source scanning.
+   ====================== */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  color: var(--s-text-secondary);
+  overflow: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.theme-toggle:hover {
+  background: var(--s-bg-muted);
+  color: var(--s-text-primary);
+}
+.theme-toggle .icon {
+  position: absolute;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.theme-toggle .icon-sun {
+  transform: rotate(90deg) scale(0);
+  opacity: 0;
+}
+.theme-toggle .icon-moon {
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+.theme-toggle.is-dark .icon-sun {
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+.theme-toggle.is-dark .icon-moon {
+  transform: rotate(-90deg) scale(0);
+  opacity: 0;
 }
 
 .active hr {

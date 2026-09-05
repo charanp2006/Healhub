@@ -4,6 +4,8 @@ import { useContext, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { assets } from "@/src/assets/assets";
+import { LOGO as HealhubLogo, LOGO_ALT } from "@healhub/ui/images";
+import { ThemeToggle } from "@healhub/ui/theme";
 import { AppContext } from "@/src/context/AppContext";
 
 const navLinks = [
@@ -42,7 +44,7 @@ const Navbar = () => {
         onClick={() => router.push("/")}
         className="flex items-center gap-2 cursor-pointer"
       >
-        <img className="w-10 h-10" src={assets.logo_icon.src} alt="Healhub" />
+        <img className="w-10 h-8.5" src={HealhubLogo} alt={LOGO_ALT} />
         <div>
           <span className="text-3xl font-bold text-[#179E8D]">Heal</span>
           <span className="text-3xl font-bold text-[#179E8D]">hub</span>
@@ -61,6 +63,7 @@ const Navbar = () => {
         ))}
       </ul>
       <div className="flex items-center gap-4">
+        <ThemeToggle />
         {token && userData ? (
           <div
             onClick={() => setDropdown((prev) => !prev)}
@@ -73,22 +76,22 @@ const Navbar = () => {
             />
             <img className="w-2.5" src={assets.dropdown_icon.src} alt="" />
             <div
-              className={`absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 ${dropdown ? "block" : "hidden"}`}
+              className={`absolute top-0 right-0 pt-14 text-base font-medium text-text-secondary z-20 ${dropdown ? "block" : "hidden"}`}
             >
-              <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4">
+              <div className="min-w-48 bg-background-muted rounded flex flex-col gap-4 p-4">
                 <p
                   onClick={() => router.push("/my-profile")}
-                  className="hover:text-black cursor-pointer"
+                  className="hover:text-text-primary cursor-pointer"
                 >
                   My Profile
                 </p>
                 <p
                   onClick={() => router.push("/my-appointments")}
-                  className="hover:text-black cursor-pointer"
+                  className="hover:text-text-primary cursor-pointer"
                 >
                   My Appointments
                 </p>
-                <p onClick={logout} className="hover:text-black cursor-pointer">
+                <p onClick={logout} className="hover:text-text-primary cursor-pointer">
                   Logout
                 </p>
               </div>
@@ -110,14 +113,14 @@ const Navbar = () => {
         />
         {/* ------- Mobile menu ------- */}
         <div
-          className={`${showMenu ? "fixed w-full" : "h-0 w-0"} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}
+          className={`${showMenu ? "fixed w-full" : "h-0 w-0"} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-background-card transition-all`}
         >
           <div className="flex items-center justify-between px-5 py-6">
             <div className="flex items-center gap-2">
               <img
-                className="w-10 h-10"
-                src={assets.logo_icon.src}
-                alt="Healhub"
+                className="w-10 h-8.5"
+                src={HealhubLogo}
+                alt={LOGO_ALT}
               />
               <div>
                 <span className="text-3xl font-bold text-[#179E8D]">Heal</span>

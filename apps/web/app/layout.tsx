@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import AppContextProvider from "@/src/context/AppContext";
+import { ThemeProvider } from "@healhub/ui/theme";
 import Navbar from "@/src/components/Navbar";
 import Footer from "@/src/components/Footer";
 import FloatingDemoButton from "@/src/components/FloatingDemoButton";
@@ -22,7 +23,8 @@ export const metadata: Metadata = {
   description: "Book doctors and hospital appointments online.",
   manifest: "/manifest.json",
   icons: {
-    apple: "/logo.png",
+    icon: "/favicon.png",
+    apple: "/apple-touch-icon.png",
   },
 };
 
@@ -36,26 +38,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={outfit.variable}>
+    <html lang="en" className={outfit.variable} suppressHydrationWarning>
       <body>
-        <AppContextProvider>
-          <div className="mx-0 sm:mx-[3%] bg-[#f6f8fa] md:bg-white min-h-screen">
-            <ToastWrapper />
-            <MobileAppHeader />
-            <div className="hidden md:block">
-              <Navbar />
+        <ThemeProvider>
+          <AppContextProvider>
+            <div className="mx-0 sm:mx-[3%] bg-background-base md:bg-background-card min-h-screen">
+              <ToastWrapper />
+              <MobileAppHeader />
+              <div className="hidden md:block">
+                <Navbar />
+              </div>
+              <main className="min-h-screen px-4 md:px-0 pb-[96px] md:pb-0">
+                {children}
+              </main>
+              <div className="hidden md:block">
+                <Footer />
+              </div>
+              <FloatingDemoButton />
+              <MobileTabBar />
             </div>
-            <main className="min-h-screen px-4 md:px-0 pb-[96px] md:pb-0">
-              {children}
-            </main>
-            <div className="hidden md:block">
-              <Footer />
-            </div>
-            <FloatingDemoButton />
-            <MobileTabBar />
-          </div>
-          <RegisterSW />
-        </AppContextProvider>
+            <RegisterSW />
+          </AppContextProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -26,28 +26,28 @@ const HospitalDashboard = () => {
   return (
     <div className="m-5">
       <div className="flex flex-wrap gap-3">
-          <div className="flex items-center gap-2 p-4 bg-white min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
+          <div className="flex items-center gap-2 p-4 bg-background-card min-w-52 rounded border-2 border-border cursor-pointer hover:scale-105 transition-all">
             <img className="w-14" src={assets.people_icon} alt="" />
             <div>
-              <p className="text-xl font-semibold text-gray-600">
+              <p className="text-xl font-semibold text-text-secondary">
                 {dashboardData.doctors}
               </p>
-              <p className="text-gray-400">Doctors</p>
+              <p className="text-text-dim">Doctors</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 p-4 bg-white min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
+          <div className="flex items-center gap-2 p-4 bg-background-card min-w-52 rounded border-2 border-border cursor-pointer hover:scale-105 transition-all">
             <img className="w-14" src={assets.appointments_icon} alt="" />
             <div>
-              <p className="text-xl font-semibold text-gray-600">
+              <p className="text-xl font-semibold text-text-secondary">
                 {dashboardData.appointments}
               </p>
-              <p className="text-gray-400">Appointments</p>
+              <p className="text-text-dim">Appointments</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white">
+        <div className="bg-background-card">
           <div className="flex items-center gap-2.5 p-4 border-b-2 mt-10 rounded-t border">
             <img src={assets.list_icon} alt="" />
             <p className="font-semibold">Latest Bookings</p>
@@ -55,25 +55,25 @@ const HospitalDashboard = () => {
 
           <div className="pt-4 border border-t-0">
             {dashboardData.latestAppointments.length === 0 ? (
-              <p className="p-6 text-gray-500 text-center">
+              <p className="p-6 text-text-secondary text-center">
                 No appointments found
               </p>
             ) : (
               dashboardData.latestAppointments.map((appointment, index) => (
                 <div
                   key={index}
-                  className="flex items-center px-6 py-3 gap-3 hover:bg-gray-100"
+                  className="flex items-center px-6 py-3 gap-3 hover:bg-background-muted"
                 >
                   <img
-                    className="rounded-full bg-gray-200 w-10"
+                    className="rounded-full bg-background-muted-hover w-10"
                     src={appointment.docData?.image}
                     alt=""
                   />
                   <div className="flex-1 text-sm">
-                    <p className="text-gray-800 font-semibold">
+                    <p className="text-text-primary font-semibold">
                       {appointment.docData?.name}
                     </p>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-text-secondary text-sm">
                       {slotDateFormat(appointment.slotDate)}
                     </p>
                   </div>

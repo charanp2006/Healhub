@@ -39,20 +39,20 @@ const MobileHomeHero = () => {
       {/* Search shortcut */}
       <button
         onClick={() => router.push("/hospitals")}
-        className="w-full flex items-center gap-3 bg-white rounded-2xl px-4 py-3.5 mt-6 shadow-md touch-none-outline"
+        className="w-full flex items-center gap-3 bg-background-card rounded-2xl px-4 py-3.5 mt-6 shadow-md touch-none-outline"
       >
         <Search size={20} className="text-[#20c3ae] flex-shrink-0" />
-        <span className="text-sm text-[#8a94a3] flex-1 text-left">
+        <span className="text-sm text-text-dim flex-1 text-left">
           Search hospitals, clinics & doctors
         </span>
-        <ChevronRight size={18} className="text-[#c2c9d3]" />
+        <ChevronRight size={18} className="text-text-dim" />
       </button>
 
       {/* Quick actions */}
       <div className="flex gap-3 mt-4">
         <button
           onClick={() => router.push("/doctors")}
-          className="flex-1 flex items-center gap-3 bg-white/15 border border-white/25 rounded-2xl px-4 py-3.5 text-white touch-none-outline"
+          className="flex-1 flex items-center gap-3 bg-background-card/15 border border-white/25 rounded-2xl px-4 py-3.5 text-white touch-none-outline"
         >
           <Stethoscope size={22} className="text-white" />
           <div className="text-left">
@@ -62,7 +62,7 @@ const MobileHomeHero = () => {
         </button>
         <button
           onClick={() => router.push("/hospitals")}
-          className="flex-1 flex items-center gap-3 bg-white/15 border border-white/25 rounded-2xl px-4 py-3.5 text-white touch-none-outline"
+          className="flex-1 flex items-center gap-3 bg-background-card/15 border border-white/25 rounded-2xl px-4 py-3.5 text-white touch-none-outline"
         >
           <Building2 size={22} className="text-white" />
           <div className="text-left">
@@ -72,7 +72,7 @@ const MobileHomeHero = () => {
         </button>
         <button
           onClick={() => router.push("/my-appointments")}
-          className="flex-1 flex items-center gap-3 bg-white/15 border border-white/25 rounded-2xl px-4 py-3.5 text-white touch-none-outline"
+          className="flex-1 flex items-center gap-3 bg-background-card/15 border border-white/25 rounded-2xl px-4 py-3.5 text-white touch-none-outline"
         >
           <CalendarHeart size={22} className="text-white" />
           <div className="text-left">
