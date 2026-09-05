@@ -46,6 +46,7 @@ const HospitalAnalyticsPage = () => {
 
   useEffect(() => {
     if (hToken) fetchAnalytics();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hToken]);
 
   const formatCurrency = (amount) =>

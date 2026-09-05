@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AdminContext } from "@/src/context/AdminContext";
 import { Search, SlidersHorizontal, Pencil, Trash2, Eye, ChevronDown, ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import { SkeletonCount } from "@healhub/ui";
 
 const categories = ["Health Tips","Nutrition","Mental Health","Fitness","Disease Awareness","Medical News","Hospital Updates","Other"];
 
@@ -36,6 +37,7 @@ const BlogsList = () => {
     } catch (error) { toast.error(error.message); } finally { setLoading(false); }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (aToken) fetchBlogs(1); }, [aToken]);
 
   const handleSearch = (e) => { e?.preventDefault(); fetchBlogs(1); };
@@ -90,7 +92,7 @@ const BlogsList = () => {
           </div>
         </form>
       )}
-      <p className="text-sm text-text-secondaryLight mb-4">{loading ? "Loading..." : `${totalCount} post${totalCount !== 1 ? "s" : ""} total`}</p>
+      <p className="text-sm text-text-secondaryLight mb-4">{loading ? <SkeletonCount /> : `${totalCount} post${totalCount !== 1 ? "s" : ""} total`}</p>
       <div className="bg-background-cardLight border border-border-light rounded-lg overflow-hidden">
         <div className="hidden sm:grid grid-cols-[3fr_1.5fr_1fr_1fr_1fr_auto] gap-2 py-3 px-6 border-b border-border-light text-sm font-medium text-text-secondaryLight">
           <p>Title</p><p>Category</p><p>Status</p><p>Views</p><p>Date</p><p>Actions</p>

@@ -1,5 +1,4 @@
 import billingModel from "../models/billingModel";
-import roomCategoryModel from "../models/roomCategoryModel";
 import hospitalModel from "../models/hospitalModel";
 import doctorModel from "../models/doctorModel";
 import appointmentModel from "../models/appointmentModel";

@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 // Seed script: creates dummy demo accounts so all HealHub apps can be logged
 // into with known credentials.
 //

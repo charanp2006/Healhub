@@ -1,18 +1,15 @@
 // @ts-nocheck
 "use client";
 import { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { DoctorContext } from "@/src/context/DoctorContext";
-import { assets } from "@/src/assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Camera, User, Mail, Briefcase, GraduationCap, FileText, Globe, Star, Loader2, Eye, EyeOff, Award } from "lucide-react";
+import { Camera, Briefcase, GraduationCap, FileText, Globe, Star, Loader2, Award } from "lucide-react";
 
 const specialities = ["General physician","Gynecologist","Dermatologist","Pediatricians","Neurologist","Gastroenterologist"];
 
 const DoctorProfile = () => {
-  const router = useRouter();
-  const { backendURL, dToken, profileData, setProfileData, getProfileData } = useContext(DoctorContext);
+  const { backendURL, dToken, profileData, getProfileData } = useContext(DoctorContext);
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,6 +19,7 @@ const DoctorProfile = () => {
     name: "", email: "", password: "", speciality: "", degree: "", experience: "", about: "", available: true, address1: "", address2: "", fees: "", specializationsInput: "", languagesInput: ""
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (dToken) getProfileData(); }, [dToken]);
 
   useEffect(() => {

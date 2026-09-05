@@ -34,7 +34,7 @@ const MyProfile = () => {
       formData.append("gender", userData.gender);
       formData.append("dob", userData.dob);
 
-      image && formData.append("image", image);
+      if (image) formData.append("image", image);
 
       const { data } = await axios.post(
         `${backendURL}/api/user/update-profile`,
@@ -61,7 +61,7 @@ const MyProfile = () => {
       <div className="max-w-lg flex flex-col gap-2 text-sm pt-5">
         {isEdit ? (
           <label htmlFor="image">
-            <div className="inline-block relative cursor-pointer">
+            <div className="inline-block relative cursor-pointer mx-auto md:mx-0">
               <img
                 className="w-36 rounded-full border-1 border-border-light"
                 src={
@@ -84,7 +84,7 @@ const MyProfile = () => {
           </label>
         ) : (
           <img
-            className="w-36 rounded-full border-1 border-border-light"
+            className="w-36 rounded-full border-1 border-border-light mx-auto md:mx-0"
             src={userData.image}
             alt=""
           />
@@ -101,7 +101,7 @@ const MyProfile = () => {
             required={isEdit}
           />
         ) : (
-          <p className="font-medium text-3xl text-text-primaryLight mt-4">
+          <p className="font-medium text-3xl text-text-primaryLight mt-4 text-center md:text-left">
             {userData.name}
           </p>
         )}
@@ -205,7 +205,7 @@ const MyProfile = () => {
           </div>
         </div>
 
-        <div className="mt-10">
+        <div className="mt-10 mx-auto md:mx-0">
           {isEdit ? (
             <button
               className="border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all"

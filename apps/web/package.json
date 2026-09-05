@@ -20,7 +20,8 @@
     "lenis": "^1",
     "react-hook-form": "^7",
     "zod": "^3",
-    "@zodios/core": "^10"
+    "@zodios/core": "^10",
+    "@healhub/ui": "*"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -30,6 +31,7 @@
     "@tailwindcss/postcss": "^4",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@healhub/config": "*"
   }
 }

@@ -60,6 +60,7 @@ const HospitalAddBlogContent = () => {
         }
       })();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editId, hToken]);
 
   const onSubmit = async (e) => {

@@ -33,6 +33,7 @@ const HospitalAddDoctor = () => {
     if (hToken && !profileData) {
       getProfileData();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hToken]);
 
   const onSubmitHandler = async (event) => {

@@ -12,9 +12,9 @@ import {
   UserPlus,
   UserMinus,
   History,
-  Loader2,
   X,
 } from "lucide-react";
+import { SkeletonCards } from "@healhub/ui";
 
 const HospitalManageRooms = () => {
   const { hToken, backendURL: backendUrl } = useContext(HospitalContext);
@@ -75,6 +75,7 @@ const HospitalManageRooms = () => {
 
   useEffect(() => {
     if (hToken) fetchCategories();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hToken]);
 
   const resetForm = () => {
@@ -180,8 +181,11 @@ const HospitalManageRooms = () => {
 
   if (loading) {
     return (
-      <div className="m-5 flex justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="m-5">
+        <SkeletonCards
+          count={6}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        />
       </div>
     );
   }

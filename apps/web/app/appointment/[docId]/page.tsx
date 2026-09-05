@@ -204,12 +204,14 @@ const Appointment = () => {
 
   useEffect(() => {
     fetchDocInfo();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doctors, docId]);
 
   useEffect(() => {
     if (docInfo && docId) {
       getAvailableSlots();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docInfo, doctorSchedule, docId]);
 
   // reset slot index when slots array changes
@@ -377,7 +379,7 @@ const Appointment = () => {
 
           <button
             onClick={bookAppointment}
-            className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6 cursor-pointer"
+            className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6 w-full sm:w-auto cursor-pointer touch-none-outline"
           >
             Book an appointment
           </button>

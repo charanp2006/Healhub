@@ -64,11 +64,13 @@
   --color-border-light: var(--border-light);
   --color-border-dark: var(--border-dark);
 
+  --font-sans: var(--font-outfit), system-ui, sans-serif;
+
   --grid-template-columns-auto: repeat(auto-fill, minmax(250px, 1fr));
 }
 
 * {
-  font-family: Outfit;
+  font-family: var(--font-sans);
 }
 
 .active hr {

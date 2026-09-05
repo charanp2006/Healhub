@@ -5,14 +5,29 @@ import appointmentModel from "../models/appointmentModel";
 import userModel from "../models/userModel";
 import hospitalModel from "../models/hospitalModel";
 import { connectDB } from "../db";
-import { getCloudinary } from "../cloudinary";
 import { uploadImageToCloudinary } from "../upload";
-import { json, bad } from "../http";
+import { json, bad, tooMany } from "../http";
 import { verifyAdmin, signAuthToken } from "../auth";
+import {
+  clientIp,
+  checkLoginRateGate,
+  recordLoginAttempt,
+} from "../ratelimit";
 
 export async function loginAdmin(request: Request): Promise<Response> {
   try {
     const { email, password } = await request.json();
+
+    const ip = clientIp(request);
+    const gate = checkLoginRateGate({ role: "admin", email, ip });
+    if (gate.blocked) {
+      return tooMany(
+        "Too many failed attempts. Try again in a few minutes.",
+        gate.retryAfterSeconds,
+        request
+      );
+    }
+
     if (
       email === process.env.ADMIN_EMAIL &&
       password === process.env.ADMIN_PW
@@ -26,12 +41,14 @@ export async function loginAdmin(request: Request): Promise<Response> {
       if (!token) {
         return json({ success: false, message: "Could not create session" }, undefined, request);
       }
+      recordLoginAttempt({ role: "admin", email, ip, ok: true });
       return json({ success: true, token }, undefined, request);
     }
+    recordLoginAttempt({ role: "admin", email, ip, ok: false });
     return json({ success: false, message: "Invalid admin credentials" }, undefined, request);
   } catch (error) {
     console.log("Error in login admin:", error);
-    return json({ success: false, message: (error as Error).message }, undefined, request);
+    return json({ success: false, message: "Something went wrong. Please try again." }, undefined, request);
   }
 }
 

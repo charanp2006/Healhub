@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AdminContext } from "@/src/context/AdminContext";
 import { Search, SlidersHorizontal, MapPin, BedDouble, Star, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { SkeletonCount, SkeletonCards } from "@healhub/ui";
 
 const specialties = ["General Physician","Gynecologist","Dermatologist","Pediatrician","Neurologist","Gastroenterologist"];
 
@@ -50,6 +51,7 @@ const HospitalsList = () => {
 
   useEffect(() => {
     if (aToken) fetchHospitals(1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aToken, sortBy]);
 
   const handleSearch = (e) => { e?.preventDefault(); fetchHospitals(1); };
@@ -114,10 +116,12 @@ const HospitalsList = () => {
         </form>
       )}
       <p className="text-sm text-text-secondaryLight mb-4">
-        {loading ? "Loading..." : `${totalCount} hospital${totalCount !== 1 ? "s" : ""} found`}
+        {loading ? <SkeletonCount /> : `${totalCount} hospital${totalCount !== 1 ? "s" : ""} found`}
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {hospitals.map((h) => (
+        {loading ? (
+          <SkeletonCards count={6} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" />
+        ) : hospitals.map((h) => (
           <div key={h._id} className="border border-border-light rounded-xl overflow-hidden bg-background-cardLight hover:-translate-y-1 transition-all duration-300 group">
             <div className="h-40 bg-primary-soft overflow-hidden">
               {h.image ? (

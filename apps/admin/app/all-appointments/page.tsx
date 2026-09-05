@@ -30,6 +30,7 @@ const AllAppointments = () => {
       setTotalPages(result.totalPages || 1);
       setTotal(result.total || 0);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, statusFilter, typeFilter, doctorFilter, search, aToken]);
 
   useEffect(()=>{
@@ -37,6 +38,7 @@ const AllAppointments = () => {
       fetchAppointments();
       getAllDoctors();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[aToken, page, statusFilter, typeFilter, doctorFilter])
 
   useEffect(() => {
@@ -47,6 +49,7 @@ const AllAppointments = () => {
       }
     }, 400);
     return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   const getStatusBadge = (appointment) => {

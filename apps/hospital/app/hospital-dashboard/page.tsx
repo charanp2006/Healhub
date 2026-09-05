@@ -5,6 +5,7 @@ import React, { useContext, useEffect } from "react";
 import { assets } from "@/src/assets/assets";
 import { HospitalContext } from "@/src/context/HospitalContext";
 import { AppContext } from "@/src/context/AppContext";
+import { SkeletonDashboard } from "@healhub/ui";
 
 const HospitalDashboard = () => {
   const { hToken, dashboardData, getHospitalDashboard } =
@@ -15,12 +16,16 @@ const HospitalDashboard = () => {
     if (hToken) {
       getHospitalDashboard();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hToken]);
 
+  if (!dashboardData) {
+    return <div className="m-5"><SkeletonDashboard /></div>;
+  }
+
   return (
-    dashboardData && (
-      <div className="m-5">
-        <div className="flex flex-wrap gap-3">
+    <div className="m-5">
+      <div className="flex flex-wrap gap-3">
           <div className="flex items-center gap-2 p-4 bg-white min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
             <img className="w-14" src={assets.people_icon} alt="" />
             <div>
@@ -85,7 +90,6 @@ const HospitalDashboard = () => {
           </div>
         </div>
       </div>
-    )
   );
 };
 

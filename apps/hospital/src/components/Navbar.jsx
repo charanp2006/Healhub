@@ -16,12 +16,18 @@ const Navbar = () => {
   const { hToken, setHToken } = useContext(HospitalContext);
 
   const logout = () => {
-    aToken && setAToken("");
-    aToken && localStorage.removeItem("aToken");
-    dToken && setDToken("");
-    dToken && localStorage.removeItem("dToken");
-    hToken && setHToken("");
-    hToken && localStorage.removeItem("hToken");
+    if (aToken) {
+      setAToken("");
+      localStorage.removeItem("aToken");
+    }
+    if (dToken) {
+      setDToken("");
+      localStorage.removeItem("dToken");
+    }
+    if (hToken) {
+      setHToken("");
+      localStorage.removeItem("hToken");
+    }
     router.push("/");
   };
 

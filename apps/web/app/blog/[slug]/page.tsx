@@ -6,6 +6,7 @@ import { useRouter, useParams } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AppContext } from "@/src/context/AppContext";
+import { SkeletonArticle } from "@healhub/ui";
 import {
   Calendar,
   Eye,
@@ -46,6 +47,7 @@ const BlogPost = () => {
   useEffect(() => {
     fetchBlog();
     window.scrollTo(0, 0);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   const formatDate = (dateStr) => {
@@ -58,9 +60,7 @@ const BlogPost = () => {
   };
 
   if (loading) {
-    return (
-      <p className="text-center text-text-secondaryLight py-20">Loading...</p>
-    );
+    return <SkeletonArticle />;
   }
 
   if (!blog) {
