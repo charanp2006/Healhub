@@ -8,6 +8,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Releases are tagged as `vX.Y.Z` on git. See `docs/versioning.md` for how to
 maintain this file and release a new version.
 
+## [0.3.0](https://github.com/charanp2006/healhub/compare/HealHub-v0.2.0...HealHub-v0.3.0) (2026-09-06)
+
+
+### Features
+
+* add ApiHealth component and health check API route ([7f68f3e](https://github.com/charanp2006/healhub/commit/7f68f3ecb571c0ccefa54c9299e397232afb316d))
+* add doctor availability management, blogs, dashboard, and profile pages ([5ccc349](https://github.com/charanp2006/healhub/commit/5ccc349e6ac012e890ba27acbdf4f1a98c274784))
+* add doctor availability management, blogs, dashboard, and profile pages ([814c95e](https://github.com/charanp2006/healhub/commit/814c95e1862974a52fc53a48b58ea01cf3472742))
+* dark theme across apps, new brand assets, and mobile splash screen ([8d2e81b](https://github.com/charanp2006/healhub/commit/8d2e81bed52da219276872cb0c563e73215a9a22))
+* implement in-memory sliding-window rate limiting for login endpoints ([dc629c7](https://github.com/charanp2006/healhub/commit/dc629c7d4686eef7bfe3114ee3d250fd2643a2a2))
+* mobile app UX, doctor tools, rate limiting & skeleton loading ([8ced5ca](https://github.com/charanp2006/healhub/commit/8ced5ca72d6fd9e58868d7fd197b26b018743316))
+* **mobile:** redesign web/admin/hospital for mobile app UX ([95002ce](https://github.com/charanp2006/healhub/commit/95002ceb8ffd39448d841d1df302b1f99436f3cc))
+* **monorepo:** migrate MERN app to Next.js HealHub monorepo ([57a206b](https://github.com/charanp2006/healhub/commit/57a206b4c03e95e0b3e6a1c3705fd760344b2989))
+* **monorepo:** migrate MERN app to Next.js HealHub monorepo ([008b110](https://github.com/charanp2006/healhub/commit/008b11066d4c1b0bc778a58f1295b45813062790))
+
+
+### Bug Fixes
+
+* **build:** declare internal workspace packages so Vercel resolves @healhub/ui ([7d73e8d](https://github.com/charanp2006/healhub/commit/7d73e8df2a8d475278f07f1e43a2ac7f2cf588f7))
+* **deps:** declare recharts for admin/hospital analytics ([5cb1827](https://github.com/charanp2006/healhub/commit/5cb18273b3e0ab808578e4a6786ff7adbadd0421))
+* **deps:** declare recharts for admin/hospital analytics, API health check component ([11fb7e4](https://github.com/charanp2006/healhub/commit/11fb7e407a927cea77e5fefbe0909cdbaabfa3bf))
+
+
+### Chores
+
+* **release:** add Release Please automation and versioning guide ([c392295](https://github.com/charanp2006/healhub/commit/c39229543b4ac3a5b108b74b699ed6b763450bbf))
+* **release:** v0.2.0 ([1b5a9f1](https://github.com/charanp2006/healhub/commit/1b5a9f17029e092144d662b9143891cf9bd041f8))
+
+
+### Build System
+
+* **monorepo:** enable Turbopack and add mobile styles ([7b0c00c](https://github.com/charanp2006/healhub/commit/7b0c00c0ed764b48ba302cdcf4215022b2c37ee7))
+
 ## [Unreleased]
 
 ### Added
